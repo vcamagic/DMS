@@ -16,5 +16,6 @@
   <ItemGroup>
     <ProjectReference Include="..\DormManagementSystem.BLL.Services\DormManagementSystem.BLL.Services.csproj" />
     <ProjectReference Include="..\DormManagementSystem.DAL.Models\DormManagementSystem.DAL.Models.csproj" />
+    <ProjectReference Include="..\DormManagementSystem.GlobalExceptionHandler\DormManagementSystem.GlobalExceptionHandler.csproj" />
   </ItemGroup>
 </Project>

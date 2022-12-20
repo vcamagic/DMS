@@ -4,12 +4,12 @@ public static class AppConstants
 {
     public static class AppRoles 
     {
-        public const string Warden = "warden";
-        public const string Administrator = "administrator";
-        public const string Maid = "maid";
-        public const string Doorkeeper = "doorkeeper";
-        public const string Student = "student";
-        public const string Janitor = "janitor";
+        public const string Warden = "Warden";
+        public const string Administrator = "Administrator";
+        public const string Maid = "Maid";
+        public const string Doorkeeper = "Doorkeeper";
+        public const string Student = "Student";
+        public const string Janitor = "Janitor";
     }
 
     public static class AppPolicies

@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using DormManagementSystem.DAL.Models;
 using DormManagementSystem.DAL.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -21,7 +22,7 @@ public class RepositoryBase<T> : IRepositoryBase<T> where T : class
             _context.Set<T>().AsQueryable() :
             _context.Set<T>().AsNoTracking().AsQueryable();
 
-    public IQueryable<T> FindByCondition(Func<T, bool> expression, bool trackChanges) =>
+    public IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression, bool trackChanges) =>
         trackChanges ?
             _context.Set<T>().Where(expression).AsQueryable() :
             _context.Set<T>().AsNoTracking().Where(expression).AsQueryable();

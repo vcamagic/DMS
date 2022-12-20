@@ -27,62 +27,16 @@ public class ApplicationContext : DbContext
         modelBuilder
         .Entity<Claim>(x => 
         {
-            x
-            .HasKey(x => new { x.ClaimTypeId, x.AccountId });
-
             x        
             .HasOne(x => x.Account)
             .WithMany(x => x.Claims)
             .HasForeignKey(x => x.AccountId);
-
         });
-
-        modelBuilder
-        .Entity<ClaimType>()
-        .HasData(
-            new ClaimType()
-            {
-                Id = Guid.NewGuid(),
-                Name = "Role",
-                Value = "Administrator"
-            },
-            new ClaimType()
-            {
-                Id = Guid.NewGuid(),
-                Name = "Role",
-                Value = "Warden"
-            },
-            new ClaimType()
-            {
-                Id = Guid.NewGuid(),
-                Name = "Role",
-                Value = "Maid"
-            },
-            new ClaimType()
-            {
-                Id = Guid.NewGuid(),
-                Name = "Role",
-                Value = "Doorkeeper"
-            },
-            new ClaimType()
-            {
-                Id = Guid.NewGuid(),
-                Name = "Role",
-                Value = "Janitor"
-            },
-            new ClaimType()
-            {
-                Id = Guid.NewGuid(),
-                Name = "Role",
-                Value = "Student"
-            }
-        );
         
         base.OnModelCreating(modelBuilder);
     }
 
     public DbSet<Account> Accounts { get; set; }
     public DbSet<User> Users { get; set; }
-    public DbSet<ClaimType> ClaimTypes { get; set; }
     public DbSet<Claim> Claims { get; set; }
 }

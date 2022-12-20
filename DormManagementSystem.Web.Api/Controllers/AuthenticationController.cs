@@ -1,4 +1,6 @@
 using System.Security.Claims;
+using DormManagementSystem.BLL.Services.DTOs;
+using DormManagementSystem.BLL.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -10,15 +12,25 @@ namespace DormManagementSystem.Web.Api.Controllers;
 [Route("api/[controller]")]
 public class AuthenticationController : ControllerBase
 {
-    [HttpPost("login")]
-    [AllowAnonymous]
-    public async Task Login()
-    {
-        var claims = new List<Claim>(){new Claim("role", "warden")};
-        var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-        var user = new ClaimsPrincipal(identity);
+    private readonly IAuthService _authService;
 
-        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, user);
+    public AuthenticationController(IAuthService authService)
+    {
+        _authService = authService;
+    }
+
+    [HttpPost("/register-account")]
+    public async Task<IActionResult> RegisterAccount([FromBody] RegisterAccountDTO registerAccountDTO) 
+    {
+        var account = await _authService.RegisterAccount(registerAccountDTO);
+        return Ok();
+    }
+
+    [HttpPost("/login")]
+    public async Task<IActionResult> Login([FromBody] LoginDTO loginDTO)
+    {
+        await _authService.Login(loginDTO);
+        return Ok();
     }
 }
  

@@ -47,23 +47,11 @@ namespace DormManagementSystem.DAL.Models.Migrations
 
             modelBuilder.Entity("DormManagementSystem.DAL.Models.Models.Claim", b =>
                 {
-                    b.Property<Guid>("ClaimTypeId")
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("AccountId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("ClaimTypeId", "AccountId");
-
-                    b.HasIndex("AccountId");
-
-                    b.ToTable("Claims");
-                });
-
-            modelBuilder.Entity("DormManagementSystem.DAL.Models.Models.ClaimType", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
@@ -76,45 +64,9 @@ namespace DormManagementSystem.DAL.Models.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ClaimTypes");
+                    b.HasIndex("AccountId");
 
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("d1b37397-9438-4c9a-bf2e-b270a3c4e2bf"),
-                            Name = "Role",
-                            Value = "Administrator"
-                        },
-                        new
-                        {
-                            Id = new Guid("369f23ac-a293-4b2a-880a-ada25871504a"),
-                            Name = "Role",
-                            Value = "Warden"
-                        },
-                        new
-                        {
-                            Id = new Guid("dc8b25c9-bd59-41ea-bd71-e5d121b2bbc5"),
-                            Name = "Role",
-                            Value = "Maid"
-                        },
-                        new
-                        {
-                            Id = new Guid("ace9441a-5e06-4f42-bc2a-b88a868a54ac"),
-                            Name = "Role",
-                            Value = "Doorkeeper"
-                        },
-                        new
-                        {
-                            Id = new Guid("3cf5f75d-5a7b-4c3e-8168-301d7d59aab7"),
-                            Name = "Role",
-                            Value = "Janitor"
-                        },
-                        new
-                        {
-                            Id = new Guid("2d623cd3-0091-422f-a21e-1bf1c62f1bb1"),
-                            Name = "Role",
-                            Value = "Student"
-                        });
+                    b.ToTable("Claims");
                 });
 
             modelBuilder.Entity("DormManagementSystem.DAL.Models.Models.User", b =>
@@ -160,15 +112,7 @@ namespace DormManagementSystem.DAL.Models.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DormManagementSystem.DAL.Models.Models.ClaimType", "ClaimType")
-                        .WithMany()
-                        .HasForeignKey("ClaimTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Account");
-
-                    b.Navigation("ClaimType");
                 });
 
             modelBuilder.Entity("DormManagementSystem.DAL.Models.Models.User", b =>

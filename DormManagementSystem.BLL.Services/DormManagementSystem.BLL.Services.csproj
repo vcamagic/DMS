@@ -2,8 +2,10 @@
   <ItemGroup>
     <ProjectReference Include="..\DormManagementSystem.DAL.Models\DormManagementSystem.DAL.Models.csproj" />
     <ProjectReference Include="..\DormManagementSystem.DAL.Repositories\DormManagementSystem.DAL.Repositories.csproj" />
+    <ProjectReference Include="..\DormManagementSystem.GlobalExceptionHandler\DormManagementSystem.GlobalExceptionHandler.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="12.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
   </ItemGroup>
   <PropertyGroup>

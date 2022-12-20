@@ -2,6 +2,18 @@
   "version": 3,
   "targets": {
     "net6.0": {
+      "AutoMapper/12.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.CSharp": "4.7.0"
+        },
+        "compile": {
+          "lib/netstandard2.1/AutoMapper.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.1/AutoMapper.dll": {}
+        }
+      },
       "EntityFramework/6.4.4": {
         "type": "package",
         "dependencies": {
@@ -168,7 +180,7 @@
           "lib/netstandard2.0/Microsoft.AspNetCore.Hosting.Server.Abstractions.dll": {}
         }
       },
-      "Microsoft.AspNetCore.Http/2.2.0": {
+      "Microsoft.AspNetCore.Http/2.2.2": {
         "type": "package",
         "dependencies": {
           "Microsoft.AspNetCore.Http.Abstractions": "2.2.0",
@@ -1140,8 +1152,10 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v6.0",
         "dependencies": {
+          "AutoMapper": "12.0.0",
           "DormManagementSystem.DAL.Models": "1.0.0",
           "DormManagementSystem.DAL.Repositories": "1.0.0",
+          "DormManagementSystem.GlobalExceptionHandler": "1.0.0",
           "Microsoft.AspNetCore.Identity": "2.2.0"
         },
         "compile": {
@@ -1177,10 +1191,38 @@
         "runtime": {
           "bin/placeholder/DormManagementSystem.DAL.Repositories.dll": {}
         }
+      },
+      "DormManagementSystem.GlobalExceptionHandler/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v6.0",
+        "dependencies": {
+          "Microsoft.AspNetCore.Http": "2.2.2"
+        },
+        "compile": {
+          "bin/placeholder/DormManagementSystem.GlobalExceptionHandler.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/DormManagementSystem.GlobalExceptionHandler.dll": {}
+        }
       }
     }
   },
   "libraries": {
+    "AutoMapper/12.0.0": {
+      "sha512": "0Rmg0zI5AFu1O/y//o9VGyhxKjhggWpk9mOA1tp0DEVx40c61bs+lnQv+0jUq8XbniF7FKgIVvI1perqiMtLrA==",
+      "type": "package",
+      "path": "automapper/12.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "automapper.12.0.0.nupkg.sha512",
+        "automapper.nuspec",
+        "icon.png",
+        "lib/netstandard2.1/AutoMapper.dll",
+        "lib/netstandard2.1/AutoMapper.xml"
+      ]
+    },
     "EntityFramework/6.4.4": {
       "sha512": "yj1+/4tci7Panu3jKDHYizxwVm0Jvm7b7m057b5h4u8NUHGCR8WIWirBTw+8EptRffwftIWPBeIRGNKD1ewEMQ==",
       "type": "package",
@@ -1386,16 +1428,16 @@
         "microsoft.aspnetcore.hosting.server.abstractions.nuspec"
       ]
     },
-    "Microsoft.AspNetCore.Http/2.2.0": {
-      "sha512": "YogBSMotWPAS/X5967pZ+yyWPQkThxhmzAwyCHCSSldzYBkW5W5d6oPfBaPqQOnSHYTpSOSOkpZoAce0vwb6+A==",
+    "Microsoft.AspNetCore.Http/2.2.2": {
+      "sha512": "BAibpoItxI5puk7YJbIGj95arZueM8B8M5xT1fXBn3hb3L2G3ucrZcYXv1gXdaroLbntUs8qeV8iuBrpjQsrKw==",
       "type": "package",
-      "path": "microsoft.aspnetcore.http/2.2.0",
+      "path": "microsoft.aspnetcore.http/2.2.2",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "lib/netstandard2.0/Microsoft.AspNetCore.Http.dll",
         "lib/netstandard2.0/Microsoft.AspNetCore.Http.xml",
-        "microsoft.aspnetcore.http.2.2.0.nupkg.sha512",
+        "microsoft.aspnetcore.http.2.2.2.nupkg.sha512",
         "microsoft.aspnetcore.http.nuspec"
       ]
     },
@@ -3221,12 +3263,18 @@
       "type": "project",
       "path": "../DormManagementSystem.DAL.Repositories/DormManagementSystem.DAL.Repositories.csproj",
       "msbuildProject": "../DormManagementSystem.DAL.Repositories/DormManagementSystem.DAL.Repositories.csproj"
+    },
+    "DormManagementSystem.GlobalExceptionHandler/1.0.0": {
+      "type": "project",
+      "path": "../DormManagementSystem.GlobalExceptionHandler/DormManagementSystem.GlobalExceptionHandler.csproj",
+      "msbuildProject": "../DormManagementSystem.GlobalExceptionHandler/DormManagementSystem.GlobalExceptionHandler.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net6.0": [
       "DormManagementSystem.BLL.Services >= 1.0.0",
       "DormManagementSystem.DAL.Models >= 1.0.0",
+      "DormManagementSystem.GlobalExceptionHandler >= 1.0.0",
       "EntityFramework >= 6.4.4",
       "Microsoft.EntityFrameworkCore.Design >= 6.0.4",
       "Microsoft.EntityFrameworkCore.SqlServer >= 6.0.4",
@@ -3263,8 +3311,11 @@
             "C:\\Users\\vladimir.camagic\\Desktop\\diplomski\\DormManagementSystem.BLL.Services\\DormManagementSystem.BLL.Services.csproj": {
               "projectPath": "C:\\Users\\vladimir.camagic\\Desktop\\diplomski\\DormManagementSystem.BLL.Services\\DormManagementSystem.BLL.Services.csproj"
             },
-            "C:\\Users\\vladimir.camagic\\Desktop\\diplomski\\DormManagementSystem.DAL.Models\\DormManagementSystem.DAL.Models.csproj": {
-              "projectPath": "C:\\Users\\vladimir.camagic\\Desktop\\diplomski\\DormManagementSystem.DAL.Models\\DormManagementSystem.DAL.Models.csproj"
+            "c:\\Users\\vladimir.camagic\\Desktop\\diplomski\\DormManagementSystem.DAL.Models\\DormManagementSystem.DAL.Models.csproj": {
+              "projectPath": "c:\\Users\\vladimir.camagic\\Desktop\\diplomski\\DormManagementSystem.DAL.Models\\DormManagementSystem.DAL.Models.csproj"
+            },
+            "C:\\Users\\vladimir.camagic\\Desktop\\diplomski\\DormManagementSystem.GlobalExceptionHandler\\DormManagementSystem.GlobalExceptionHandler.csproj": {
+              "projectPath": "C:\\Users\\vladimir.camagic\\Desktop\\diplomski\\DormManagementSystem.GlobalExceptionHandler\\DormManagementSystem.GlobalExceptionHandler.csproj"
             }
           }
         }

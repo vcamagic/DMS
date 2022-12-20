@@ -18,42 +18,42 @@ public static class AuthExtensions
             {
                 opt.RequireAuthenticatedUser()
                     .AddAuthenticationSchemes(CookieAuthenticationDefaults.AuthenticationScheme)
-                    .RequireClaim("role", AppConstants.AppRoles.Warden);
+                    .RequireClaim("Role", AppConstants.AppRoles.Warden, AppConstants.AppRoles.Administrator);
             });
 
             builder.AddPolicy(AppConstants.AppPolicies.AdministratorPolicy, opt =>
             {
                 opt.RequireAuthenticatedUser()
                     .AddAuthenticationSchemes(CookieAuthenticationDefaults.AuthenticationScheme)
-                    .RequireClaim("role", AppConstants.AppRoles.Administrator);
+                    .RequireClaim("Role", AppConstants.AppRoles.Administrator);
             });
 
             builder.AddPolicy(AppConstants.AppPolicies.MaidPolicy, opt =>
             {
                 opt.RequireAuthenticatedUser()
                     .AddAuthenticationSchemes(CookieAuthenticationDefaults.AuthenticationScheme)
-                    .RequireClaim("role", AppConstants.AppRoles.Maid);
+                    .RequireClaim("Role", AppConstants.AppRoles.Maid);
             });
 
             builder.AddPolicy(AppConstants.AppPolicies.DoorkeeperPolicy, opt =>
             {
                 opt.RequireAuthenticatedUser()
                     .AddAuthenticationSchemes(CookieAuthenticationDefaults.AuthenticationScheme)
-                    .RequireClaim("role", AppConstants.AppRoles.Doorkeeper);
+                    .RequireClaim("Role", AppConstants.AppRoles.Doorkeeper);
             });
 
             builder.AddPolicy(AppConstants.AppPolicies.StudentPolicy, opt =>
             {
                 opt.RequireAuthenticatedUser()
                     .AddAuthenticationSchemes(CookieAuthenticationDefaults.AuthenticationScheme)
-                    .RequireClaim("role", AppConstants.AppRoles.Student);
+                    .RequireClaim("Role", AppConstants.AppRoles.Student);
             });
 
             builder.AddPolicy(AppConstants.AppPolicies.JanitorPolicy, opt =>
             {
                 opt.RequireAuthenticatedUser()
                     .AddAuthenticationSchemes(CookieAuthenticationDefaults.AuthenticationScheme)
-                    .RequireClaim("role", AppConstants.AppRoles.Janitor);
+                    .RequireClaim("Role", AppConstants.AppRoles.Janitor);
             });
         });
 }

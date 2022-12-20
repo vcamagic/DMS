@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\vladimir.camagic\\Desktop\\diplomski\\DormManagementSystem.DAL.Models\\DormManagementSystem.DAL.Models.csproj": {}
+    "c:\\Users\\vladimir.camagic\\Desktop\\diplomski\\DormManagementSystem.DAL.Models\\DormManagementSystem.DAL.Models.csproj": {}
   },
   "projects": {
-    "C:\\Users\\vladimir.camagic\\Desktop\\diplomski\\DormManagementSystem.DAL.Models\\DormManagementSystem.DAL.Models.csproj": {
+    "c:\\Users\\vladimir.camagic\\Desktop\\diplomski\\DormManagementSystem.DAL.Models\\DormManagementSystem.DAL.Models.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\vladimir.camagic\\Desktop\\diplomski\\DormManagementSystem.DAL.Models\\DormManagementSystem.DAL.Models.csproj",
+        "projectUniqueName": "c:\\Users\\vladimir.camagic\\Desktop\\diplomski\\DormManagementSystem.DAL.Models\\DormManagementSystem.DAL.Models.csproj",
         "projectName": "DormManagementSystem.DAL.Models",
-        "projectPath": "C:\\Users\\vladimir.camagic\\Desktop\\diplomski\\DormManagementSystem.DAL.Models\\DormManagementSystem.DAL.Models.csproj",
+        "projectPath": "c:\\Users\\vladimir.camagic\\Desktop\\diplomski\\DormManagementSystem.DAL.Models\\DormManagementSystem.DAL.Models.csproj",
         "packagesPath": "C:\\Users\\vladimir.camagic\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\vladimir.camagic\\Desktop\\diplomski\\DormManagementSystem.DAL.Models\\obj\\",
+        "outputPath": "c:\\Users\\vladimir.camagic\\Desktop\\diplomski\\DormManagementSystem.DAL.Models\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\vladimir.camagic\\AppData\\Roaming\\NuGet\\NuGet.Config",

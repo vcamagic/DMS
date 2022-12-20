@@ -74,3 +74,6 @@ c:\Users\vladimir.camagic\Desktop\diplomski\DormManagementSystem.Web.Api\obj\Deb
 c:\Users\vladimir.camagic\Desktop\diplomski\DormManagementSystem.Web.Api\obj\Debug\net6.0\DormManagementSystem.Web.Api.pdb
 c:\Users\vladimir.camagic\Desktop\diplomski\DormManagementSystem.Web.Api\obj\Debug\net6.0\DormManagementSystem.Web.Api.genruntimeconfig.cache
 c:\Users\vladimir.camagic\Desktop\diplomski\DormManagementSystem.Web.Api\obj\Debug\net6.0\ref\DormManagementSystem.Web.Api.dll
+C:\Users\vladimir.camagic\Desktop\diplomski\DormManagementSystem.Web.Api\bin\Debug\net6.0\AutoMapper.dll
+c:\Users\vladimir.camagic\Desktop\diplomski\DormManagementSystem.Web.Api\bin\Debug\net6.0\DormManagementSystem.GlobalExceptionHandler.dll
+c:\Users\vladimir.camagic\Desktop\diplomski\DormManagementSystem.Web.Api\bin\Debug\net6.0\DormManagementSystem.GlobalExceptionHandler.pdb
