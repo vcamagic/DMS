@@ -16,6 +16,7 @@ public class AccountsController : ControllerBase
         _accountsService = accountsService;
     }
 
+    [HttpGet]
     [Authorize(Policy = AppConstants.AppPolicies.AdministratorPolicy)]
     public async Task<ActionResult<IReadOnlyList<AccountDTO>>> Get([FromQuery]PaginationDTO paginationDTO)
     {
@@ -25,7 +26,7 @@ public class AccountsController : ControllerBase
     }
 
     [Authorize(Policy = AppConstants.AppPolicies.AdministratorPolicy)]
-    [HttpPut("activate/{accountId}")]
+    [HttpPut("activate/{id}")]
     public async Task<IActionResult> ActivateAccount([FromRoute]Guid accountId)
     {
         await _accountsService.ActivateAccount(accountId);

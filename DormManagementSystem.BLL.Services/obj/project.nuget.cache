@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "eyt5YPkErHuYVeTni2io2rjKiG1m0FiX0anrfRZtkJod9tmVgj/ymXYSXBfpXnxAPdPWwNPsDCbVNXHW//cDng==",
+  "dgSpecHash": "7RCawSkoBlzmN0RBoVdQfIbxz82f5yC57YB9TAn5b+77RdUeFXb+pgH6kWDqnoVkg+HFZNM0GfrgO0hjLNSN1A==",
   "success": true,
-  "projectFilePath": "C:\\Users\\vladimir.camagic\\Desktop\\diplomski\\DormManagementSystem.BLL.Services\\DormManagementSystem.BLL.Services.csproj",
+  "projectFilePath": "c:\\Users\\vladimir.camagic\\Desktop\\diplomski\\DormManagementSystem.BLL.Services\\DormManagementSystem.BLL.Services.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\vladimir.camagic\\.nuget\\packages\\automapper\\12.0.0\\automapper.12.0.0.nupkg.sha512",
     "C:\\Users\\vladimir.camagic\\.nuget\\packages\\microsoft.aspnetcore.authentication\\2.2.0\\microsoft.aspnetcore.authentication.2.2.0.nupkg.sha512",

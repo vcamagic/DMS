@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Identity;
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.ConfigureDbConnection(builder.Configuration);
-
 //Services
 builder.Services.AddAutoMapper(typeof(MappingProfiles));
 builder.Services.AddSingleton<IPasswordHasher<Account>, PasswordHasher<Account>>();

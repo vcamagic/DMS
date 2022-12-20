@@ -1,4 +1,5 @@
 using DormManagementSystem.Web.Api.Helpers;
+using DormManagementSystem.Web.Api.Requirements;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
@@ -14,6 +15,10 @@ public static class AuthExtensions
     public static IServiceCollection ConfigureAuthorization(this IServiceCollection services) =>
         services.AddAuthorization(builder =>
         {
+            builder.AddPolicy("OwnsAccount", opt => {
+                opt.Requirements.Add(new OwnsAccountRequirement());
+            });
+
             builder.AddPolicy(AppConstants.AppPolicies.WardenPolicy, opt =>
             {
                 opt.RequireAuthenticatedUser()
