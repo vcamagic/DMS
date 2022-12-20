@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "OSwmMvcNqDRKSlXKHhWPN2iKdjRnj+6c6D1BZdPIQ6FzsX+07QdplomlOjpzTwYJdfqDQEw8UMaU9nPmzA6mPQ==",
+  "dgSpecHash": "7hepwQprIMaRy2yPXuVpf2kRDq09dothODfZWjqFmYC+z/QKzz6TjwxM5o54PTHuuAM3K4EmhDvz4uNNQAHBQA==",
   "success": true,
-  "projectFilePath": "c:\\Users\\vladimir.camagic\\Desktop\\diplomski\\DormManagementSystem.DAL.Models\\DormManagementSystem.DAL.Models.csproj",
+  "projectFilePath": "C:\\Users\\vladimir.camagic\\Desktop\\diplomski\\DormManagementSystem.DAL.Models\\DormManagementSystem.DAL.Models.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\vladimir.camagic\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\vladimir.camagic\\.nuget\\packages\\microsoft.csharp\\4.5.0\\microsoft.csharp.4.5.0.nupkg.sha512",

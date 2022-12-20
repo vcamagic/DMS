@@ -28,8 +28,8 @@
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "c:\\Users\\vladimir.camagic\\Desktop\\diplomski\\DormManagementSystem.DAL.Models\\DormManagementSystem.DAL.Models.csproj": {
-                "projectPath": "c:\\Users\\vladimir.camagic\\Desktop\\diplomski\\DormManagementSystem.DAL.Models\\DormManagementSystem.DAL.Models.csproj"
+              "C:\\Users\\vladimir.camagic\\Desktop\\diplomski\\DormManagementSystem.DAL.Models\\DormManagementSystem.DAL.Models.csproj": {
+                "projectPath": "C:\\Users\\vladimir.camagic\\Desktop\\diplomski\\DormManagementSystem.DAL.Models\\DormManagementSystem.DAL.Models.csproj"
               },
               "C:\\Users\\vladimir.camagic\\Desktop\\diplomski\\DormManagementSystem.DAL.Repositories\\DormManagementSystem.DAL.Repositories.csproj": {
                 "projectPath": "C:\\Users\\vladimir.camagic\\Desktop\\diplomski\\DormManagementSystem.DAL.Repositories\\DormManagementSystem.DAL.Repositories.csproj"
@@ -78,14 +78,14 @@
         }
       }
     },
-    "c:\\Users\\vladimir.camagic\\Desktop\\diplomski\\DormManagementSystem.DAL.Models\\DormManagementSystem.DAL.Models.csproj": {
+    "C:\\Users\\vladimir.camagic\\Desktop\\diplomski\\DormManagementSystem.DAL.Models\\DormManagementSystem.DAL.Models.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\vladimir.camagic\\Desktop\\diplomski\\DormManagementSystem.DAL.Models\\DormManagementSystem.DAL.Models.csproj",
+        "projectUniqueName": "C:\\Users\\vladimir.camagic\\Desktop\\diplomski\\DormManagementSystem.DAL.Models\\DormManagementSystem.DAL.Models.csproj",
         "projectName": "DormManagementSystem.DAL.Models",
-        "projectPath": "c:\\Users\\vladimir.camagic\\Desktop\\diplomski\\DormManagementSystem.DAL.Models\\DormManagementSystem.DAL.Models.csproj",
+        "projectPath": "C:\\Users\\vladimir.camagic\\Desktop\\diplomski\\DormManagementSystem.DAL.Models\\DormManagementSystem.DAL.Models.csproj",
         "packagesPath": "C:\\Users\\vladimir.camagic\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\vladimir.camagic\\Desktop\\diplomski\\DormManagementSystem.DAL.Models\\obj\\",
+        "outputPath": "C:\\Users\\vladimir.camagic\\Desktop\\diplomski\\DormManagementSystem.DAL.Models\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\vladimir.camagic\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -172,8 +172,8 @@
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "c:\\Users\\vladimir.camagic\\Desktop\\diplomski\\DormManagementSystem.DAL.Models\\DormManagementSystem.DAL.Models.csproj": {
-                "projectPath": "c:\\Users\\vladimir.camagic\\Desktop\\diplomski\\DormManagementSystem.DAL.Models\\DormManagementSystem.DAL.Models.csproj"
+              "C:\\Users\\vladimir.camagic\\Desktop\\diplomski\\DormManagementSystem.DAL.Models\\DormManagementSystem.DAL.Models.csproj": {
+                "projectPath": "C:\\Users\\vladimir.camagic\\Desktop\\diplomski\\DormManagementSystem.DAL.Models\\DormManagementSystem.DAL.Models.csproj"
               }
             }
           }
@@ -293,8 +293,8 @@
               "C:\\Users\\vladimir.camagic\\Desktop\\diplomski\\DormManagementSystem.BLL.Services\\DormManagementSystem.BLL.Services.csproj": {
                 "projectPath": "C:\\Users\\vladimir.camagic\\Desktop\\diplomski\\DormManagementSystem.BLL.Services\\DormManagementSystem.BLL.Services.csproj"
               },
-              "c:\\Users\\vladimir.camagic\\Desktop\\diplomski\\DormManagementSystem.DAL.Models\\DormManagementSystem.DAL.Models.csproj": {
-                "projectPath": "c:\\Users\\vladimir.camagic\\Desktop\\diplomski\\DormManagementSystem.DAL.Models\\DormManagementSystem.DAL.Models.csproj"
+              "C:\\Users\\vladimir.camagic\\Desktop\\diplomski\\DormManagementSystem.DAL.Models\\DormManagementSystem.DAL.Models.csproj": {
+                "projectPath": "C:\\Users\\vladimir.camagic\\Desktop\\diplomski\\DormManagementSystem.DAL.Models\\DormManagementSystem.DAL.Models.csproj"
               },
               "C:\\Users\\vladimir.camagic\\Desktop\\diplomski\\DormManagementSystem.GlobalExceptionHandler\\DormManagementSystem.GlobalExceptionHandler.csproj": {
                 "projectPath": "C:\\Users\\vladimir.camagic\\Desktop\\diplomski\\DormManagementSystem.GlobalExceptionHandler\\DormManagementSystem.GlobalExceptionHandler.csproj"
@@ -312,6 +312,10 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
+            "AutoMapper.Extensions.Microsoft.DependencyInjection": {
+              "target": "Package",
+              "version": "[12.0.0, )"
+            },
             "EntityFramework": {
               "target": "Package",
               "version": "[6.4.4, )"

@@ -2713,8 +2713,8 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "c:\\Users\\vladimir.camagic\\Desktop\\diplomski\\DormManagementSystem.DAL.Models\\DormManagementSystem.DAL.Models.csproj": {
-              "projectPath": "c:\\Users\\vladimir.camagic\\Desktop\\diplomski\\DormManagementSystem.DAL.Models\\DormManagementSystem.DAL.Models.csproj"
+            "C:\\Users\\vladimir.camagic\\Desktop\\diplomski\\DormManagementSystem.DAL.Models\\DormManagementSystem.DAL.Models.csproj": {
+              "projectPath": "C:\\Users\\vladimir.camagic\\Desktop\\diplomski\\DormManagementSystem.DAL.Models\\DormManagementSystem.DAL.Models.csproj"
             },
             "C:\\Users\\vladimir.camagic\\Desktop\\diplomski\\DormManagementSystem.DAL.Repositories\\DormManagementSystem.DAL.Repositories.csproj": {
               "projectPath": "C:\\Users\\vladimir.camagic\\Desktop\\diplomski\\DormManagementSystem.DAL.Repositories\\DormManagementSystem.DAL.Repositories.csproj"

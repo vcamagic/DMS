@@ -6,7 +6,5 @@ public static class DbExtensions
 {
     public static IServiceCollection ConfigureDbConnection(this IServiceCollection services, IConfiguration configuration) =>
         services.AddDbContext<ApplicationContext>(options => 
-            options
-            .UseSqlServer(configuration
-                .GetConnectionString("DefaultConnection")));
+            options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 }

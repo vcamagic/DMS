@@ -1,5 +1,5 @@
-c:\Users\vladimir.camagic\Desktop\diplomski\DormManagementSystem.DAL.Models\bin\Debug\net6.0\DormManagementSystem.DAL.Models.deps.json
-c:\Users\vladimir.camagic\Desktop\diplomski\DormManagementSystem.DAL.Models\bin\Debug\net6.0\DormManagementSystem.DAL.Models.runtimeconfig.json
+C:\Users\vladimir.camagic\Desktop\diplomski\DormManagementSystem.DAL.Models\bin\Debug\net6.0\DormManagementSystem.DAL.Models.deps.json
+C:\Users\vladimir.camagic\Desktop\diplomski\DormManagementSystem.DAL.Models\bin\Debug\net6.0\DormManagementSystem.DAL.Models.runtimeconfig.json
 c:\Users\vladimir.camagic\Desktop\diplomski\DormManagementSystem.DAL.Models\bin\Debug\net6.0\DormManagementSystem.DAL.Models.dll
 c:\Users\vladimir.camagic\Desktop\diplomski\DormManagementSystem.DAL.Models\bin\Debug\net6.0\DormManagementSystem.DAL.Models.pdb
 c:\Users\vladimir.camagic\Desktop\diplomski\DormManagementSystem.DAL.Models\obj\Debug\net6.0\DormManagementSystem.DAL.Models.csproj.AssemblyReference.cache
@@ -10,5 +10,5 @@ c:\Users\vladimir.camagic\Desktop\diplomski\DormManagementSystem.DAL.Models\obj\
 c:\Users\vladimir.camagic\Desktop\diplomski\DormManagementSystem.DAL.Models\obj\Debug\net6.0\DormManagementSystem.DAL.Models.dll
 c:\Users\vladimir.camagic\Desktop\diplomski\DormManagementSystem.DAL.Models\obj\Debug\net6.0\refint\DormManagementSystem.DAL.Models.dll
 c:\Users\vladimir.camagic\Desktop\diplomski\DormManagementSystem.DAL.Models\obj\Debug\net6.0\DormManagementSystem.DAL.Models.pdb
-c:\Users\vladimir.camagic\Desktop\diplomski\DormManagementSystem.DAL.Models\obj\Debug\net6.0\DormManagementSystem.DAL.Models.genruntimeconfig.cache
-c:\Users\vladimir.camagic\Desktop\diplomski\DormManagementSystem.DAL.Models\obj\Debug\net6.0\ref\DormManagementSystem.DAL.Models.dll
+C:\Users\vladimir.camagic\Desktop\diplomski\DormManagementSystem.DAL.Models\obj\Debug\net6.0\DormManagementSystem.DAL.Models.genruntimeconfig.cache
+C:\Users\vladimir.camagic\Desktop\diplomski\DormManagementSystem.DAL.Models\obj\Debug\net6.0\ref\DormManagementSystem.DAL.Models.dll

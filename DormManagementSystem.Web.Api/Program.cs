@@ -1,3 +1,4 @@
+using DormManagementSystem.BLL.Services;
 using DormManagementSystem.BLL.Services.Implementations;
 using DormManagementSystem.BLL.Services.Interfaces;
 using DormManagementSystem.DAL.Models.Models;
@@ -11,9 +12,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.ConfigureDbConnection(builder.Configuration);
 
 //Services
+builder.Services.AddAutoMapper(typeof(MappingProfiles));
 builder.Services.AddSingleton<IPasswordHasher<Account>, PasswordHasher<Account>>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddTransient<IAuthService, AuthService>();
+builder.Services.AddTransient<IAccountsService, AccountsService>();
 //Repositories
 builder.Services.AddTransient<IRepositoryManager, RepositoryManager>();
 
@@ -21,7 +24,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+ 
 builder.Services.ConfigureAuthentication();
 builder.Services.ConfigureAuthorization();
 

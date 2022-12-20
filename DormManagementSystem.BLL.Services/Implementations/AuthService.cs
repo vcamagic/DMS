@@ -21,7 +21,7 @@ public class AuthService : IAuthService
         _repositoryManager = repositoryManager;
         _httpContextAccessor = httpContextAccessor;
     }
-    
+
     public async Task<Account> RegisterAccount(RegisterAccountDTO registerAccountDTO)
     {
         var existingAccount = await _repositoryManager
@@ -45,10 +45,6 @@ public class AuthService : IAuthService
         _repositoryManager.AccountRepository.Create(account);
         await _repositoryManager.SaveAsync();
 
-        await _httpContextAccessor
-            .HttpContext
-            .SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, UserHelper.Convert(account));
-
         return account;
     }
 
@@ -63,6 +59,11 @@ public class AuthService : IAuthService
         if (account == null)
         {
             throw new BadRequestException("Bad credentials.");
+        }
+
+        if (account.IsActive == false)
+        {
+            throw new BadRequestException($"Account with email address {account.Email} is not activated.");
         }
 
         var result = _passwordHasher.VerifyHashedPassword(account, account.PasswordHash, loginDTO.Password);
@@ -101,7 +102,8 @@ public static class UserHelper
 {
     public static System.Security.Claims.ClaimsPrincipal Convert(Account account)
     {
-        var claims = account.Claims.Select(x => new System.Security.Claims.Claim(x.Name, x.Value));
+        var claims = account.Claims.Select(x => new System.Security.Claims.Claim(x.Name, x.Value)).ToList();
+        claims.Add(new System.Security.Claims.Claim("Email", account.Email));
 
         var identity = new System.Security.Claims.ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 

@@ -1,10 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "DwXftlCbAcU+Xy4bChCZcu9vfqdNd/PQhA4AAFzilGd9LQ3zSLZ0MGq08Wgp7y5ycA9FOFlkMFLJVD054Gqd/Q==",
+  "dgSpecHash": "cifHPiS7wGHMJA50YaDBMWos8I9N9tMVZw6eSN8HbZxJtI7gPc0nVF8V5FnPuDd84ob3X1fZOhZtFNhLNfTnxQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\vladimir.camagic\\Desktop\\diplomski\\DormManagementSystem.Web.Api\\DormManagementSystem.Web.Api.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\vladimir.camagic\\.nuget\\packages\\automapper\\12.0.0\\automapper.12.0.0.nupkg.sha512",
+    "C:\\Users\\vladimir.camagic\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.0\\automapper.extensions.microsoft.dependencyinjection.12.0.0.nupkg.sha512",
     "C:\\Users\\vladimir.camagic\\.nuget\\packages\\entityframework\\6.4.4\\entityframework.6.4.4.nupkg.sha512",
     "C:\\Users\\vladimir.camagic\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\vladimir.camagic\\.nuget\\packages\\microsoft.aspnetcore.authentication\\2.2.0\\microsoft.aspnetcore.authentication.2.2.0.nupkg.sha512",

@@ -10,7 +10,7 @@ public class RegisterAccountDTO
     public string Password { get; set; }
     [Required(ErrorMessage = $"{nameof(ConfirmPassword)} is required."), Compare(nameof(Password))]
     public string ConfirmPassword { get; set; }
-    [Required(ErrorMessage = $"{nameof(Role)} is required.")]
+    [Required(ErrorMessage = $"{nameof(Roles)} are required.")]
     public IEnumerable<Role> Roles { get; set; }
 }
 
