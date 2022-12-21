@@ -6,7 +6,7 @@ using DormManagementSystem.DAL.Models.Models;
 
 namespace DormManagementSystem.BLL.Services.Interfaces;
 
-public interface IAccountsService
+public interface IAccountsService : IServiceBase<Account>
 {
     public Task<IReadOnlyList<AccountDTO>> GetAccounts(PaginationDTO paginationDTO);
     public Task<AccountDTO> GetAccount(Guid id);

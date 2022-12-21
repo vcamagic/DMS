@@ -15,11 +15,13 @@ public class AuthService : IAuthService
     public AuthService(
         IPasswordHasher<Account> passwordHasher,
         IRepositoryManager repositoryManager,
-        IHttpContextAccessor httpContextAccessor)
+        IHttpContextAccessor httpContextAccessor,
+        IAccountsService accountsService)
     {
         _passwordHasher = passwordHasher;
         _repositoryManager = repositoryManager;
         _httpContextAccessor = httpContextAccessor;
+        _accountsService = accountsService;
     }
 
     public async Task<Account> RegisterAccount(RegisterAccountDTO registerAccountDTO)
@@ -42,9 +44,7 @@ public class AuthService : IAuthService
         };
         account.PasswordHash = _passwordHasher.HashPassword(account, registerAccountDTO.Password);
 
-        _repositoryManager.AccountRepository.Create(account);
-        await _repositoryManager.SaveAsync();
-
+        await _accountsService.Create(account);
         return account;
     }
 
@@ -96,6 +96,7 @@ public class AuthService : IAuthService
     private readonly IPasswordHasher<Account> _passwordHasher;
     private readonly IRepositoryManager _repositoryManager;
     private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly IAccountsService _accountsService;
 }
 
 public static class UserHelper

@@ -16,12 +16,13 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddAutoMapper(typeof(MappingProfiles));
 builder.Services.AddSingleton<IPasswordHasher<Account>, PasswordHasher<Account>>();
 //Repositories
-builder.Services.AddTransient<IRepositoryManager, RepositoryManager>();
+builder.Services.AddScoped<IRepositoryManager, RepositoryManager>();
+builder.Services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
 
 //Services
-builder.Services.AddTransient<IAuthService, AuthService>();
-builder.Services.AddTransient<IAccountsService, AccountsService>();
-builder.Services.AddTransient<IAuthorizationHandler, OwnsAccountPolicyHandler>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IAccountsService, AccountsService>();
+builder.Services.AddScoped<IAuthorizationHandler, OwnsAccountPolicyHandler>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

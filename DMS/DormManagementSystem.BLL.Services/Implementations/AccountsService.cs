@@ -8,21 +8,20 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DormManagementSystem.BLL.Services.Implementations;
 
-public class AccountsService : IAccountsService
+public class AccountsService : ServiceBase<Account>, IAccountsService
 {
     public AccountsService(
         IRepositoryManager repositoryManager,
-        IMapper mapper)
+        IMapper mapper,
+        IRepositoryBase<Account> repositoryBase) : base(repositoryBase)
     {
         _repositoryManager = repositoryManager;
         _mapper = mapper;
     }
     public async Task ActivateAccount(Guid accountId)
     {
-        var account = await _repositoryManager
-            .AccountRepository
-            .FindByCondition(x => x.Id == accountId, true)
-            .FirstOrDefaultAsync() ?? throw new BadRequestException($"Account with Id {accountId} does not exist.");
+        var account = await GetEntity(x => x.Id == accountId, true) ?? 
+            throw new BadRequestException($"Account with Id {accountId} does not exist.");
 
         account.IsActive = true;
 
@@ -31,35 +30,22 @@ public class AccountsService : IAccountsService
 
     public async Task<IReadOnlyList<AccountDTO>> GetAccounts(PaginationDTO paginationDTO)
     {
-        var accounts = await _repositoryManager
-            .AccountRepository
-            .FindAll(false)
-            .Include(x => x.Claims)
-            .Skip(paginationDTO.Page * paginationDTO.PageSize)
-            .Take(paginationDTO.PageSize)
-            .ToListAsync();
-
+        var accounts = await GetEntityPage(paginationDTO, false, x => x.Claims); 
         return _mapper.Map<IReadOnlyList<AccountDTO>>(accounts);
     }
 
     public async Task<AccountDTO> GetAccount(Guid id)
     {
-        var account = await _repositoryManager
-            .AccountRepository
-            .FindByCondition(x => x.Id == id, false)
-            .Include(x => x.Claims)
-            .FirstOrDefaultAsync();
+        var account = await GetEntity(x => x.Id == id, false, x => x.Claims) ?? 
+            throw new BadRequestException($"Account with id {id} does not exist.");
 
         return _mapper.Map<AccountDTO>(account);
     }
 
     public async Task<AccountDTO> GetAccount(string email)
     {
-        var account = await _repositoryManager
-            .AccountRepository
-            .FindByCondition(x => x.Email == email, false)
-            .Include(x => x.Claims)
-            .FirstOrDefaultAsync();
+        var account = await GetEntity(x => x.Email == email, false, x => x.Claims) ??
+            throw new BadRequestException($"Account with email {email} does not exist.");
 
         return _mapper.Map<AccountDTO>(account);
     }

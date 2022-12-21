@@ -7,7 +7,7 @@ namespace DormManagementSystem.DAL.Repositories.Implementations;
 
 public class RepositoryBase<T> : IRepositoryBase<T> where T : class
 {
-    private readonly ApplicationContext _context;
+    public ApplicationContext Context => _context;
 
     public RepositoryBase(ApplicationContext context)
     {
@@ -28,4 +28,7 @@ public class RepositoryBase<T> : IRepositoryBase<T> where T : class
             _context.Set<T>().AsNoTracking().Where(expression).AsQueryable();
 
     public void Update(T entity) => _context.Set<T>().Update(entity);
+
+    
+    private readonly ApplicationContext _context;
 }
