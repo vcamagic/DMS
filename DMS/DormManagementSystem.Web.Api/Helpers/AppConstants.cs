@@ -20,5 +20,6 @@ public static class AppConstants
         public const string DoorkeeperPolicy = "DoorkeeperPolicy";
         public const string StudentPolicy = "StudentPolicy";
         public const string JanitorPolicy = "JanitorPolicy";
+        public const string OwnsAccountPolicy = "OwnsAccountPolicy";
     }
 }

@@ -16,7 +16,7 @@ public static class AuthExtensions
         services.AddAuthorization(builder =>
         {
 
-            builder.AddPolicy("OwnsAccountPolicy", opt =>
+            builder.AddPolicy(AppConstants.AppPolicies.OwnsAccountPolicy, opt =>
             {
                 opt.RequireAuthenticatedUser()
                     .AddAuthenticationSchemes(CookieAuthenticationDefaults.AuthenticationScheme)

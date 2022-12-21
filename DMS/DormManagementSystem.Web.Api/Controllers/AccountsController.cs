@@ -25,8 +25,8 @@ public class AccountsController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    [Authorize(Policy = "OwnsAccountPolicy")]
-    public async Task<IActionResult> Get([FromRoute]Guid id)
+    [Authorize(Policy = AppConstants.AppPolicies.OwnsAccountPolicy)]
+    public async Task<ActionResult<AccountDTO>> Get([FromRoute]Guid id)
     {
         var account = await _accountsService.GetAccount(id);
         return Ok(account);
