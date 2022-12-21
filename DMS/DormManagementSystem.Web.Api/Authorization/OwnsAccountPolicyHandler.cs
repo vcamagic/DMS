@@ -28,9 +28,7 @@ public class OwnsAccountPolicyHandler : AuthorizationHandler<OwnsAccountRequirem
             return;
         }
 
-        var roleClaim = context.User.Claims.FirstOrDefault(x => x.Type == "Role")?.Value;
-
-        if (roleClaim == AppConstants.AppRoles.Administrator)
+        if (context.User.HasClaim("Role", AppConstants.AppRoles.Administrator))
         {
             context.Succeed(requirement);
             return;
