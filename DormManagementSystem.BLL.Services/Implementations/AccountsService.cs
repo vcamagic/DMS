@@ -42,6 +42,28 @@ public class AccountsService : IAccountsService
         return _mapper.Map<IReadOnlyList<AccountDTO>>(accounts);
     }
 
+    public async Task<AccountDTO> GetAccount(Guid id)
+    {
+        var account = await _repositoryManager
+            .AccountRepository
+            .FindByCondition(x => x.Id == id, false)
+            .Include(x => x.Claims)
+            .FirstOrDefaultAsync();
+
+        return _mapper.Map<AccountDTO>(account);
+    }
+
+    public async Task<AccountDTO> GetAccount(string email)
+    {
+        var account = await _repositoryManager
+            .AccountRepository
+            .FindByCondition(x => x.Email == email, false)
+            .Include(x => x.Claims)
+            .FirstOrDefaultAsync();
+
+        return _mapper.Map<AccountDTO>(account);
+    }
+
     private readonly IRepositoryManager _repositoryManager;
     private readonly IMapper _mapper;
 }

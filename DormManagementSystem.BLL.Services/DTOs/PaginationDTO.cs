@@ -9,8 +9,8 @@ public class PaginationDTO
     }
     public int Page { get => _page; set => _page = value; }
 
-    private int _pageSize;
-    private int _page;
+    private int _pageSize = 20;
+    private int _page = 0;
     private int _maxPageSize = 50;
 
 }

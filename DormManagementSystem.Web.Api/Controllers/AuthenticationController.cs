@@ -12,8 +12,6 @@ namespace DormManagementSystem.Web.Api.Controllers;
 [Route("api/[controller]")]
 public class AuthenticationController : ControllerBase
 {
-    private readonly IAuthService _authService;
-
     public AuthenticationController(IAuthService authService)
     {
         _authService = authService;
@@ -32,5 +30,7 @@ public class AuthenticationController : ControllerBase
         await _authService.Login(loginDTO);
         return Ok();
     }
+
+    private readonly IAuthService _authService;
 }
  

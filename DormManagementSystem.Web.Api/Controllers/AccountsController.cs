@@ -21,15 +21,22 @@ public class AccountsController : ControllerBase
     public async Task<ActionResult<IReadOnlyList<AccountDTO>>> Get([FromQuery]PaginationDTO paginationDTO)
     {
         var accounts = await _accountsService.GetAccounts(paginationDTO);
-
         return Ok(accounts);
+    }
+
+    [HttpGet("{id}")]
+    [Authorize(Policy = "OwnsAccountPolicy")]
+    public async Task<IActionResult> Get([FromRoute]Guid id)
+    {
+        var account = await _accountsService.GetAccount(id);
+        return Ok(account);
     }
 
     [Authorize(Policy = AppConstants.AppPolicies.AdministratorPolicy)]
     [HttpPut("activate/{id}")]
-    public async Task<IActionResult> ActivateAccount([FromRoute]Guid accountId)
+    public async Task<IActionResult> ActivateAccount([FromRoute]Guid id)
     {
-        await _accountsService.ActivateAccount(accountId);
+        await _accountsService.ActivateAccount(id);
         return Ok();
     }
 
