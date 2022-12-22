@@ -21,7 +21,7 @@ public class ServiceBase<T> : IServiceBase<T> where T : class
                 .Skip((paginationDTO.Page - 1) * paginationDTO.PageSize)
                 .Take(paginationDTO.PageSize)
                 .ToListAsync();
-    public async Task<T?> GetEntity(Expression<Func<T, bool>> expression, bool trackChanges, params Expression<Func<T, object>>[] includes) =>
+    public async Task<T> GetEntity(Expression<Func<T, bool>> expression, bool trackChanges, params Expression<Func<T, object>>[] includes) =>
         await includes
                 .Aggregate(_repository.FindByCondition(expression, trackChanges), (current, include) => current.Include(include))
                 .FirstOrDefaultAsync();
