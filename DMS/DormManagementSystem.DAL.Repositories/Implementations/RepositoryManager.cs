@@ -12,6 +12,19 @@ public class RepositoryManager : IRepositoryManager
 
     public ApplicationContext Context => _context;    
 
+    public IUserRepository UserRepository
+    {
+        get
+        {
+            if (_userRepository == null)
+            {
+                _userRepository = new UserRepository(_context);
+            }
+
+            return _userRepository;
+        }
+    }
+
     public IAccountRepository AccountRepository
     {
         get
@@ -29,4 +42,5 @@ public class RepositoryManager : IRepositoryManager
 
     private readonly ApplicationContext _context;
     private IAccountRepository _accountRepository;    
+    private IUserRepository _userRepository;    
 }

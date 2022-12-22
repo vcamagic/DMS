@@ -1,7 +1,6 @@
 using AutoMapper;
 using DormManagementSystem.BLL.Services.DTOs;
 using DormManagementSystem.BLL.Services.Interfaces;
-using DormManagementSystem.DAL.Models;
 using DormManagementSystem.DAL.Models.Models;
 using DormManagementSystem.DAL.Repositories.Interfaces;
 using DormManagementSystem.GlobalExceptionHandler.Exceptions;
@@ -11,9 +10,9 @@ namespace DormManagementSystem.BLL.Services.Implementations;
 public class UsersService : ServiceBase<User>, IUsersService
 {
     public UsersService(
-        IRepositoryBase<User> repository,
+        IRepositoryManager repositoryManager,
         IMapper mapper,
-        IAccountsService accountsService) : base(repository, mapper)
+        IAccountsService accountsService) : base(repositoryManager.UserRepository, mapper)
     {
         _accountsService = accountsService;
     }

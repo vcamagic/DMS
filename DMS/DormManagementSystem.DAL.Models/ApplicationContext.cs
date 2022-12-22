@@ -15,14 +15,25 @@ public class ApplicationContext : DbContext
     {
         modelBuilder
         .Entity<Account>()
+        .HasIndex(x => x.Email)
+        .IsUnique();
+
+        modelBuilder
+        .Entity<Account>()
         .HasOne(x => x.User)
         .WithOne(x => x.Account)
         .HasForeignKey<User>(x => x.AccountId);
+        
 
         modelBuilder
         .Entity<User>()
         .Property(x => x.DateOfBirth)
         .HasColumnType("date");
+
+        modelBuilder
+        .Entity<User>()
+        .HasIndex(x => x.JMBG)
+        .IsUnique();
 
         modelBuilder
         .Entity<Claim>(x => 

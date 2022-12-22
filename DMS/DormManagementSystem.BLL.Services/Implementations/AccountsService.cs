@@ -4,7 +4,6 @@ using DormManagementSystem.BLL.Services.Interfaces;
 using DormManagementSystem.DAL.Models.Models;
 using DormManagementSystem.DAL.Repositories.Interfaces;
 using DormManagementSystem.GlobalExceptionHandler.Exceptions;
-using Microsoft.EntityFrameworkCore;
 
 namespace DormManagementSystem.BLL.Services.Implementations;
 
@@ -12,8 +11,7 @@ public class AccountsService : ServiceBase<Account>, IAccountsService
 {
     public AccountsService(
         IRepositoryManager repositoryManager,
-        IMapper mapper,
-        IRepositoryBase<Account> repositoryBase) : base(repositoryBase)
+        IMapper mapper) : base(repositoryManager.AccountRepository)
     {
         _repositoryManager = repositoryManager;
         _mapper = mapper;
