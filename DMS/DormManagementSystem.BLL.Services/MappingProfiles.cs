@@ -10,5 +10,8 @@ public class MappingProfiles : Profile
     {
         CreateMap<Account, AccountDTO>();
         CreateMap<Claim, ClaimDTO>();
+        CreateMap<User, UserDTO>().ReverseMap();
+        CreateMap<CreateUserDTO, User>();
+        CreateMap<UpdateUserDTO, User>();
     }
 }

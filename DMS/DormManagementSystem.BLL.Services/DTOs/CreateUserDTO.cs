@@ -1,16 +1,9 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace DormManagementSystem.DAL.Models.Models;
+namespace DormManagementSystem.BLL.Services.DTOs;
 
-public class User
+public class CreateUserDTO
 {
-    public User()
-    {
-        Id = Guid.NewGuid();
-    }
-
-    [Key, Required(ErrorMessage = $"{nameof(Id)} is required.")]
-    public Guid Id { get; set; }
     [Required(ErrorMessage = $"{nameof(FirstName)} is required.")]
     public string FirstName { get; set; }
     [Required(ErrorMessage = $"{nameof(LastName)} is required.")] 
@@ -20,7 +13,6 @@ public class User
     public string Address { get; set; }
     [Required(ErrorMessage = $"{nameof(JMBG)} is required.")] 
     public string JMBG { get; set; }
-
+    [Required(ErrorMessage = $"{nameof(AccountId)} is required.")] 
     public Guid AccountId { get; set; }
-    public Account Account { get; set; }
 }

@@ -1,4 +1,5 @@
 using System.Linq.Expressions;
+using AutoMapper;
 using DormManagementSystem.BLL.Services.DTOs;
 using DormManagementSystem.BLL.Services.Interfaces;
 using DormManagementSystem.DAL.Repositories.Interfaces;
@@ -8,12 +9,20 @@ namespace DormManagementSystem.BLL.Services.Implementations;
 
 public class ServiceBase<T> : IServiceBase<T> where T : class
 {
+
+    public ServiceBase(IRepositoryBase<T> repository, IMapper mapper)
+    {
+        _repository = repository;
+        _mapper = mapper;
+    }
     public ServiceBase(IRepositoryBase<T> repository)
     {
         _repository = repository;
     }
 
     public IRepositoryBase<T> Repository => _repository;
+
+    public IMapper Mapper => _mapper;
 
     public async Task<IReadOnlyList<T>> GetEntityPage(PaginationDTO paginationDTO, bool trackChanges, params Expression<Func<T, object>>[] includes) =>
          await includes
@@ -46,4 +55,5 @@ public class ServiceBase<T> : IServiceBase<T> where T : class
     }   
 
     private readonly IRepositoryBase<T> _repository;
+    private readonly IMapper _mapper;
 }

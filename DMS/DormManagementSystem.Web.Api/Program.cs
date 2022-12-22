@@ -22,6 +22,8 @@ builder.Services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
 //Services
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IAccountsService, AccountsService>();
+builder.Services.AddScoped<IUsersService, UsersService>();
+
 builder.Services.AddScoped<IAuthorizationHandler, OwnsAccountPolicyHandler>();
 
 builder.Services.AddControllers();
