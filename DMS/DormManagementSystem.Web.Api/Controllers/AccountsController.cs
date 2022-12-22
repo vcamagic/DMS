@@ -18,15 +18,17 @@ public class AccountsController : ControllerBase
 
     [HttpGet]
     [Authorize(Policy = AppConstants.AppPolicies.AdministratorPolicy)]
-    public async Task<ActionResult<IReadOnlyList<AccountDTO>>> Get([FromQuery]PaginationDTO paginationDTO)
+    public async Task<ActionResult<Page<AccountDTO>>> Get(
+        [FromQuery] PaginationDTO paginationDTO, 
+        [FromQuery] bool? active = null)
     {
-        var accounts = await _accountsService.GetAccounts(paginationDTO);
+        var accounts = await _accountsService.GetAccounts(paginationDTO, active);
         return Ok(accounts);
     }
 
     [HttpGet("{id}")]
     [Authorize(Policy = AppConstants.AppPolicies.OwnsAccountPolicy)]
-    public async Task<ActionResult<AccountDTO>> Get([FromRoute]Guid id)
+    public async Task<ActionResult<AccountDTO>> Get([FromRoute] Guid id)
     {
         var account = await _accountsService.GetAccount(id);
         return Ok(account);
@@ -34,11 +36,11 @@ public class AccountsController : ControllerBase
 
     [Authorize(Policy = AppConstants.AppPolicies.AdministratorPolicy)]
     [HttpPut("activate/{id}")]
-    public async Task<IActionResult> ActivateAccount([FromRoute]Guid id)
+    public async Task<IActionResult> ActivateAccount([FromRoute] Guid id)
     {
         await _accountsService.ActivateAccount(id);
         return Ok();
     }
 
-    private readonly IAccountsService _accountsService;    
+    private readonly IAccountsService _accountsService;
 }

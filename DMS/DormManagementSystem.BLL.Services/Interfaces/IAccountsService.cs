@@ -8,7 +8,7 @@ namespace DormManagementSystem.BLL.Services.Interfaces;
 
 public interface IAccountsService : IServiceBase<Account>
 {
-    public Task<IReadOnlyList<AccountDTO>> GetAccounts(PaginationDTO paginationDTO);
+    public Task<Page<AccountDTO>> GetAccounts(PaginationDTO paginationDTO, bool? active = null);
     public Task<AccountDTO> GetAccount(Guid id);
     public Task<AccountDTO> GetAccount(string email);
     public Task ActivateAccount(Guid accountId);

@@ -13,5 +13,8 @@ public class MappingProfiles : Profile
         CreateMap<User, UserDTO>().ReverseMap();
         CreateMap<CreateUserDTO, User>();
         CreateMap<UpdateUserDTO, User>();
+
+        CreateMap<Page<Account>, Page<AccountDTO>>();
+        CreateMap<Page<User>, Page<UserDTO>>();
     }
 }

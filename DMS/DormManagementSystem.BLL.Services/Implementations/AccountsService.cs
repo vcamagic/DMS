@@ -20,7 +20,7 @@ public class AccountsService : ServiceBase<Account>, IAccountsService
     }
     public async Task ActivateAccount(Guid accountId)
     {
-        var account = await GetEntity(x => x.Id == accountId, true) ?? 
+        var account = await GetEntity(x => x.Id == accountId, true) ??
             throw new BadRequestException($"Account with Id {accountId} does not exist.");
 
         account.IsActive = true;
@@ -28,15 +28,21 @@ public class AccountsService : ServiceBase<Account>, IAccountsService
         await _repositoryManager.SaveAsync();
     }
 
-    public async Task<IReadOnlyList<AccountDTO>> GetAccounts(PaginationDTO paginationDTO)
+    public async Task<Page<AccountDTO>> GetAccounts(
+        PaginationDTO paginationDTO,
+        bool? active = null)
     {
-        var accounts = await GetEntityPage(paginationDTO, false, x => x.Claims); 
-        return _mapper.Map<IReadOnlyList<AccountDTO>>(accounts);
+        var accountsPage = await GetEntityPage(
+            paginationDTO,
+            x => (active == null || x.IsActive == active),
+            false, x => x.Claims);
+            
+        return _mapper.Map<Page<AccountDTO>>(accountsPage);
     }
 
     public async Task<AccountDTO> GetAccount(Guid id)
     {
-        var account = await GetEntity(x => x.Id == id, false, x => x.Claims) ?? 
+        var account = await GetEntity(x => x.Id == id, false, x => x.Claims) ??
             throw new BadRequestException($"Account with id {id} does not exist.");
 
         return _mapper.Map<AccountDTO>(account);

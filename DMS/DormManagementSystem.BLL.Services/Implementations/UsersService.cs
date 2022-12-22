@@ -26,11 +26,11 @@ public class UsersService : ServiceBase<User>, IUsersService
         return Mapper.Map<UserDTO>(user);
     }
 
-    public async Task<IReadOnlyList<UserDTO>> GetUsers(PaginationDTO paginationDTO)
+    public async Task<Page<UserDTO>> GetUsers(PaginationDTO paginationDTO)
     {
         var users = await GetEntityPage(paginationDTO, false, x => x.Account);
 
-        return Mapper.Map<IReadOnlyList<UserDTO>>(users);
+        return Mapper.Map<Page<UserDTO>>(users);
     }
 
     public async Task<UserDTO> Create(CreateUserDTO createUserDTO)

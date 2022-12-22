@@ -16,14 +16,14 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetUsers([FromQuery] PaginationDTO paginationDTO)
+    public async Task<ActionResult<Page<UserDTO>>> GetUsers([FromQuery] PaginationDTO paginationDTO)
     {
         var users = await _usersService.GetUsers(paginationDTO);
         return Ok(users);
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetUser([FromRoute] Guid id)
+    public async Task<ActionResult<UserDTO>> GetUser([FromRoute] Guid id)
     {
         var user = await _usersService.GetUser(id);
         return Ok(user);
