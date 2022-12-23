@@ -11,10 +11,9 @@ public class AccountsService : ServiceBase<Account>, IAccountsService
 {
     public AccountsService(
         IRepositoryManager repositoryManager,
-        IMapper mapper) : base(repositoryManager.AccountRepository)
+        IMapper mapper) : base(repositoryManager.AccountRepository, mapper)
     {
         _repositoryManager = repositoryManager;
-        _mapper = mapper;
     }
     public async Task ActivateAccount(Guid accountId)
     {
@@ -34,8 +33,8 @@ public class AccountsService : ServiceBase<Account>, IAccountsService
             paginationDTO,
             x => (active == null || x.IsActive == active),
             false, x => x.Claims);
-            
-        return _mapper.Map<Page<AccountDTO>>(accountsPage);
+
+        return Mapper.Map<Page<AccountDTO>>(accountsPage);
     }
 
     public async Task<AccountDTO> GetAccount(Guid id)
@@ -43,17 +42,40 @@ public class AccountsService : ServiceBase<Account>, IAccountsService
         var account = await GetEntity(x => x.Id == id, false, x => x.Claims) ??
             throw new BadRequestException($"Account with id {id} does not exist.");
 
-        return _mapper.Map<AccountDTO>(account);
+        return Mapper.Map<AccountDTO>(account);
     }
 
     public async Task<AccountDTO> GetAccount(string email)
     {
         var account = await GetEntity(x => x.Email == email, false, x => x.Claims) ??
-            throw new BadRequestException($"Account with email {email} does not exist.");
+            throw new BadRequestException($"Account with email address {email} does not exist.");;
 
-        return _mapper.Map<AccountDTO>(account);
+        return Mapper.Map<AccountDTO>(account);
     }
 
+    public async Task<AccountDTO> CreateAccount(CreateAccountDTO createAccountDTO)
+    {
+        var account = Mapper.Map<Account>(createAccountDTO);
+
+        await Create(account);
+
+        return Mapper.Map<AccountDTO>(account);
+    }
+
+    private static ICollection<Claim> ConvertRolesToClaims(IEnumerable<Role> roles) =>
+    roles.Select(x =>
+    {
+        return x switch
+        {
+            Role.Administrator => new Claim("Role", "Administrator"),
+            Role.Warden => new Claim("Role", "Warden"),
+            Role.Maid => new Claim("Role", "Maid"),
+            Role.Doorkeeper => new Claim("Role", "Doorkeeper"),
+            Role.Janitor => new Claim("Role", "Janitor"),
+            Role.Student => new Claim("Role", "Student"),
+            _ => new Claim()
+        };
+    }).ToList();
+
     private readonly IRepositoryManager _repositoryManager;
-    private readonly IMapper _mapper;
 }

@@ -18,10 +18,10 @@ public class AuthenticationController : ControllerBase
     }
 
     [HttpPost("/register-account")]
-    public async Task<IActionResult> RegisterAccount([FromBody] RegisterAccountDTO registerAccountDTO) 
+    public async Task<ActionResult<AccountDTO>> RegisterAccount([FromBody] RegisterAccountDTO registerAccountDTO) 
     {
-        var account = await _authService.RegisterAccount(registerAccountDTO);
-        return Ok();
+        var accountDTO  = await _authService.RegisterAccount(registerAccountDTO);
+        return Ok(accountDTO);
     }
 
     [HttpPost("/login")]

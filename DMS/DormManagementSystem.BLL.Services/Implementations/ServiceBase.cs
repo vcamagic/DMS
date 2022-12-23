@@ -9,18 +9,31 @@ namespace DormManagementSystem.BLL.Services.Implementations;
 
 public class ServiceBase<T> : IServiceBase<T> where T : class
 {
+    public ServiceBase(IRepositoryBase<T> repository)
+    {
+        _repository = repository;
+    }
     public ServiceBase(IRepositoryBase<T> repository, IMapper mapper)
     {
         _repository = repository;
         _mapper = mapper;
     }
-    public ServiceBase(IRepositoryBase<T> repository)
+
+    public ServiceBase(IRepositoryManager repositoryManager, IMapper mapper)
+    {
+        _repositoryManager = repositoryManager;
+        _mapper = mapper;
+    }
+
+    public ServiceBase(IRepositoryBase<T> repository, IRepositoryManager repositoryManager, IMapper mapper)
     {
         _repository = repository;
+        _repositoryManager = repositoryManager;
+        _mapper = mapper;
     }
 
     public IRepositoryBase<T> Repository => _repository;
-
+    public IRepositoryManager RepositoryManager => _repositoryManager;
     public IMapper Mapper => _mapper;
 
     public async Task<Page<T>> GetEntityPage(PaginationDTO paginationDTO, bool trackChanges, params Expression<Func<T, object>>[] includes)
@@ -89,5 +102,6 @@ public class ServiceBase<T> : IServiceBase<T> where T : class
     }
 
     private readonly IRepositoryBase<T> _repository;
+    private readonly IRepositoryManager _repositoryManager;
     private readonly IMapper _mapper;
 }

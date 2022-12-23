@@ -24,28 +24,25 @@ public class AuthService : IAuthService
         _accountsService = accountsService;
     }
 
-    public async Task<Account> RegisterAccount(RegisterAccountDTO registerAccountDTO)
+    public async Task<AccountDTO> RegisterAccount(RegisterAccountDTO registerAccountDTO)
     {
-        var existingAccount = await _repositoryManager
-                .AccountRepository
-                .FindByCondition(x => x.Email == registerAccountDTO.Email, false)
-                .FirstOrDefaultAsync();
+        
+        var existingAccount = await _accountsService.GetAccount(registerAccountDTO.Email);
 
         if (existingAccount != null)
         {
             throw new BadRequestException($"Account with email {registerAccountDTO.Email} already exists.");
         }
 
-        var account = new Account
+        var createAccount = new CreateAccountDTO
         {
             Email = registerAccountDTO.Email,
+            PasswordHash = _passwordHasher.HashPassword(new Account(), registerAccountDTO.Password),
             Claims = ConvertRolesToClaims(registerAccountDTO.Roles),
             IsActive = false
         };
-        account.PasswordHash = _passwordHasher.HashPassword(account, registerAccountDTO.Password);
 
-        await _accountsService.Create(account);
-        return account;
+        return await _accountsService.CreateAccount(createAccount);
     }
 
     public async Task Login(LoginDTO loginDTO)
@@ -78,18 +75,18 @@ public class AuthService : IAuthService
             .SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, UserHelper.Convert(account));
     }
 
-    private static ICollection<Claim> ConvertRolesToClaims(IEnumerable<Role> roles) =>
+    private static IReadOnlyList<ClaimDTO> ConvertRolesToClaims(IEnumerable<Role> roles) =>
         roles.Select(x =>
         {
             return x switch
             {
-                Role.Administrator => new Claim("Role", "Administrator"),
-                Role.Warden => new Claim("Role", "Warden"),
-                Role.Maid => new Claim("Role", "Maid"),
-                Role.Doorkeeper => new Claim("Role", "Doorkeeper"),
-                Role.Janitor => new Claim("Role", "Janitor"),
-                Role.Student => new Claim("Role", "Student"),
-                _ => new Claim()
+                Role.Administrator => new ClaimDTO { Name = "Role", Value = "Administrator"},
+                Role.Warden => new ClaimDTO { Name = "Role", Value = "Warden"},
+                Role.Maid => new ClaimDTO { Name = "Role", Value = "Maid"},
+                Role.Doorkeeper => new ClaimDTO { Name = "Role", Value = "Doorkeeper"},
+                Role.Janitor => new ClaimDTO { Name = "Role", Value = "Janitor"},
+                Role.Student => new ClaimDTO { Name = "Role", Value = "Student"},
+                _ => new ClaimDTO()
             };
         }).ToList();
 

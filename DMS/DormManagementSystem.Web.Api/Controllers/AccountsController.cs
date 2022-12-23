@@ -19,7 +19,7 @@ public class AccountsController : ControllerBase
     [HttpGet]
     [Authorize(Policy = AppConstants.AppPolicies.AdministratorPolicy)]
     public async Task<ActionResult<Page<AccountDTO>>> Get(
-        [FromQuery] PaginationDTO paginationDTO, 
+        [FromQuery] PaginationDTO paginationDTO,
         [FromQuery] bool? active = null)
     {
         var accounts = await _accountsService.GetAccounts(paginationDTO, active);

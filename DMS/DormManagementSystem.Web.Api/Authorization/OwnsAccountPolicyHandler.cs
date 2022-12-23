@@ -1,4 +1,5 @@
 using DormManagementSystem.BLL.Services.Interfaces;
+using DormManagementSystem.GlobalExceptionHandler.Exceptions;
 using DormManagementSystem.Web.Api.Helpers;
 using Microsoft.AspNetCore.Authorization;
 
@@ -30,7 +31,8 @@ public class OwnsAccountPolicyHandler : AuthorizationHandler<OwnsAccountRequirem
             return;
         }
 
-        var account = await _accountsService.GetAccount(emailClaim);
+        var account = await _accountsService.GetAccount(emailClaim) ??
+            throw new BadRequestException($"Account with email address {emailClaim} does not exist.");
 
         if (account.Id != accountId)
         {

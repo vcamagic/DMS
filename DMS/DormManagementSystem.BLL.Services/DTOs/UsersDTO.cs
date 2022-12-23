@@ -8,4 +8,5 @@ public class UserDTO
     public DateTime DateOfBirth  { get; set; }
     public string Address { get; set; }
     public string JMBG { get; set; }
+    public AccountDTO Account { get; set; }
 }

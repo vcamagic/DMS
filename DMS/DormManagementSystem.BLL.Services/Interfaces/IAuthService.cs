@@ -5,6 +5,6 @@ namespace DormManagementSystem.BLL.Services.Interfaces;
 
 public interface IAuthService
 {
-    public Task<Account> RegisterAccount(RegisterAccountDTO registerAccountDTO);
+    public Task<AccountDTO> RegisterAccount(RegisterAccountDTO registerAccountDTO);
     public Task Login(LoginDTO loginDTO);
 }
