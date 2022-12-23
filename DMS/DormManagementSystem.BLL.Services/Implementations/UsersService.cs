@@ -19,7 +19,7 @@ public class UsersService : ServiceBase<User>, IUsersService
 
     public async Task<UserDTO> GetUser(Guid id)
     {
-        var user = await GetEntity(x => x.Id == id, false, new string[] { nameof(User.Account), $"{nameof(User.Account)}.{nameof(User.Account.Claims)}" }) ??
+        var user = await GetEntity(x => x.Id == id, false, new string[] { $"{nameof(User.Account)}.{nameof(User.Account.Claims)}" }) ??
             throw new BadRequestException($"User with id {id} does not exist.");
 
         return Mapper.Map<UserDTO>(user);
@@ -27,7 +27,7 @@ public class UsersService : ServiceBase<User>, IUsersService
 
     public async Task<Page<UserDTO>> GetUsers(PaginationDTO paginationDTO)
     {
-        var users = await GetEntityPage(paginationDTO, false, new string[] { nameof(User.Account), $"{nameof(User.Account)}.{nameof(User.Account.Claims)}" });
+        var users = await GetEntityPage(paginationDTO, false, new string[] { $"{nameof(User.Account)}.{nameof(User.Account.Claims)}" });
 
         return Mapper.Map<Page<UserDTO>>(users);
     }

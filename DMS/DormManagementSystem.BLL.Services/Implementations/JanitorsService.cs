@@ -13,7 +13,6 @@ public class JanitorsService : ServiceBase<Janitor>, IJanitorsService
 {
     public JanitorsService(IRepositoryManager repositoryManager, IMapper mapper) : base(repositoryManager, mapper)
     {
-        _repositoryManager = repositoryManager;
     }
 
     public async Task<JanitorDTO> CreateJanitor(CreateJanitorDTO createJanitorDTO)
@@ -25,7 +24,7 @@ public class JanitorsService : ServiceBase<Janitor>, IJanitorsService
             throw new BadRequestException($"User already exists for Account with id {createJanitorDTO.AccountId}.");
         }
 
-        var account = await _repositoryManager
+        var account = await RepositoryManager
             .AccountRepository.FindByCondition(x => x.Id == createJanitorDTO.AccountId, false).FirstOrDefaultAsync() ??
             throw new BadRequestException($"Account with id {createJanitorDTO.AccountId} does not exist.");
 
@@ -39,5 +38,4 @@ public class JanitorsService : ServiceBase<Janitor>, IJanitorsService
         return Mapper.Map<JanitorDTO>(janitor);
     }
 
-    private readonly IRepositoryManager _repositoryManager;
 }

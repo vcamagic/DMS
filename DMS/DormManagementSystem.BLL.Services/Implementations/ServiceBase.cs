@@ -40,17 +40,20 @@ public class ServiceBase<T> : IServiceBase<T> where T : class
     {
         var query = _repository.FindAll(trackChanges);
 
-        var records = await includes
+
+        if (includes != null)
+        {
+            query = includes
                 .Aggregate(query, (current, include) => current.Include(include))
                 .Skip((paginationDTO.Page - 1) * paginationDTO.PageSize)
-                .Take(paginationDTO.PageSize)
-                .ToListAsync();
+                .Take(paginationDTO.PageSize);
+        }
 
         return new Page<T>
         {
             TotalPages = (int)(query.Count() / paginationDTO.PageSize) == 0 ? 1 : (int)(query.Count() / paginationDTO.PageSize),
             CurrentPage = paginationDTO.Page,
-            Records = records
+            Records = await query.ToListAsync()
         };
     }
 
@@ -62,25 +65,36 @@ public class ServiceBase<T> : IServiceBase<T> where T : class
     {
         var query = _repository.FindByCondition(expression, trackChanges);
 
-        var records = await includes
-               .Aggregate(query, (current, include) => current.Include(include))
-               .Skip((paginationDTO.Page - 1) * paginationDTO.PageSize)
-               .Take(paginationDTO.PageSize)
-               .ToListAsync();
+
+        if (includes != null)
+        {
+            query = includes
+                .Aggregate(query, (current, include) => current.Include(include))
+                .Skip((paginationDTO.Page - 1) * paginationDTO.PageSize)
+                .Take(paginationDTO.PageSize);
+        }
 
         return new Page<T>
         {
             TotalPages = (int)(query.Count() / paginationDTO.PageSize) == 0 ? 1 : (int)(query.Count() / paginationDTO.PageSize),
             CurrentPage = paginationDTO.Page,
-            Records = records
+            Records = await query.ToListAsync()
         };
     }
 
 
-    public async Task<T> GetEntity(Expression<Func<T, bool>> expression, bool trackChanges, string[] includes = null) =>
-        await includes
-                .Aggregate(_repository.FindByCondition(expression, trackChanges), (current, include) => current.Include(include))
-                .FirstOrDefaultAsync();
+    public async Task<T> GetEntity(Expression<Func<T, bool>> expression, bool trackChanges, string[] includes = null)
+    {
+        var query = _repository.FindByCondition(expression, trackChanges);
+
+        if (includes != null)
+        {
+            query = includes
+                .Aggregate(query, (current, include) => current.Include(include));
+        }
+
+        return await query.FirstOrDefaultAsync();
+    }   
 
     public async Task Create(T entity)
     {

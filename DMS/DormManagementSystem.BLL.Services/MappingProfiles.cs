@@ -15,11 +15,13 @@ public class MappingProfiles : Profile
         CreateMap<CreateUserDTO, User>();
         CreateMap<UpdateUserDTO, User>();
         CreateMap<CreateJanitorDTO, Janitor>();
+       // CreateMap<CreateDoorkeeperDTO, Doorkeeper>();
         CreateMap<EmployeeDTO, Employee>().ReverseMap();
         CreateMap<Shift, ShiftDTO>().ReverseMap();
         CreateMap<CreateShiftDTO, Shift>().ForMember(x => x.Employees, opt => opt.MapFrom(y => new List<Employee>()));
 
         CreateMap<Page<Account>, Page<AccountDTO>>();
         CreateMap<Page<User>, Page<UserDTO>>();
+        CreateMap<Page<Shift>, Page<ShiftDTO>>();
     }
 }

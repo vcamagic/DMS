@@ -41,14 +41,18 @@ public class ShiftsService : ServiceBase<Shift>, IShiftsService
 
     public async Task<ShiftDTO> GetShift(Guid id)
     {
-        var shift = await RepositoryManager
-            .ShiftRepository
-            .FindByCondition(x => x.Id == id, false)
-            .Include(x => x.Employees)
-            .ThenInclude(x => x.Account)
-            .ThenInclude(x => x.Claims)
-            .FirstOrDefaultAsync();
+        var shift = await GetEntity(
+            x => x.Id == id,
+            false,
+            new string[] { $"{nameof(Shift.Employees)}.{nameof(Account)}.{nameof(Account.Claims)}" });
 
         return Mapper.Map<ShiftDTO>(shift);
+    }
+
+    public async Task<Page<ShiftDTO>> GetShifts(PaginationDTO paginationDTO)
+    {
+        var shifts = await GetEntityPage(paginationDTO, false, new string[] { $"{nameof(Shift.Employees)}.{nameof(Account)}.{nameof(Account.Claims)}" });
+
+        return Mapper.Map<Page<ShiftDTO>>(shifts);
     }
 }

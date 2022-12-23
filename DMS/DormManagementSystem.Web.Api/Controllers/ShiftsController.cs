@@ -14,16 +14,16 @@ public class ShiftsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<Page<ShiftDTO>>> GetShifts()
+    public async Task<ActionResult<Page<ShiftDTO>>> GetShifts([FromRoute] PaginationDTO paginationDTO)
     {
-        return Ok();
+        var shifts = await _shiftsService.GetShifts(paginationDTO);
+        return Ok(shifts);
     }
 
     [HttpGet("{id}")]
     public async Task<ActionResult<ShiftDTO>> GetShift([FromRoute] Guid id)
     {
         var shift = await _shiftsService.GetShift(id);
-
         return Ok(shift);
     }
 
