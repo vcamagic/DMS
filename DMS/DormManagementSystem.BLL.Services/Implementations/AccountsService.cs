@@ -32,14 +32,14 @@ public class AccountsService : ServiceBase<Account>, IAccountsService
         var accountsPage = await GetEntityPage(
             paginationDTO,
             x => (active == null || x.IsActive == active),
-            false, x => x.Claims);
+            false, new string[] { nameof(Account.Claims) });
 
         return Mapper.Map<Page<AccountDTO>>(accountsPage);
     }
 
     public async Task<AccountDTO> GetAccount(Guid id)
     {
-        var account = await GetEntity(x => x.Id == id, false, x => x.Claims) ??
+        var account = await GetEntity(x => x.Id == id, false, new string[] { nameof(Account.Claims) }) ??
             throw new BadRequestException($"Account with id {id} does not exist.");
 
         return Mapper.Map<AccountDTO>(account);
@@ -47,8 +47,8 @@ public class AccountsService : ServiceBase<Account>, IAccountsService
 
     public async Task<AccountDTO> GetAccount(string email)
     {
-        var account = await GetEntity(x => x.Email == email, false, x => x.Claims) ??
-            throw new BadRequestException($"Account with email address {email} does not exist.");;
+        var account = await GetEntity(x => x.Email == email, false, new string[] { nameof(Account.Claims) }) ??
+            throw new BadRequestException($"Account with email address {email} does not exist."); ;
 
         return Mapper.Map<AccountDTO>(account);
     }

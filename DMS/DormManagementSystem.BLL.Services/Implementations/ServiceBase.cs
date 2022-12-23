@@ -36,7 +36,7 @@ public class ServiceBase<T> : IServiceBase<T> where T : class
     public IRepositoryManager RepositoryManager => _repositoryManager;
     public IMapper Mapper => _mapper;
 
-    public async Task<Page<T>> GetEntityPage(PaginationDTO paginationDTO, bool trackChanges, params Expression<Func<T, object>>[] includes)
+    public async Task<Page<T>> GetEntityPage(PaginationDTO paginationDTO, bool trackChanges, string[] includes = null)
     {
         var query = _repository.FindAll(trackChanges);
 
@@ -58,7 +58,7 @@ public class ServiceBase<T> : IServiceBase<T> where T : class
         PaginationDTO paginationDTO,
         Expression<Func<T, bool>> expression,
         bool trackChanges,
-        params Expression<Func<T, object>>[] includes)
+        string[] includes = null)
     {
         var query = _repository.FindByCondition(expression, trackChanges);
 
@@ -77,7 +77,7 @@ public class ServiceBase<T> : IServiceBase<T> where T : class
     }
 
 
-    public async Task<T> GetEntity(Expression<Func<T, bool>> expression, bool trackChanges, params Expression<Func<T, object>>[] includes) =>
+    public async Task<T> GetEntity(Expression<Func<T, bool>> expression, bool trackChanges, string[] includes = null) =>
         await includes
                 .Aggregate(_repository.FindByCondition(expression, trackChanges), (current, include) => current.Include(include))
                 .FirstOrDefaultAsync();
