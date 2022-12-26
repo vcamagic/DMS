@@ -8,7 +8,7 @@ namespace DormManagementSystem.BLL.Services.Interfaces;
 
 public interface IAccountsService
 {
-    Task<Page<AccountDTO>> GetAccounts(PaginationDTO paginationDTO, bool? active = null);
+    Task<Page<AccountDTO>> GetAccounts(PaginationDTO paginationDTO, SortDTO sortDTO = null, bool? active = null);
     Task<AccountDTO> GetAccount(Guid id);
     Task<AccountDTO> GetAccount(string email);
     Task<AccountDTO> CreateAccount(CreateAccountDTO createAccountDTO);

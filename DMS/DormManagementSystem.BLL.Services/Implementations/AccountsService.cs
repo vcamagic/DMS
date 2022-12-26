@@ -27,12 +27,22 @@ public class AccountsService : ServiceBase<Account>, IAccountsService
 
     public async Task<Page<AccountDTO>> GetAccounts(
         PaginationDTO paginationDTO,
+        SortDTO sortDTO = null,
         bool? active = null)
     {
-        var accountsPage = await GetEntityPage(
-            paginationDTO,
-            x => (active == null || x.IsActive == active),
-            false, new string[] { nameof(Account.Claims) });
+        var includeClaims = new string[] { nameof(Account.Claims) };
+
+        var accountsPage = sortDTO switch
+        {
+            null => await GetEntityPage(paginationDTO, false),
+            { SortBy: "email" } => sortDTO.Order == "desc" ?
+                await GetEntityPage(paginationDTO, false, orderSelector: x => x.Email, orderAscending: false, includes: includeClaims) :
+                await GetEntityPage(paginationDTO, false, orderSelector: x => x.Email, includes: includeClaims),
+            { SortBy: "isActive" } => sortDTO.Order == "desc" ?
+                await GetEntityPage(paginationDTO, false, orderSelector: x => x.IsActive, orderAscending: false, includes: includeClaims) :
+                await GetEntityPage(paginationDTO, false, orderSelector: x => x.IsActive, includes: includeClaims),
+            _ => await GetEntityPage(paginationDTO, false, includes: includeClaims)
+        };
 
         return Mapper.Map<Page<AccountDTO>>(accountsPage);
     }

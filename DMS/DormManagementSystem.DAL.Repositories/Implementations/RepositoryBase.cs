@@ -18,7 +18,7 @@ public class RepositoryBase<T> : IRepositoryBase<T> where T : class
     public void Delete(T entity) => _context.Set<T>().Remove(entity);
 
     public IQueryable<T> FindAll(bool trackChanges) =>
-        trackChanges ? 
+        trackChanges ?
             _context.Set<T>().AsQueryable() :
             _context.Set<T>().AsNoTracking().AsQueryable();
 
@@ -29,6 +29,6 @@ public class RepositoryBase<T> : IRepositoryBase<T> where T : class
 
     public void Update(T entity) => _context.Set<T>().Update(entity);
 
-    
+
     private readonly ApplicationContext _context;
 }

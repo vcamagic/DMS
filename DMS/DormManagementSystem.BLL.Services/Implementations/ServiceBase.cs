@@ -1,6 +1,7 @@
 using System.Linq.Expressions;
 using AutoMapper;
 using DormManagementSystem.BLL.Services.DTOs;
+using DormManagementSystem.BLL.Services.Extensions;
 using DormManagementSystem.BLL.Services.Interfaces;
 using DormManagementSystem.DAL.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -36,23 +37,30 @@ public class ServiceBase<T> : IServiceBase<T> where T : class
     public IRepositoryManager RepositoryManager => _repositoryManager;
     public IMapper Mapper => _mapper;
 
-    public async Task<Page<T>> GetEntityPage(PaginationDTO paginationDTO, bool trackChanges, string[] includes = null)
+    public async Task<Page<T>> GetEntityPage(
+        PaginationDTO paginationDTO,
+        bool trackChanges,
+        string[] includes = null,
+        Expression<Func<T, object>> orderSelector = null,
+        bool orderAscending = true)
     {
         var query = _repository.FindAll(trackChanges);
+        var entitiesCount = query.Count();
 
-        if (includes != null)
-        {
-            query = includes
-                .Aggregate(query, (current, include) => current.Include(include))
-                .Skip((paginationDTO.Page - 1) * paginationDTO.PageSize)
-                .Take(paginationDTO.PageSize);
-        }
+        var records = await query
+            .ApplySorting(orderSelector, orderAscending)
+            .ApplyPaging(paginationDTO)
+            .LoadRelatedEntities(includes)
+            .ToListAsync();
+
+
+        var totalPages = (int)(entitiesCount / paginationDTO.PageSize) == 0 ? 1 : (int)(entitiesCount / paginationDTO.PageSize);
 
         return new Page<T>
         {
-            TotalPages = (int)(query.Count() / paginationDTO.PageSize) == 0 ? 1 : (int)(query.Count() / paginationDTO.PageSize),
+            TotalPages = totalPages,
             CurrentPage = paginationDTO.Page,
-            Records = await query.ToListAsync()
+            Records = records
         };
     }
 
@@ -60,39 +68,36 @@ public class ServiceBase<T> : IServiceBase<T> where T : class
         PaginationDTO paginationDTO,
         Expression<Func<T, bool>> expression,
         bool trackChanges,
-        string[] includes = null)
+        string[] includes = null,
+        Expression<Func<T, object>> orderSelector = null,
+        bool orderAscending = true)
     {
         var query = _repository.FindByCondition(expression, trackChanges);
+        var entitiesCount = query.Count();
 
-        if (includes != null)
-        {
-            query = includes
-                .Aggregate(query, (current, include) => current.Include(include))
-                .Skip((paginationDTO.Page - 1) * paginationDTO.PageSize)
-                .Take(paginationDTO.PageSize);
-        }
+        var records = await query
+            .ApplySorting(orderSelector, orderAscending)
+            .ApplyPaging(paginationDTO)
+            .LoadRelatedEntities(includes)
+            .ToListAsync();
 
+
+        var totalPages = (int)(entitiesCount / paginationDTO.PageSize) == 0 ? 1 : (int)(entitiesCount / paginationDTO.PageSize);
+        
         return new Page<T>
         {
-            TotalPages = (int)(query.Count() / paginationDTO.PageSize) == 0 ? 1 : (int)(query.Count() / paginationDTO.PageSize),
+            TotalPages = totalPages,
             CurrentPage = paginationDTO.Page,
-            Records = await query.ToListAsync()
+            Records = records
         };
     }
 
 
     public async Task<T> GetEntity(Expression<Func<T, bool>> expression, bool trackChanges, string[] includes = null)
     {
-        var query = _repository.FindByCondition(expression, trackChanges);
-
-        if (includes != null)
-        {
-            query = includes
-                .Aggregate(query, (current, include) => current.Include(include));
-        }
-
+        var query = _repository.FindByCondition(expression, trackChanges).LoadRelatedEntities(includes);
         return await query.FirstOrDefaultAsync();
-    }   
+    }
 
     public async Task Create(T entity)
     {
@@ -111,6 +116,36 @@ public class ServiceBase<T> : IServiceBase<T> where T : class
         _repository.Delete(entity);
 
         await _repository.Context.SaveChangesAsync();
+    }
+
+    private async Task<Page<T>> ApplySortingPagingAndLoadRelatedEntities(
+        IQueryable<T> query,
+        PaginationDTO paginationDTO,
+        string[] includes = null,
+        Expression<Func<T, object>> orderSelector = null,
+        bool orderAscending = true)
+    {
+        var entitiesCount = query.Count();
+
+        if (orderSelector != null)
+        {
+            query = orderAscending == true ? query.OrderBy(orderSelector) : query.OrderByDescending(orderSelector);
+        }
+
+        if (includes != null)
+        {
+            query = includes.Aggregate(query, (current, include) => current.Include(include));
+        }
+
+        var records = await query.Skip((paginationDTO.Page - 1) * paginationDTO.PageSize).Take(paginationDTO.PageSize).ToListAsync();
+        var totalPages = (int)(entitiesCount / paginationDTO.PageSize) == 0 ? 1 : (int)(entitiesCount / paginationDTO.PageSize);
+
+        return new Page<T>
+        {
+            TotalPages = totalPages,
+            CurrentPage = paginationDTO.Page,
+            Records = records
+        };
     }
 
     private readonly IRepositoryBase<T> _repository;

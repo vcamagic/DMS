@@ -20,9 +20,10 @@ public class AccountsController : ControllerBase
     [Authorize(Policy = AppConstants.AppPolicies.AdministratorPolicy)]
     public async Task<ActionResult<Page<AccountDTO>>> Get(
         [FromQuery] PaginationDTO paginationDTO,
+        [FromQuery] SortDTO sortDTO,
         [FromQuery] bool? active = null)
     {
-        var accounts = await _accountsService.GetAccounts(paginationDTO, active);
+        var accounts = await _accountsService.GetAccounts(paginationDTO, sortDTO, active);
         return Ok(accounts);
     }
 
