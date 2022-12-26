@@ -3,7 +3,7 @@ using DormManagementSystem.BLL.Services.CustomValidationAttributes;
 
 namespace DormManagementSystem.BLL.Services.DTOs;
 
-public class CreateShiftDTO
+public class UpdateShiftDTO
 {
     [Required]
     [DateAfter(FirstDateProperty = nameof(End), SecondDateProperty = nameof(Start), ErrorMessage = "End date must be after start date.")]

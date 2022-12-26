@@ -10,8 +10,21 @@ namespace DormManagementSystem.BLL.Services.Implementations;
 
 public class DoorkeepersService : ServiceBase<Doorkeeper>, IDoorkeepersService
 {
-    public DoorkeepersService(IRepositoryManager repositoryManager, IMapper mapper) : base(repositoryManager, mapper)
+    public DoorkeepersService(
+        IRepositoryBase<Doorkeeper> repository,
+        IAccountsService accountsService,
+        IMapper mapper) : base(repository, mapper)
     {
+        _accountsService = accountsService;
+    }
+
+
+    public async Task<DoorkeeperDTO> GetDoorkeeper(Guid id)
+    {
+        var doorkeeper = await GetEntity(x => x.Id == id, false) ??
+            throw new BadRequestException($"User with id {id} does not exist.");
+
+        return Mapper.Map<DoorkeeperDTO>(doorkeeper);
     }
 
     public async Task<DoorkeeperDTO> CreateDoorkeeper(CreateDoorkeeperDTO createDoorkeeperDTO)
@@ -23,12 +36,12 @@ public class DoorkeepersService : ServiceBase<Doorkeeper>, IDoorkeepersService
             throw new BadRequestException($"User already exists for Account with id {createDoorkeeperDTO.AccountId}.");
         }
 
-        var account = await RepositoryManager
-            .AccountRepository.FindByCondition(x => x.Id == createDoorkeeperDTO.AccountId, false).FirstOrDefaultAsync() ??
-            throw new BadRequestException($"Account with id {createDoorkeeperDTO.AccountId} does not exist.");
+        var hasClaim = await _accountsService.AccountHasClaim(createDoorkeeperDTO.AccountId, new("Role", "Doorkeeper"));
 
-        _ = account.Claims.FirstOrDefault(x => x.Name == "Role" && x.Value == "Janitor") ??
-            throw new BadRequestException($"Account with id {createDoorkeeperDTO.AccountId} is not a janitor.");
+        if (!hasClaim)
+        {
+            throw new BadRequestException("User is not a doorkeeper.");
+        }
 
         var doorkeeper = Mapper.Map<Doorkeeper>(createDoorkeeperDTO);
 
@@ -36,4 +49,12 @@ public class DoorkeepersService : ServiceBase<Doorkeeper>, IDoorkeepersService
 
         return Mapper.Map<DoorkeeperDTO>(doorkeeper);
     }
+
+    public async Task<Page<DoorkeeperDTO>> GetDoorkeepers(PaginationDTO paginationDTO)
+    {
+        var doorkeepers = await GetEntityPage(paginationDTO, false);
+        return Mapper.Map<Page<DoorkeeperDTO>>(doorkeepers);
+    }
+
+    private readonly IAccountsService _accountsService;
 }

@@ -17,6 +17,7 @@ builder.Services.AddAutoMapper(typeof(MappingProfiles));
 builder.Services.AddSingleton<IPasswordHasher<Account>, PasswordHasher<Account>>();
 //Repositories
 builder.Services.AddScoped<IRepositoryManager, RepositoryManager>();
+builder.Services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
 
 //Services
 builder.Services.AddScoped<IAuthService, AuthService>();

@@ -26,8 +26,10 @@ public class AuthService : IAuthService
 
     public async Task<AccountDTO> RegisterAccount(RegisterAccountDTO registerAccountDTO)
     {
-        
-        var existingAccount = await _accountsService.GetAccount(registerAccountDTO.Email);
+
+        var existingAccount = await _repositoryManager.AccountRepository.
+            FindByCondition(x => x.Email == registerAccountDTO.Email, false)
+            .FirstOrDefaultAsync();
 
         if (existingAccount != null)
         {
@@ -63,11 +65,11 @@ public class AuthService : IAuthService
             throw new BadRequestException($"Account with email address {account.Email} is not activated.");
         }
 
-        var result = _passwordHasher.VerifyHashedPassword(account, account.PasswordHash, loginDTO.Password);
+        var result = _passwordHasher.VerifyHashedPassword(new Account(), account.PasswordHash, loginDTO.Password);
 
         if (result == PasswordVerificationResult.Failed)
         {
-            throw new BadRequestException("Bad credentials");
+            throw new BadRequestException("Bad credentials.");
         }
 
         await _httpContextAccessor
@@ -80,12 +82,12 @@ public class AuthService : IAuthService
         {
             return x switch
             {
-                Role.Administrator => new ClaimDTO { Name = "Role", Value = "Administrator"},
-                Role.Warden => new ClaimDTO { Name = "Role", Value = "Warden"},
-                Role.Maid => new ClaimDTO { Name = "Role", Value = "Maid"},
-                Role.Doorkeeper => new ClaimDTO { Name = "Role", Value = "Doorkeeper"},
-                Role.Janitor => new ClaimDTO { Name = "Role", Value = "Janitor"},
-                Role.Student => new ClaimDTO { Name = "Role", Value = "Student"},
+                Role.Administrator => new ClaimDTO { Name = "Role", Value = "Administrator" },
+                Role.Warden => new ClaimDTO { Name = "Role", Value = "Warden" },
+                Role.Maid => new ClaimDTO { Name = "Role", Value = "Maid" },
+                Role.Doorkeeper => new ClaimDTO { Name = "Role", Value = "Doorkeeper" },
+                Role.Janitor => new ClaimDTO { Name = "Role", Value = "Janitor" },
+                Role.Student => new ClaimDTO { Name = "Role", Value = "Student" },
                 _ => new ClaimDTO()
             };
         }).ToList();

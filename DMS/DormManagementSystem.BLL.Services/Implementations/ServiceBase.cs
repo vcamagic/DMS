@@ -40,7 +40,6 @@ public class ServiceBase<T> : IServiceBase<T> where T : class
     {
         var query = _repository.FindAll(trackChanges);
 
-
         if (includes != null)
         {
             query = includes
@@ -64,7 +63,6 @@ public class ServiceBase<T> : IServiceBase<T> where T : class
         string[] includes = null)
     {
         var query = _repository.FindByCondition(expression, trackChanges);
-
 
         if (includes != null)
         {

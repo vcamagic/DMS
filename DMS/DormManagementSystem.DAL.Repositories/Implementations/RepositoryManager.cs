@@ -12,6 +12,19 @@ public class RepositoryManager : IRepositoryManager
 
     public ApplicationContext Context => _context;    
 
+    public IDoorkeeperRepository DoorkeeperRepository
+    {
+        get
+        {
+            if (_doorkeeperRepository == null)
+            {
+                _doorkeeperRepository = new DoorkeeperRepository(_context);
+            }
+
+            return _doorkeeperRepository;
+        }
+    }
+
     public IEmployeeRepository EmployeeRepository
     {
         get
@@ -71,4 +84,5 @@ public class RepositoryManager : IRepositoryManager
     private IUserRepository _userRepository;    
     private IShiftRepository _shiftRepository;    
     private IEmployeeRepository _employeeRepository;    
+    private IDoorkeeperRepository _doorkeeperRepository;    
 }

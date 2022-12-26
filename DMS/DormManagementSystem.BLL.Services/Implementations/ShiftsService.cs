@@ -10,7 +10,9 @@ namespace DormManagementSystem.BLL.Services.Implementations;
 
 public class ShiftsService : ServiceBase<Shift>, IShiftsService
 {
-    public ShiftsService(IRepositoryManager repositoryManager, IMapper mapper) : base(repositoryManager.ShiftRepository, repositoryManager, mapper)
+    public ShiftsService(
+        IRepositoryManager repositoryManager,
+        IMapper mapper) : base(repositoryManager.ShiftRepository, repositoryManager, mapper)
     {
     }
 
@@ -23,20 +25,19 @@ public class ShiftsService : ServiceBase<Shift>, IShiftsService
 
         var shift = Mapper.Map<Shift>(createShiftDTO);
 
-        foreach (var employeeId in createShiftDTO.EmployeesIds)
-        {
-            var employee = RepositoryManager
-                .EmployeeRepository
-                .FindByCondition(x => x.Id == employeeId, true)
-                .FirstOrDefault() ??
-                    throw new BadRequestException($"Employee with id {employeeId} does not exist.");
-
-            shift.Employees.Add(employee);
-        }
+        AddEmployeesToShift(createShiftDTO.EmployeesIds, shift.Employees);
 
         await Create(shift);
 
         return Mapper.Map<ShiftDTO>(shift);
+    }
+
+    public async Task DeleteShift(Guid id)
+    {
+        var shift = await GetEntity(x => x.Id == id, true) ??
+            throw new BadRequestException($"Shift with id {id} does not exist.");
+
+        await Delete(shift);
     }
 
     public async Task<ShiftDTO> GetShift(Guid id)
@@ -44,7 +45,8 @@ public class ShiftsService : ServiceBase<Shift>, IShiftsService
         var shift = await GetEntity(
             x => x.Id == id,
             false,
-            new string[] { $"{nameof(Shift.Employees)}.{nameof(Account)}.{nameof(Account.Claims)}" });
+            new string[] { $"{nameof(Shift.Employees)}.{nameof(Account)}.{nameof(Account.Claims)}" })
+            ?? throw new BadRequestException($"Shift with id {id} does not exist.");
 
         return Mapper.Map<ShiftDTO>(shift);
     }
@@ -54,5 +56,36 @@ public class ShiftsService : ServiceBase<Shift>, IShiftsService
         var shifts = await GetEntityPage(paginationDTO, false, new string[] { $"{nameof(Shift.Employees)}.{nameof(Account)}.{nameof(Account.Claims)}" });
 
         return Mapper.Map<Page<ShiftDTO>>(shifts);
+    }
+
+    public async Task<ShiftDTO> UpdateShift(Guid id, UpdateShiftDTO updateShiftDTO)
+    {
+        var shift = await GetEntity(
+            x => x.Id == id,
+            true,
+            new string[] { $"{nameof(Shift.Employees)}.{nameof(Account)}.{nameof(Account.Claims)}" }) ??
+            throw new BadRequestException($"Shift with id {id} does not exist.");
+
+        Mapper.Map(updateShiftDTO, shift);
+
+        AddEmployeesToShift(updateShiftDTO.EmployeesIds, shift.Employees);
+
+        await Update(shift);
+
+        return Mapper.Map<ShiftDTO>(shift);
+    }
+
+    private void AddEmployeesToShift(IEnumerable<Guid> employeesIds, ICollection<Employee> employees)
+    {
+        foreach (var employeeId in employeesIds)
+        {
+            var employee = RepositoryManager
+                .EmployeeRepository
+                .FindByCondition(x => x.Id == employeeId, true)
+                .FirstOrDefault() ??
+                    throw new BadRequestException($"Employee with id {employeeId} does not exist.");
+
+            employees.Add(employee);
+        }
     }
 }

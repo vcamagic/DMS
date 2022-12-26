@@ -41,28 +41,28 @@ public static class AuthExtensions
             {
                 opt.RequireAuthenticatedUser()
                     .AddAuthenticationSchemes(CookieAuthenticationDefaults.AuthenticationScheme)
-                    .RequireClaim("Role", AppConstants.AppRoles.Maid);
+                    .RequireClaim("Role", AppConstants.AppRoles.Maid, AppConstants.AppRoles.Administrator);
             });
 
             builder.AddPolicy(AppConstants.AppPolicies.DoorkeeperPolicy, opt =>
             {
                 opt.RequireAuthenticatedUser()
                     .AddAuthenticationSchemes(CookieAuthenticationDefaults.AuthenticationScheme)
-                    .RequireClaim("Role", AppConstants.AppRoles.Doorkeeper);
+                    .RequireClaim("Role", AppConstants.AppRoles.Doorkeeper, AppConstants.AppRoles.Administrator);
             });
 
             builder.AddPolicy(AppConstants.AppPolicies.StudentPolicy, opt =>
             {
                 opt.RequireAuthenticatedUser()
                     .AddAuthenticationSchemes(CookieAuthenticationDefaults.AuthenticationScheme)
-                    .RequireClaim("Role", AppConstants.AppRoles.Student);
+                    .RequireClaim("Role", AppConstants.AppRoles.Student, AppConstants.AppRoles.Administrator);
             });
 
             builder.AddPolicy(AppConstants.AppPolicies.JanitorPolicy, opt =>
             {
                 opt.RequireAuthenticatedUser()
                     .AddAuthenticationSchemes(CookieAuthenticationDefaults.AuthenticationScheme)
-                    .RequireClaim("Role", AppConstants.AppRoles.Janitor);
+                    .RequireClaim("Role", AppConstants.AppRoles.Janitor, AppConstants.AppRoles.Administrator);
             });
         });
 }

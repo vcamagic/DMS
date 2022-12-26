@@ -1,11 +1,14 @@
 using DormManagementSystem.BLL.Services.DTOs;
 using DormManagementSystem.BLL.Services.Interfaces;
+using DormManagementSystem.Web.Api.Helpers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DormManagementSystem.Web.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize(Policy = AppConstants.AppPolicies.WardenPolicy)]
 public class ShiftsController : ControllerBase
 {
     public ShiftsController(IShiftsService shiftsService)
@@ -31,8 +34,21 @@ public class ShiftsController : ControllerBase
     public async Task<IActionResult> CreateShift([FromBody] CreateShiftDTO createShiftDTO)
     {
         var shift = await _shiftsService.CreateShift(createShiftDTO);
-
         return CreatedAtAction(nameof(GetShift), new { id = shift.Id }, shift);
+    }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateShift([FromRoute] Guid id, [FromBody] UpdateShiftDTO updateShiftDTO)
+    {
+        var shift = await _shiftsService.UpdateShift(id, updateShiftDTO);
+        return Ok(shift);
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteShift([FromRoute] Guid id)
+    {
+        await _shiftsService.DeleteShift(id);
+        return NoContent();
     }
 
     private readonly IShiftsService _shiftsService;

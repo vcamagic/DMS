@@ -62,6 +62,13 @@ public class AccountsService : ServiceBase<Account>, IAccountsService
         return Mapper.Map<AccountDTO>(account);
     }
 
+    public async Task<bool> AccountHasClaim(Guid id, (string name, string value) claim)
+    {
+        var account = await GetAccount(id);
+
+        return account.Claims.Any(x => x.Name == claim.name && x.Value == claim.value);
+    }
+
     private static ICollection<Claim> ConvertRolesToClaims(IEnumerable<Role> roles) =>
     roles.Select(x =>
     {
@@ -76,6 +83,7 @@ public class AccountsService : ServiceBase<Account>, IAccountsService
             _ => new Claim()
         };
     }).ToList();
+
 
     private readonly IRepositoryManager _repositoryManager;
 }
