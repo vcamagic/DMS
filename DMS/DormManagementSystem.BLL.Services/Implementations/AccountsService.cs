@@ -35,36 +35,22 @@ public class AccountsService : ServiceBase<Account>, IAccountsService
         var accountsPage = sortDTO switch
         {
             null => await GetEntityPage(paginationDTO, x => active == null || x.IsActive == active, false),
-            { SortBy: "email" } => sortDTO.Order == "desc" ?
+            { SortBy: "email" } => 
                 await GetEntityPage(
                     paginationDTO, 
                     x => active == null || x.IsActive == active, 
                     false, 
                     orderSelector: x => x.Email, 
-                    orderAscending: false, 
-                    includes: includeClaims
-                ) :
-                await GetEntityPage(
-                    paginationDTO, 
-                    x => active == null || x.IsActive == active, 
-                    false, 
-                    orderSelector: x => x.Email, 
+                    orderAscending: sortDTO.Order != "desc" , 
                     includes: includeClaims
                 ),
-            { SortBy: "isActive" } => sortDTO.Order == "desc" ?
+            { SortBy: "isActive" } => 
                 await GetEntityPage(
                     paginationDTO, 
                     x => active == null || x.IsActive == active, 
                     false, 
                     orderSelector: x => x.IsActive, 
-                    orderAscending: false, 
-                    includes: includeClaims
-                ) :
-                await GetEntityPage(
-                    paginationDTO, 
-                    x => active == null || x.IsActive == active, 
-                    false, 
-                    orderSelector: x => x.IsActive, 
+                    orderAscending: sortDTO.Order != "desc" , 
                     includes: includeClaims
                 ),
             _ => await GetEntityPage(

@@ -12,4 +12,6 @@ public class Student : User
     [Required(ErrorMessage = $"{nameof(IndexNumber)} is required.")]
     [MaxLength(10, ErrorMessage = $"{nameof(IndexNumber)} can be 10 characters max.")]
     public string IndexNumber { get; set; }
+
+    public ICollection<Malfunction> Malfunctions { get; set; }
 }
