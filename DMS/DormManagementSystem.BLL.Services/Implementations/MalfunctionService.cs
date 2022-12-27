@@ -4,6 +4,7 @@ using DormManagementSystem.BLL.Services.Interfaces;
 using DormManagementSystem.DAL.Models.Models;
 using DormManagementSystem.DAL.Repositories.Interfaces;
 using DormManagementSystem.GlobalExceptionHandler.Exceptions;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
 
 namespace DormManagementSystem.BLL.Services.Implementations;
@@ -27,9 +28,9 @@ public class MalfunctionsService : ServiceBase<Malfunction>, IMalfunctionsServic
     {
         var malfunctionsPage = sortDTO switch
         {
-            { SortBy: "priority" } =>  await GetEntityPage(paginationDTO, false, orderSelector: x => x.Priority, orderAscending: sortDTO.Order != "desc"),
-            { SortBy: "expectedFixTime" } =>  await GetEntityPage(paginationDTO, false, orderSelector: x => x.ExpectedFixTime, orderAscending: sortDTO.Order != "desc"),
-            { SortBy: "actualFixTime" } =>  await GetEntityPage(paginationDTO, false, orderSelector: x => x.ActualFixTime, orderAscending: sortDTO.Order != "desc"),
+            { SortBy: "priority" } => await GetEntityPage(paginationDTO, false, orderSelector: x => x.Priority, orderAscending: sortDTO.Order != "desc"),
+            { SortBy: "expectedFixTime" } => await GetEntityPage(paginationDTO, false, orderSelector: x => x.ExpectedFixTime, orderAscending: sortDTO.Order != "desc"),
+            { SortBy: "actualFixTime" } => await GetEntityPage(paginationDTO, false, orderSelector: x => x.ActualFixTime, orderAscending: sortDTO.Order != "desc"),
             _ => await GetEntityPage(paginationDTO, false)
         };
 
@@ -50,5 +51,24 @@ public class MalfunctionsService : ServiceBase<Malfunction>, IMalfunctionsServic
         await Create(malfunction);
 
         return Mapper.Map<MalfunctionDTO>(malfunction);
+    }
+
+    public async Task UpdateMalfunction(Guid id, JsonPatchDocument<UpdateMalfunctionDTO> patchDocument)
+    {
+        var malfunction = await GetEntity(x => x.Id == id, true, new string[] { $"{nameof(Malfunction.Janitors)}" }) ??
+            throw new BadRequestException($"Malfunction with id {id} does not exist");
+
+        var malfunctionToPatch = Mapper.Map<UpdateMalfunctionDTO>(malfunction);
+
+        patchDocument.ApplyTo(malfunctionToPatch);
+
+        if (malfunctionToPatch.Janitors != null)
+        {
+            await RepositoryManager.MalfunctionRepository.AddJanitorsToMalfunction(id, malfunctionToPatch.Janitors);
+        }
+
+        Mapper.Map(malfunctionToPatch, malfunction);
+
+        await Update(malfunction);
     }
 }

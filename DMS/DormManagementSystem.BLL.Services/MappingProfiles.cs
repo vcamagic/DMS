@@ -31,6 +31,7 @@ public class MappingProfiles : Profile
 
 
         CreateMap<UpdateUserDTO, User>();
+        CreateMap<UpdateMalfunctionDTO, Malfunction>().ForMember(x => x.Janitors, opt => opt.Ignore()).ReverseMap();
         CreateMap<UpdateShiftDTO, Shift>().ForMember(x => x.Employees, opt => opt.MapFrom(y => new List<Employee>()));
 
 
@@ -39,5 +40,20 @@ public class MappingProfiles : Profile
         CreateMap<Page<Shift>, Page<ShiftDTO>>();
         CreateMap<Page<Doorkeeper>, Page<DoorkeeperDTO>>();
         CreateMap<Page<Malfunction>, Page<MalfunctionDTO>>();
+    }
+
+    private ICollection<Janitor> MapGuidsToJanitors(ICollection<Guid> guids, ICollection<Janitor> janitors)
+    {
+        if (janitors == null)
+        {
+            janitors = new List<Janitor>();
+        }
+
+        foreach (var id in guids)
+        {
+            janitors.Add(new Janitor { Id = id });
+        }
+
+        return janitors;
     }
 }

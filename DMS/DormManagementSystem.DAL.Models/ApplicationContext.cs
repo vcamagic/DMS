@@ -92,4 +92,5 @@ public class ApplicationContext : DbContext
     public DbSet<Doorkeeper> Doorkeepers { get; set; }
     public DbSet<Janitor> Janitors { get; set; }
     public DbSet<Shift> Shifts { get; set; }
+    public DbSet<Malfunction> Malfunctions { get; set; }
 }

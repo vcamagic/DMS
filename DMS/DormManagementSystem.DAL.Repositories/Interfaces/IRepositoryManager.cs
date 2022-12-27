@@ -14,5 +14,6 @@ public interface IRepositoryManager
     public IMaidRepository MaidRepository { get; }
     public IWardenRepository WardenRepository { get; }
     public IStudentRepository StudentRepository { get; }
+    public IMalfunctionRepository MalfunctionRepository { get; }
     public Task SaveAsync();
 }

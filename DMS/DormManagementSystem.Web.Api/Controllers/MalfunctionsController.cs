@@ -2,6 +2,7 @@ using DormManagementSystem.BLL.Services.DTOs;
 using DormManagementSystem.BLL.Services.Interfaces;
 using DormManagementSystem.Web.Api.Helpers;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DormManagementSystem.Web.Api.Controllers;
@@ -39,6 +40,14 @@ public class MalfunctionsController : ControllerBase
     {
         var malfunction = await _malfunctionsService.CreateMalfunction(createMalfunctionDTO);
         return CreatedAtAction(nameof(GetMalfunction), new { id = malfunction.Id }, malfunction);
+    }
+
+    [HttpPatch("{id}")]
+    [Authorize(Policy = AppConstants.AppPolicies.JanitorPolicy)]
+    public async Task<IActionResult> PatchMalfunction([FromRoute] Guid id, [FromBody] JsonPatchDocument<UpdateMalfunctionDTO> patchDocument)
+    {
+        await _malfunctionsService.UpdateMalfunction(id, patchDocument);
+        return NoContent();
     }
 
     private readonly IMalfunctionsService _malfunctionsService;

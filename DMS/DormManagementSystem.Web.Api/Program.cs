@@ -6,6 +6,7 @@ using DormManagementSystem.DAL.Repositories.Implementations;
 using DormManagementSystem.DAL.Repositories.Interfaces;
 using DormManagementSystem.Web.Api.Authorization;
 using DormManagementSystem.Web.Api.Extensions;
+using DormManagementSystem.Web.Api.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 
@@ -30,7 +31,7 @@ builder.Services.AddScoped<IMalfunctionsService, MalfunctionsService>();
 
 builder.Services.AddScoped<IAuthorizationHandler, OwnsAccountPolicyHandler>();
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddNewtonsoftJson();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
