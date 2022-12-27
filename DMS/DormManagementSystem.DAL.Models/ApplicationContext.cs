@@ -24,7 +24,6 @@ public class ApplicationContext : DbContext
         .WithOne(x => x.Account)
         .HasForeignKey<User>(x => x.AccountId);
 
-
         modelBuilder
         .Entity<User>()
         .Property(x => x.DateOfBirth)
@@ -44,18 +43,41 @@ public class ApplicationContext : DbContext
             .HasForeignKey(x => x.AccountId);
         });
 
-        modelBuilder.Entity<Warden>().ToTable("Wardens");
-        modelBuilder.Entity<Student>().ToTable("Students");
-        modelBuilder.Entity<Employee>().ToTable("Employees");
-        modelBuilder.Entity<Janitor>().ToTable("Janitors");
-        modelBuilder.Entity<Maid>().ToTable("Maids");
-        modelBuilder.Entity<Doorkeeper>().ToTable("Doorkeepers");
+        modelBuilder
+        .Entity<Warden>()
+        .ToTable("Wardens");
 
+        modelBuilder
+        .Entity<Student>()
+        .ToTable("Students")
+        .HasMany(x => x.Malfunctions)
+        .WithOne(x => x.Student);
+
+        modelBuilder
+        .Entity<Employee>()
+        .ToTable("Employees");
+
+        modelBuilder
+        .Entity<Janitor>()
+        .ToTable("Janitors");
+
+        modelBuilder
+        .Entity<Maid>()
+        .ToTable("Maids");
+        
+        modelBuilder
+        .Entity<Doorkeeper>()
+        .ToTable("Doorkeepers");
 
         modelBuilder
         .Entity<Employee>()
         .HasMany(x => x.Shifts)
         .WithMany(x => x.Employees);
+
+        modelBuilder
+        .Entity<Janitor>()
+        .HasMany(x => x.Malfunctions)
+        .WithMany(x => x.Janitors);
 
         base.OnModelCreating(modelBuilder);
     }
