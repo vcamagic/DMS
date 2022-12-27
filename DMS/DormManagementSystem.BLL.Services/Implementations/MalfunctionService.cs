@@ -45,6 +45,7 @@ public class MalfunctionsService : ServiceBase<Malfunction>, IMalfunctionsServic
                 throw new BadRequestException($"Student with id {createMalfunctionDTO.StudentId} does not exist.");
 
         var malfunction = Mapper.Map<Malfunction>(createMalfunctionDTO);
+        malfunction.IsFixed = false;
 
         await Create(malfunction);
 

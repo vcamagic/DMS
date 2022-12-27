@@ -18,6 +18,7 @@ public class MappingProfiles : Profile
         CreateMap<EmployeeDTO, Employee>().ReverseMap();
         CreateMap<Shift, ShiftDTO>().ReverseMap();
         CreateMap<Student, StudentDTO>().ReverseMap();
+        CreateMap<Malfunction, MalfunctionDTO>().ReverseMap();
 
 
         CreateMap<CreateAccountDTO, Account>();
