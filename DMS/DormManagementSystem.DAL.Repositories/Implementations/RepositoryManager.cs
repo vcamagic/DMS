@@ -129,6 +129,19 @@ public class RepositoryManager : IRepositoryManager
         }
     }
 
+    public IMalfunctionRepository MalfunctionRepository
+    {
+        get
+        {
+            if (_malfunctionRepository == null)
+            {
+                _malfunctionRepository = new MalfunctionRepository(_context);
+            }
+
+            return _malfunctionRepository;
+        }
+    }
+
     public async Task SaveAsync() => await _context.SaveChangesAsync();
 
     private readonly ApplicationContext _context;
@@ -141,4 +154,5 @@ public class RepositoryManager : IRepositoryManager
     private IMaidRepository _maidRepository;
     private IWardenRepository _wardenRepository;
     private IStudentRepository _studentRepository;
+    private IMalfunctionRepository _malfunctionRepository;
 }
