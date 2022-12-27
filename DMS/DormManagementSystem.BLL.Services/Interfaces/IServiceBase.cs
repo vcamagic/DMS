@@ -11,6 +11,8 @@ public interface IServiceBase<T> where T : class
     ///<param name="paginationDTO">Specifies a page to be retrieved.</param>
     ///<param name="trackChanges">Will the changes to fetched entities be tracked.</param>
     ///<param name="includes">Related entities to be included in the query.</param>
+    ///<param name="orderSelector">An expression that returns a property that will be used in sorting.</param>
+    ///<param name="orderAscending">Flag for indicating kind of ordering.</param>
     ///<returns>Page of T entity.</returns>
     Task<Page<T>> GetEntityPage(PaginationDTO paginationDTO,
         bool trackChanges,

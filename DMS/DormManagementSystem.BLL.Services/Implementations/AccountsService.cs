@@ -34,14 +34,45 @@ public class AccountsService : ServiceBase<Account>, IAccountsService
 
         var accountsPage = sortDTO switch
         {
-            null => await GetEntityPage(paginationDTO, false),
+            null => await GetEntityPage(paginationDTO, x => active == null || x.IsActive == active, false),
             { SortBy: "email" } => sortDTO.Order == "desc" ?
-                await GetEntityPage(paginationDTO, false, orderSelector: x => x.Email, orderAscending: false, includes: includeClaims) :
-                await GetEntityPage(paginationDTO, false, orderSelector: x => x.Email, includes: includeClaims),
+                await GetEntityPage(
+                    paginationDTO, 
+                    x => active == null || x.IsActive == active, 
+                    false, 
+                    orderSelector: x => x.Email, 
+                    orderAscending: false, 
+                    includes: includeClaims
+                ) :
+                await GetEntityPage(
+                    paginationDTO, 
+                    x => active == null || x.IsActive == active, 
+                    false, 
+                    orderSelector: x => x.Email, 
+                    includes: includeClaims
+                ),
             { SortBy: "isActive" } => sortDTO.Order == "desc" ?
-                await GetEntityPage(paginationDTO, false, orderSelector: x => x.IsActive, orderAscending: false, includes: includeClaims) :
-                await GetEntityPage(paginationDTO, false, orderSelector: x => x.IsActive, includes: includeClaims),
-            _ => await GetEntityPage(paginationDTO, false, includes: includeClaims)
+                await GetEntityPage(
+                    paginationDTO, 
+                    x => active == null || x.IsActive == active, 
+                    false, 
+                    orderSelector: x => x.IsActive, 
+                    orderAscending: false, 
+                    includes: includeClaims
+                ) :
+                await GetEntityPage(
+                    paginationDTO, 
+                    x => active == null || x.IsActive == active, 
+                    false, 
+                    orderSelector: x => x.IsActive, 
+                    includes: includeClaims
+                ),
+            _ => await GetEntityPage(
+                    paginationDTO, 
+                    x => active == null || x.IsActive == active, 
+                    false, 
+                    includes: includeClaims
+                )
         };
 
         return Mapper.Map<Page<AccountDTO>>(accountsPage);

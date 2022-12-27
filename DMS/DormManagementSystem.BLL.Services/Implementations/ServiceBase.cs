@@ -45,23 +45,7 @@ public class ServiceBase<T> : IServiceBase<T> where T : class
         bool orderAscending = true)
     {
         var query = _repository.FindAll(trackChanges);
-        var entitiesCount = query.Count();
-
-        var records = await query
-            .ApplySorting(orderSelector, orderAscending)
-            .ApplyPaging(paginationDTO)
-            .LoadRelatedEntities(includes)
-            .ToListAsync();
-
-
-        var totalPages = (int)(entitiesCount / paginationDTO.PageSize) == 0 ? 1 : (int)(entitiesCount / paginationDTO.PageSize);
-
-        return new Page<T>
-        {
-            TotalPages = totalPages,
-            CurrentPage = paginationDTO.Page,
-            Records = records
-        };
+        return await ApplySortingPagingAndLoadRelatedEntities(query, paginationDTO, includes, orderSelector, orderAscending);
     }
 
     public async Task<Page<T>> GetEntityPage(
@@ -73,29 +57,16 @@ public class ServiceBase<T> : IServiceBase<T> where T : class
         bool orderAscending = true)
     {
         var query = _repository.FindByCondition(expression, trackChanges);
-        var entitiesCount = query.Count();
-
-        var records = await query
-            .ApplySorting(orderSelector, orderAscending)
-            .ApplyPaging(paginationDTO)
-            .LoadRelatedEntities(includes)
-            .ToListAsync();
-
-
-        var totalPages = (int)(entitiesCount / paginationDTO.PageSize) == 0 ? 1 : (int)(entitiesCount / paginationDTO.PageSize);
-        
-        return new Page<T>
-        {
-            TotalPages = totalPages,
-            CurrentPage = paginationDTO.Page,
-            Records = records
-        };
+        return await ApplySortingPagingAndLoadRelatedEntities(query, paginationDTO, includes, orderSelector, orderAscending);
     }
 
 
     public async Task<T> GetEntity(Expression<Func<T, bool>> expression, bool trackChanges, string[] includes = null)
     {
-        var query = _repository.FindByCondition(expression, trackChanges).LoadRelatedEntities(includes);
+        var query = _repository
+            .FindByCondition(expression, trackChanges)
+            .LoadRelatedEntities(includes);
+            
         return await query.FirstOrDefaultAsync();
     }
 
@@ -127,19 +98,15 @@ public class ServiceBase<T> : IServiceBase<T> where T : class
     {
         var entitiesCount = query.Count();
 
-        if (orderSelector != null)
-        {
-            query = orderAscending == true ? query.OrderBy(orderSelector) : query.OrderByDescending(orderSelector);
-        }
+        var records = await query
+            .ApplySorting(orderSelector, orderAscending)
+            .ApplyPaging(paginationDTO)
+            .LoadRelatedEntities(includes)
+            .ToListAsync();
 
-        if (includes != null)
-        {
-            query = includes.Aggregate(query, (current, include) => current.Include(include));
-        }
 
-        var records = await query.Skip((paginationDTO.Page - 1) * paginationDTO.PageSize).Take(paginationDTO.PageSize).ToListAsync();
         var totalPages = (int)(entitiesCount / paginationDTO.PageSize) == 0 ? 1 : (int)(entitiesCount / paginationDTO.PageSize);
-
+        
         return new Page<T>
         {
             TotalPages = totalPages,
