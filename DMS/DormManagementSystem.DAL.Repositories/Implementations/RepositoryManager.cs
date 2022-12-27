@@ -10,7 +10,7 @@ public class RepositoryManager : IRepositoryManager
         _context = context;
     }
 
-    public ApplicationContext Context => _context;    
+    public ApplicationContext Context => _context;
 
     public IDoorkeeperRepository DoorkeeperRepository
     {
@@ -77,12 +77,68 @@ public class RepositoryManager : IRepositoryManager
         }
     }
 
+    public IStudentRepository StudentRepository
+    {
+        get
+        {
+            if (_studentRepository == null)
+            {
+                _studentRepository = new StudentRepository(_context);
+            }
+
+            return _studentRepository;
+        }
+    }
+
+    public IJanitorRepository JanitorRepository
+    {
+        get
+        {
+            if (_janitorRepository == null)
+            {
+                _janitorRepository = new JanitorRepository(_context);
+            }
+
+            return _janitorRepository;
+        }
+    }
+
+    public IMaidRepository MaidRepository
+    {
+        get
+        {
+            if (_maidRepository == null)
+            {
+                _maidRepository = new MaidRepository(_context);
+            }
+
+            return _maidRepository;
+        }
+    }
+
+    public IWardenRepository WardenRepository
+    {
+        get
+        {
+            if (_wardenRepository == null)
+            {
+                _wardenRepository = new WardenRepository(_context);
+            }
+
+            return _wardenRepository;
+        }
+    }
+
     public async Task SaveAsync() => await _context.SaveChangesAsync();
 
     private readonly ApplicationContext _context;
-    private IAccountRepository _accountRepository;    
-    private IUserRepository _userRepository;    
-    private IShiftRepository _shiftRepository;    
-    private IEmployeeRepository _employeeRepository;    
-    private IDoorkeeperRepository _doorkeeperRepository;    
+    private IAccountRepository _accountRepository;
+    private IUserRepository _userRepository;
+    private IShiftRepository _shiftRepository;
+    private IEmployeeRepository _employeeRepository;
+    private IDoorkeeperRepository _doorkeeperRepository;
+    private IJanitorRepository _janitorRepository;
+    private IMaidRepository _maidRepository;
+    private IWardenRepository _wardenRepository;
+    private IStudentRepository _studentRepository;
 }

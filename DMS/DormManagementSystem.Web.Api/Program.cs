@@ -26,6 +26,7 @@ builder.Services.AddScoped<IUsersService, UsersService>();
 builder.Services.AddScoped<IJanitorsService, JanitorsService>();
 builder.Services.AddScoped<IShiftsService, ShiftsService>();
 builder.Services.AddScoped<IDoorkeepersService, DoorkeepersService>();
+builder.Services.AddScoped<IMalfunctionsService, MalfunctionsService>();
 
 builder.Services.AddScoped<IAuthorizationHandler, OwnsAccountPolicyHandler>();
 

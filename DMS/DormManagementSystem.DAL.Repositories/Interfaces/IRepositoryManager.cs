@@ -10,5 +10,9 @@ public interface IRepositoryManager
     public IShiftRepository ShiftRepository { get; }
     public IEmployeeRepository EmployeeRepository { get; }
     public IDoorkeeperRepository DoorkeeperRepository { get; }
+    public IJanitorRepository JanitorRepository { get; }
+    public IMaidRepository MaidRepository { get; }
+    public IWardenRepository WardenRepository { get; }
+    public IStudentRepository StudentRepository { get; }
     public Task SaveAsync();
 }

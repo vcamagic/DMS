@@ -4,8 +4,14 @@ namespace DormManagementSystem.BLL.Services.Interfaces;
 
 public interface IUsersService
 {
-    Task<Page<UserDTO>> GetUsers(PaginationDTO paginationDTO);
-    Task<UserDTO> GetUser(Guid id);
-    Task<UserDTO> Create(CreateUserDTO createUserDTO);
-    Task Update(Guid id, UpdateUserDTO createUserDTO);
+    Task<StudentDTO> GetStudent(Guid id);
+    Task<WardenDTO> GetWarden(Guid id);
+    Task<EmployeeDTO> GetJanitor(Guid id);
+    Task<EmployeeDTO> GetMaid(Guid id);
+    Task<EmployeeDTO> GetDoorkeeper(Guid id);
+    Task<StudentDTO> CreateStudent(CreateStudentDTO createStudentDTO);
+    Task<WardenDTO> CreateWarden(CreateWardenDTO createWardenDTO);
+    Task<EmployeeDTO> CreateJanitor(CreateJanitorDTO createJanitorDTO);
+    Task<EmployeeDTO> CreateMaid(CreateMaidDTO createMaidDTO);
+    Task<EmployeeDTO> CreateDoorkeeper(CreateDoorkeeperDTO createDoorkeeperDTO);
 }
