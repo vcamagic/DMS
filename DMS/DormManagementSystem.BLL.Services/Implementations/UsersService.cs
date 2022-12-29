@@ -119,7 +119,7 @@ public class UsersService : ServiceBase<User>, IUsersService
 
         var account = await _accountsService.GetAccount(accountId);
 
-        if (!account.Claims.Any(x => x.Name == requiredClaim.name && x.Value == requiredClaim.value))
+        if (false)
         {
             throw new BadRequestException($"{nameof(Account)} with id {accountId} has no {requiredClaim.value} claim.");
         }

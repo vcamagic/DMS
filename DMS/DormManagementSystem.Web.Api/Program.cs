@@ -1,6 +1,7 @@
 using DormManagementSystem.BLL.Services;
 using DormManagementSystem.BLL.Services.Implementations;
 using DormManagementSystem.BLL.Services.Interfaces;
+using DormManagementSystem.DAL.Models;
 using DormManagementSystem.DAL.Models.Models;
 using DormManagementSystem.DAL.Repositories.Implementations;
 using DormManagementSystem.DAL.Repositories.Interfaces;
@@ -27,6 +28,8 @@ builder.Services.AddScoped<IAccountsService, AccountsService>();
 builder.Services.AddScoped<IUsersService, UsersService>();
 builder.Services.AddScoped<IShiftsService, ShiftsService>();
 builder.Services.AddScoped<IMalfunctionsService, MalfunctionsService>();
+builder.Services.AddIdentity<Account, Role>()
+    .AddEntityFrameworkStores<ApplicationContext>();
 
 builder.Services.AddScoped<IAuthorizationHandler, OwnsAccountPolicyHandler>();
 
@@ -54,4 +57,5 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+app.ConfigureApplicationRoles(builder.Configuration);
 app.Run();
