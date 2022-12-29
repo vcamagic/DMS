@@ -21,12 +21,11 @@ builder.Services.AddScoped<IRepositoryManager, RepositoryManager>();
 builder.Services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
 
 //Services
+builder.Services.AddScoped(typeof(IServiceBase<>), typeof(ServiceBase<>));
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IAccountsService, AccountsService>();
 builder.Services.AddScoped<IUsersService, UsersService>();
-builder.Services.AddScoped<IJanitorsService, JanitorsService>();
 builder.Services.AddScoped<IShiftsService, ShiftsService>();
-builder.Services.AddScoped<IDoorkeepersService, DoorkeepersService>();
 builder.Services.AddScoped<IMalfunctionsService, MalfunctionsService>();
 
 builder.Services.AddScoped<IAuthorizationHandler, OwnsAccountPolicyHandler>();

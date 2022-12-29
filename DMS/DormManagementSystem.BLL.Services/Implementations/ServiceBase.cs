@@ -37,6 +37,22 @@ public class ServiceBase<T> : IServiceBase<T> where T : class
     public IRepositoryManager RepositoryManager => _repositoryManager;
     public IMapper Mapper => _mapper;
 
+    public async Task<IReadOnlyList<T>> GetEntities(bool trackChanges = false, Expression<Func<T, bool>> expression = null, string[] includes = null)
+    {
+        var query = expression switch
+        {
+            not null => _repository.FindByCondition(expression, trackChanges),
+            _ => _repository.FindAll(trackChanges)
+        };
+
+        if (includes != null && !includes.Any(x => String.IsNullOrWhiteSpace(x)))
+        {
+            query =  includes.Aggregate(query, (current, include) => current.Include(include));
+        }
+
+        return await query.ToListAsync();
+    }
+
     public async Task<Page<T>> GetEntityPage(
         PaginationDTO paginationDTO,
         bool trackChanges,
@@ -66,7 +82,7 @@ public class ServiceBase<T> : IServiceBase<T> where T : class
         var query = _repository
             .FindByCondition(expression, trackChanges)
             .LoadRelatedEntities(includes);
-            
+
         return await query.FirstOrDefaultAsync();
     }
 
@@ -106,7 +122,7 @@ public class ServiceBase<T> : IServiceBase<T> where T : class
 
 
         var totalPages = (int)(entitiesCount / paginationDTO.PageSize) == 0 ? 1 : (int)(entitiesCount / paginationDTO.PageSize);
-        
+
         return new Page<T>
         {
             TotalPages = totalPages,

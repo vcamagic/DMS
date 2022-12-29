@@ -32,7 +32,7 @@ public interface IServiceBase<T> where T : class
         PaginationDTO paginationDTO,
         Expression<Func<T, bool>> expression,
         bool trackChanges,
-        string[] includes = null, 
+        string[] includes = null,
         Expression<Func<T, object>> orderSelector = null,
         bool orderAscending = true);
 
@@ -44,6 +44,15 @@ public interface IServiceBase<T> where T : class
     ///<param name="includes">Related entities to be included in the query.</param>
     ///<returns>Entity of type T.</returns>
     Task<T> GetEntity(Expression<Func<T, bool>> expression, bool trackChanges, string[] includes = null);
+
+    ///<summary>
+    /// Gets entities of type T.
+    ///</summary>
+    ///<param name="trackChanges">Will the changes to fetched entities be tracked.</param>
+    ///<param name="expression">Expression to retrieve an entity.</param>
+    ///<param name="includes">Related entities to be included in the query.</param>
+    ///<returns>Entities of type T.</returns>
+    Task<IReadOnlyList<T>> GetEntities(bool trackChanges = false, Expression<Func<T, bool>> expression = null, string[] includes = null);
 
     ///<summary>
     /// Creates an entity of type T.
