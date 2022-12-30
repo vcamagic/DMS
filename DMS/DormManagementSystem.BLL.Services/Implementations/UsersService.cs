@@ -1,4 +1,5 @@
 using System.Linq.Expressions;
+using System.Reflection;
 using AutoMapper;
 using DormManagementSystem.BLL.Services.DTOs;
 using DormManagementSystem.BLL.Services.Interfaces;
@@ -34,82 +35,111 @@ public class UsersService : ServiceBase<User>, IUsersService
     }
 
     public async Task<Page<StudentDTO>> GetStudents(PaginationDTO paginationDTO) =>
-        Mapper.Map<Page<StudentDTO>>(await _studentsServiceBase.GetEntityPage(paginationDTO, false));
+        Mapper.Map<Page<StudentDTO>>(
+            await _studentsServiceBase
+            .GetEntityPage(paginationDTO, false, includes: new string[] { $"{nameof(User.Account)}" }));
 
     public async Task<IReadOnlyList<WardenDTO>> GetWardens() =>
-        Mapper.Map<IReadOnlyList<WardenDTO>>(await _wardensServiceBase.GetEntities());
+        Mapper.Map<IReadOnlyList<WardenDTO>>(
+            await _wardensServiceBase
+            .GetEntities(includes: new string[] { $"{nameof(User.Account)}" }));
 
     public async Task<IReadOnlyList<EmployeeDTO>> GetJanitors() =>
-        Mapper.Map<IReadOnlyList<EmployeeDTO>>(await _janitorsServiceBase.GetEntities());
+        Mapper.Map<IReadOnlyList<EmployeeDTO>>(
+            await _janitorsServiceBase
+            .GetEntities(includes: new string[] { $"{nameof(User.Account)}" }));
 
     public async Task<IReadOnlyList<EmployeeDTO>> GetMaids() =>
-        Mapper.Map<IReadOnlyList<EmployeeDTO>>(await _maidsServiceBase.GetEntities());
+        Mapper.Map<IReadOnlyList<EmployeeDTO>>(
+            await _maidsServiceBase
+            .GetEntities(includes: new string[] { $"{nameof(User.Account)}" }));
 
     public async Task<IReadOnlyList<EmployeeDTO>> GetDoorkeepers() =>
-        Mapper.Map<IReadOnlyList<EmployeeDTO>>(await _doorkeepersServiceBase.GetEntities());
+        Mapper.Map<IReadOnlyList<EmployeeDTO>>(
+            await _doorkeepersServiceBase
+            .GetEntities(includes: new string[] { $"{nameof(User.Account)}" }));
 
     public async Task<StudentDTO> GetStudent(Guid id) =>
-        await GetUser<Student, StudentDTO>(RepositoryManager.StudentRepository, x => x.Id == id);
+        await GetUser<Student, StudentDTO>(
+            RepositoryManager.StudentRepository,
+            x => x.Id == id,
+            new string[] { $"{nameof(User.Account)}" });
 
 
     public async Task<WardenDTO> GetWarden(Guid id) =>
-        await GetUser<Warden, WardenDTO>(RepositoryManager.WardenRepository, x => x.Id == id);
+        await GetUser<Warden, WardenDTO>(
+            RepositoryManager.WardenRepository, 
+            x => x.Id == id, 
+            new string[] { $"{nameof(User.Account)}" });
 
 
     public async Task<EmployeeDTO> GetJanitor(Guid id) =>
-        await GetUser<Janitor, EmployeeDTO>(RepositoryManager.JanitorRepository, x => x.Id == id);
+        await GetUser<Janitor, EmployeeDTO>(
+            RepositoryManager.JanitorRepository, 
+            x => x.Id == id, 
+            new string[] { $"{nameof(User.Account)}" });
 
     public async Task<EmployeeDTO> GetMaid(Guid id) =>
-        await GetUser<Maid, EmployeeDTO>(RepositoryManager.MaidRepository, x => x.Id == id);
+        await GetUser<Maid, EmployeeDTO>(
+            RepositoryManager.MaidRepository, 
+            x => x.Id == id, 
+            new string[] { $"{nameof(User.Account)}" });
 
     public async Task<EmployeeDTO> GetDoorkeeper(Guid id) =>
-        await GetUser<Doorkeeper, EmployeeDTO>(RepositoryManager.DoorkeeperRepository, x => x.Id == id);
+        await GetUser<Doorkeeper, EmployeeDTO>(
+            RepositoryManager.DoorkeeperRepository, 
+            x => x.Id == id, 
+            new string[] { $"{nameof(User.Account)}" });
 
 
-    public async Task<StudentDTO> CreateStudent(CreateStudentDTO createStudentDTO)
+    public async Task<StudentDTO> CreateStudent(Guid accountId, CreateStudentDTO createStudentDTO)
     {
-        await CheckUserData(createStudentDTO.JMBG, createStudentDTO.AccountId, "Student");
-        return await CreateUser<Student, CreateStudentDTO, StudentDTO>(RepositoryManager.StudentRepository, createStudentDTO);
+        await CheckUserData(createStudentDTO.JMBG, accountId, "Student");
+        return await CreateUser<Student, CreateStudentDTO, StudentDTO>(
+            accountId, RepositoryManager.StudentRepository, createStudentDTO);
     }
 
-    public async Task<WardenDTO> CreateWarden(CreateWardenDTO createWardenDTO)
+    public async Task<WardenDTO> CreateWarden(Guid accountId, CreateWardenDTO createWardenDTO)
     {
-        await CheckUserData(createWardenDTO.JMBG, createWardenDTO.AccountId, "Warden");
-        return await CreateUser<Warden, CreateWardenDTO, WardenDTO>(RepositoryManager.WardenRepository, createWardenDTO);
+        await CheckUserData(createWardenDTO.JMBG, accountId, "Warden");
+        return await CreateUser<Warden, CreateWardenDTO, WardenDTO>(
+            accountId, RepositoryManager.WardenRepository, createWardenDTO);
     }
 
-    public async Task<EmployeeDTO> CreateJanitor(CreateJanitorDTO createJanitorDTO)
+    public async Task<EmployeeDTO> CreateJanitor(Guid accountId, CreateJanitorDTO createJanitorDTO)
     {
-        await CheckUserData(createJanitorDTO.JMBG, createJanitorDTO.AccountId, "Janitor");
-        return await CreateUser<Janitor, CreateJanitorDTO, EmployeeDTO>(RepositoryManager.JanitorRepository, createJanitorDTO);
+        await CheckUserData(createJanitorDTO.JMBG, accountId, "Janitor");
+        return await CreateUser<Janitor, CreateJanitorDTO, EmployeeDTO>(
+            accountId, RepositoryManager.JanitorRepository, createJanitorDTO);
     }
 
-    public async Task<EmployeeDTO> CreateMaid(CreateMaidDTO createMaidDTO)
+    public async Task<EmployeeDTO> CreateMaid(Guid accountId, CreateMaidDTO createMaidDTO)
     {
-        await CheckUserData(createMaidDTO.JMBG, createMaidDTO.AccountId, "Maid");
-        return await CreateUser<Maid, CreateMaidDTO, EmployeeDTO>(RepositoryManager.MaidRepository, createMaidDTO);
+        await CheckUserData(createMaidDTO.JMBG, accountId, "Maid");
+        return await CreateUser<Maid, CreateMaidDTO, EmployeeDTO>(accountId, RepositoryManager.MaidRepository, createMaidDTO);
     }
 
-    public async Task<EmployeeDTO> CreateDoorkeeper(CreateDoorkeeperDTO createDoorkeeperDTO)
+    public async Task<EmployeeDTO> CreateDoorkeeper(Guid accountId, CreateDoorkeeperDTO createDoorkeeperDTO)
     {
-        await CheckUserData(createDoorkeeperDTO.JMBG, createDoorkeeperDTO.AccountId, "Doorkeeper");
-        return await CreateUser<Doorkeeper, CreateDoorkeeperDTO, EmployeeDTO>(RepositoryManager.DoorkeeperRepository, createDoorkeeperDTO);
+        await CheckUserData(createDoorkeeperDTO.JMBG, accountId, "Doorkeeper");
+        return await CreateUser<Doorkeeper, CreateDoorkeeperDTO, EmployeeDTO>(
+            accountId, RepositoryManager.DoorkeeperRepository, createDoorkeeperDTO);
     }
 
-    public async Task<StudentDTO> UpdateStudent(Guid id, UpdateStudentDTO updateStudentDTO) =>
-        await UpdateUser<Student, UpdateStudentDTO, StudentDTO>(_studentsServiceBase, x => x.Id == id, updateStudentDTO);
+    public async Task<StudentDTO> UpdateStudent(Guid accountId, Guid id, UpdateStudentDTO updateStudentDTO) =>
+        await UpdateUser<Student, UpdateStudentDTO, StudentDTO>(accountId, _studentsServiceBase, x => x.Id == id, updateStudentDTO);
 
-    public async Task<WardenDTO> UpdateWarden(Guid id, UpdateWardenDTO updateStudentDTO) =>
-        await UpdateUser<Warden, UpdateWardenDTO, WardenDTO>(_wardensServiceBase, x => x.Id == id, updateStudentDTO);
+    public async Task<WardenDTO> UpdateWarden(Guid accountId, Guid id, UpdateWardenDTO updateStudentDTO) =>
+        await UpdateUser<Warden, UpdateWardenDTO, WardenDTO>(accountId, _wardensServiceBase, x => x.Id == id, updateStudentDTO);
 
-    public async Task<EmployeeDTO> UpdateMaid(Guid id, UpdateMaidDTO updateStudentDTO) =>
-        await UpdateUser<Maid, UpdateMaidDTO, EmployeeDTO>(_maidsServiceBase, x => x.Id == id, updateStudentDTO);
+    public async Task<EmployeeDTO> UpdateMaid(Guid accountId, Guid id, UpdateMaidDTO updateStudentDTO) =>
+        await UpdateUser<Maid, UpdateMaidDTO, EmployeeDTO>(accountId, _maidsServiceBase, x => x.Id == id, updateStudentDTO);
 
-    public async Task<EmployeeDTO> UpdateJanitor(Guid id, UpdateJanitorDTO updateStudentDTO) =>
-        await UpdateUser<Janitor, UpdateJanitorDTO, EmployeeDTO>(_janitorsServiceBase, x => x.Id == id, updateStudentDTO);
+    public async Task<EmployeeDTO> UpdateJanitor(Guid accountId, Guid id, UpdateJanitorDTO updateStudentDTO) =>
+        await UpdateUser<Janitor, UpdateJanitorDTO, EmployeeDTO>(accountId, _janitorsServiceBase, x => x.Id == id, updateStudentDTO);
 
-    public async Task<EmployeeDTO> UpdateDoorkeeper(Guid id, UpdateDoorkeeperDTO updateStudentDTO) =>
-        await UpdateUser<Doorkeeper, UpdateDoorkeeperDTO, EmployeeDTO>(_doorkeepersServiceBase, x => x.Id == id, updateStudentDTO);
+    public async Task<EmployeeDTO> UpdateDoorkeeper(Guid accountId, Guid id, UpdateDoorkeeperDTO updateStudentDTO) =>
+        await UpdateUser<Doorkeeper, UpdateDoorkeeperDTO, EmployeeDTO>(accountId, _doorkeepersServiceBase, x => x.Id == id, updateStudentDTO);
 
     private async Task CheckUserData(string jmbg, Guid accountId, string requiredRole)
     {
@@ -122,7 +152,7 @@ public class UsersService : ServiceBase<User>, IUsersService
 
         var account = await _accountManager.FindByIdAsync(accountId.ToString()) ??
             throw new BadRequestException($"{nameof(Account)} with id {accountId} does not exist");
-        
+
         var roles = await _accountManager.GetRolesAsync(account);
 
         if (!roles.Contains(requiredRole))
@@ -131,24 +161,53 @@ public class UsersService : ServiceBase<User>, IUsersService
         }
     }
 
-    private async Task<TReturn> GetUser<T, TReturn>(IRepositoryBase<T> repository, Expression<Func<T, bool>> expression) where T : class where TReturn : class
+    private async Task<TReturn> GetUser<T, TReturn>(
+        IRepositoryBase<T> repository,
+        Expression<Func<T, bool>> expression,
+        string[] includes = null) where T : class where TReturn : class
     {
-        var user = await repository.FindByCondition(expression, false).FirstOrDefaultAsync() ??
+        var query = repository.FindByCondition(expression, false);
+
+        if (includes != null)
+        {
+            query = includes.Aggregate(query, (current, include) => current.Include(include));
+        }
+
+        var user = await query.FirstOrDefaultAsync() ??
             throw new BadRequestException($"{typeof(T).Name} does not exist.");
 
         return Mapper.Map<TReturn>(user);
     }
 
-    private async Task<Page<TReturn>> GetUsers<T, TReturn>(IRepositoryBase<T> repository, Expression<Func<T, bool>> expression) where T : class where TReturn : class
+    private async Task<Page<TReturn>> GetUsers<T, TReturn>(
+        IRepositoryBase<T> repository,
+        Expression<Func<T, bool>> expression,
+        string[] includes = null) where T : class where TReturn : class
     {
-        var users = await repository.FindByCondition(expression, false).ToListAsync();
+        var query = repository.FindByCondition(expression, false);
+
+        if (includes != null)
+        {
+            query = includes.Aggregate(query, (current, include) => current.Include(include));
+        }
+
+        var users = await query.ToListAsync();
 
         return Mapper.Map<Page<TReturn>>(users);
     }
 
-    private async Task<TReturnDTO> CreateUser<T, TCreateDTO, TReturnDTO>(IRepositoryBase<T> repository, TCreateDTO createDTO) where T : class
+    private async Task<TReturnDTO> CreateUser<T, TCreateDTO, TReturnDTO>(
+        Guid accountId,
+        IRepositoryBase<T> repository,
+        TCreateDTO createDTO) where T : class
     {
         var user = Mapper.Map<T>(createDTO);
+
+        if (!TrySetProperty(user, nameof(User.AccountId), accountId))
+        {
+            throw new ArgumentException($"Arguments are not valid.");
+        }
+
         repository.Create(user);
 
         await RepositoryManager.SaveAsync();
@@ -156,7 +215,11 @@ public class UsersService : ServiceBase<User>, IUsersService
         return Mapper.Map<TReturnDTO>(user);
     }
 
-    private async Task<TEntityDTO> UpdateUser<T, TEntityUpdateDTO, TEntityDTO>(IServiceBase<T> serviceBase, Expression<Func<T, bool>> expression, TEntityUpdateDTO updateDTO)
+    private async Task<TEntityDTO> UpdateUser<T, TEntityUpdateDTO, TEntityDTO>(
+        Guid accountId,
+        IServiceBase<T> serviceBase,
+        Expression<Func<T, bool>> expression,
+        TEntityUpdateDTO updateDTO)
         where T : class
         where TEntityDTO : class
         where TEntityUpdateDTO : class
@@ -169,6 +232,17 @@ public class UsersService : ServiceBase<User>, IUsersService
         await serviceBase.Update(user);
 
         return Mapper.Map<TEntityDTO>(user);
+    }
+
+    private bool TrySetProperty(object obj, string property, object value)
+    {
+        var prop = obj.GetType().GetProperty(property, BindingFlags.Public | BindingFlags.Instance);
+        if (prop != null && prop.CanWrite)
+        {
+            prop.SetValue(obj, value, null);
+            return true;
+        }
+        return false;
     }
 
 

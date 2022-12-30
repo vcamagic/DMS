@@ -14,13 +14,21 @@ public class OwnsAccountPolicyHandler : AuthorizationHandler<OwnsAccountRequirem
         _accountsService = accountsService;
         _accessor = accessor;
     }
-    
+
     protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, OwnsAccountRequirement requirement)
     {
-        var routeParameter = _accessor.HttpContext.GetRouteValue("id") as string;
+        var routeParameter = _accessor.HttpContext.GetRouteValue("accountId") ??
+            _accessor.HttpContext.GetRouteValue("id");
+
+        if (routeParameter == null)
+        {
+            context.Fail();
+            return;
+        }
+
         var emailClaim = context.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;
 
-        if (routeParameter == null || emailClaim == null || !Guid.TryParse(routeParameter, out var accountId))
+        if (routeParameter == null || emailClaim == null || !Guid.TryParse(routeParameter as string, out var accountId))
         {
             context.Fail();
             return;
@@ -38,7 +46,7 @@ public class OwnsAccountPolicyHandler : AuthorizationHandler<OwnsAccountRequirem
         if (account.Id != accountId)
         {
             context.Fail();
-            return;            
+            return;
         }
 
         context.Succeed(requirement);

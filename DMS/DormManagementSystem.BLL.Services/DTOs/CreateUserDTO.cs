@@ -13,8 +13,6 @@ public class CreateUserDTO
     public string Address { get; set; }
     [Required(ErrorMessage = $"{nameof(JMBG)} is required."), MaxLength(13, ErrorMessage = $"{nameof(JMBG)} max length is 13.")]
     public string JMBG { get; set; }
-    [Required(ErrorMessage = $"{nameof(AccountId)} is required.")]
-    public Guid AccountId { get; set; }
     [Required(ErrorMessage = $"{nameof(Sex)} is required.")]
     public Sex Sex { get; set; }
 }
