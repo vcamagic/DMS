@@ -14,14 +14,14 @@ public interface IUsersService
     Task<EmployeeDTO> GetJanitor(Guid id);
     Task<EmployeeDTO> GetMaid(Guid id);
     Task<EmployeeDTO> GetDoorkeeper(Guid id);
-    Task<StudentDTO> CreateStudent(CreateStudentDTO createStudentDTO);
-    Task<WardenDTO> CreateWarden(CreateWardenDTO createWardenDTO);
-    Task<EmployeeDTO> CreateJanitor(CreateJanitorDTO createJanitorDTO);
-    Task<EmployeeDTO> CreateMaid(CreateMaidDTO createMaidDTO);
-    Task<EmployeeDTO> CreateDoorkeeper(CreateDoorkeeperDTO createDoorkeeperDTO);
-    Task<StudentDTO> UpdateStudent(Guid id, UpdateStudentDTO updateStudentDTO);
-    Task<WardenDTO> UpdateWarden(Guid id, UpdateWardenDTO updateWardenDTO);
-    Task<EmployeeDTO> UpdateMaid(Guid id, UpdateMaidDTO updateMaidDTO);
-    Task<EmployeeDTO> UpdateJanitor(Guid id, UpdateJanitorDTO updateJanitorDTO);
-    Task<EmployeeDTO> UpdateDoorkeeper(Guid id, UpdateDoorkeeperDTO updateDoorkeeperDTO);
+    Task<StudentDTO> CreateStudent(Guid accountId, CreateStudentDTO createStudentDTO);
+    Task<WardenDTO> CreateWarden(Guid accountId, CreateWardenDTO createWardenDTO);
+    Task<EmployeeDTO> CreateJanitor(Guid accountId, CreateJanitorDTO createJanitorDTO);
+    Task<EmployeeDTO> CreateMaid(Guid accountId, CreateMaidDTO createMaidDTO);
+    Task<EmployeeDTO> CreateDoorkeeper(Guid accountId, CreateDoorkeeperDTO createDoorkeeperDTO);
+    Task<StudentDTO> UpdateStudent(Guid accountId, Guid id, UpdateStudentDTO updateStudentDTO);
+    Task<WardenDTO> UpdateWarden(Guid accountId, Guid id, UpdateWardenDTO updateWardenDTO);
+    Task<EmployeeDTO> UpdateMaid(Guid accountId, Guid id, UpdateMaidDTO updateMaidDTO);
+    Task<EmployeeDTO> UpdateJanitor(Guid accountId, Guid id, UpdateJanitorDTO updateJanitorDTO);
+    Task<EmployeeDTO> UpdateDoorkeeper(Guid accountId, Guid id, UpdateDoorkeeperDTO updateDoorkeeperDTO);
 }

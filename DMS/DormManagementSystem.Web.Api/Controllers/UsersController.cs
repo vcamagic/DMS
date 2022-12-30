@@ -86,83 +86,108 @@ public class UsersController : ControllerBase
         return Ok(doorkeeper);
     }
 
-    [HttpPost("wardens")]
+    [HttpPost("{accountId}/wardens")]
     [Authorize(Policy = AppConstants.AppPolicies.WardenPolicy)]
-    public async Task<IActionResult> CreateWarden([FromBody] CreateWardenDTO createWardenDTO)
+    public async Task<IActionResult> CreateWarden(
+        [FromRoute] Guid accountId, 
+        [FromBody] CreateWardenDTO createWardenDTO)
     {
-        var warden = await _usersService.CreateWarden(createWardenDTO);
+        var warden = await _usersService.CreateWarden(accountId, createWardenDTO);
         return CreatedAtAction(nameof(GetWarden), new { id = warden.Id }, warden);
     }
 
-    [HttpPost("janitors")]
-    [Authorize(Policy = AppConstants.AppPolicies.JanitorPolicy)]
-    public async Task<IActionResult> CreateJanitor([FromBody] CreateJanitorDTO createJanitorDTO)
+    [HttpPost("{accountId}/janitors")]
+    [Authorize(Policy = AppConstants.AppPolicies.OwnsAccountPolicy)]
+    public async Task<IActionResult> CreateJanitor(
+        [FromRoute] Guid accountId, 
+        [FromBody] CreateJanitorDTO createJanitorDTO)
     {
-        var janitor = await _usersService.CreateJanitor(createJanitorDTO);
+        var janitor = await _usersService.CreateJanitor(accountId, createJanitorDTO);
         return CreatedAtAction(nameof(GetJanitor), new { id = janitor.Id }, janitor);
     }
 
-    [HttpPost("maids")]
+    [HttpPost("{accountId}/maids")]
     [Authorize(Policy = AppConstants.AppPolicies.MaidPolicy)]
-    public async Task<IActionResult> CreateMaid([FromBody] CreateMaidDTO createMaidDTO)
+    public async Task<IActionResult> CreateMaid(
+        [FromRoute] Guid accountId,
+        [FromBody] CreateMaidDTO createMaidDTO)
     {
-        var maid = await _usersService.CreateMaid(createMaidDTO);
+        var maid = await _usersService.CreateMaid(accountId, createMaidDTO);
         return CreatedAtAction(nameof(GetMaid), new { id = maid.Id }, maid);
     }
 
-    [HttpPost("doorkeepers")]
+    [HttpPost("{accountId}/doorkeepers")]
     [Authorize(Policy = AppConstants.AppPolicies.DoorkeeperPolicy)]
-    public async Task<IActionResult> CreateDoorkeeper([FromBody] CreateDoorkeeperDTO createDoorkeeperDTO)
+    public async Task<IActionResult> CreateDoorkeeper(
+        [FromRoute] Guid accountId,
+        [FromBody] CreateDoorkeeperDTO createDoorkeeperDTO)
     {
-        var doorkeeper = await _usersService.CreateDoorkeeper(createDoorkeeperDTO);
+        var doorkeeper = await _usersService.CreateDoorkeeper(accountId, createDoorkeeperDTO);
         return CreatedAtAction(nameof(GetDoorkeeper), new { id = doorkeeper.Id }, doorkeeper);
     }
 
-    [HttpPost("students")]
+    [HttpPost("{accountId}/students")]
     [Authorize(Policy = AppConstants.AppPolicies.StudentPolicy)]
-    public async Task<IActionResult> CreateStudent([FromBody] CreateStudentDTO createStudentDTO)
+    public async Task<IActionResult> CreateStudent(
+        [FromRoute] Guid accountId,
+        [FromBody] CreateStudentDTO createStudentDTO)
     {
-        var student = await _usersService.CreateStudent(createStudentDTO);
+        var student = await _usersService.CreateStudent(accountId, createStudentDTO);
         return CreatedAtAction(nameof(GetStudent), new { id = student.Id }, student);
     }
 
-    [HttpPut("students/{id}")]
+    [HttpPut("{accountId}/students/{id}")]
     [Authorize(Policy = AppConstants.AppPolicies.OwnsAccountPolicy)]
-    public async Task<ActionResult<StudentDTO>> UpdateStudent([FromRoute] Guid id, [FromBody] UpdateStudentDTO updateStudentDTO)
+    public async Task<ActionResult<StudentDTO>> UpdateStudent(
+        [FromRoute] Guid accountId,
+        [FromRoute] Guid id,
+        [FromBody] UpdateStudentDTO updateStudentDTO)
     {
-        var student = await _usersService.UpdateStudent(id, updateStudentDTO);
+        var student = await _usersService.UpdateStudent(accountId, id, updateStudentDTO);
         return Ok(student);
     }
 
-    [HttpPut("wardens/{id}")]
+    [HttpPut("{accountId}/wardens/{id}")]
     [Authorize(Policy = AppConstants.AppPolicies.OwnsAccountPolicy)]
-    public async Task<ActionResult<WardenDTO>> UpdateWarden([FromRoute] Guid id, [FromBody] UpdateWardenDTO updateWardenDTO)
+    public async Task<ActionResult<WardenDTO>> UpdateWarden(
+        [FromRoute] Guid accountId,
+        [FromRoute] Guid id,
+        [FromBody] UpdateWardenDTO updateWardenDTO)
     {
-        var warden = await _usersService.UpdateWarden(id, updateWardenDTO);
+        var warden = await _usersService.UpdateWarden(accountId, id, updateWardenDTO);
         return Ok(warden);
     }
 
-    [HttpPut("janitors/{id}")]
+    [HttpPut("{accountId}/janitors/{id}")]
     [Authorize(Policy = AppConstants.AppPolicies.OwnsAccountPolicy)]
-    public async Task<ActionResult<EmployeeDTO>> UpdateJanitor([FromRoute] Guid id, [FromBody] UpdateJanitorDTO updateJanitorDTO)
+    public async Task<ActionResult<EmployeeDTO>> UpdateJanitor(
+        [FromRoute] Guid accountId,
+        [FromRoute] Guid id,
+        [FromBody] UpdateJanitorDTO updateJanitorDTO)
     {
-        var janitor = await _usersService.UpdateJanitor(id, updateJanitorDTO);
+        var janitor = await _usersService.UpdateJanitor(accountId, id, updateJanitorDTO);
         return Ok(janitor);
     }
 
-    [HttpPut("maids/{id}")]
+    [HttpPut("{accountId}/maids/{id}")]
     [Authorize(Policy = AppConstants.AppPolicies.OwnsAccountPolicy)]
-    public async Task<ActionResult<EmployeeDTO>> UpdateMaid([FromRoute] Guid id, [FromBody] UpdateMaidDTO updateMaidDTO)
+    public async Task<ActionResult<EmployeeDTO>> UpdateMaid(
+        [FromRoute] Guid accountId,
+        [FromRoute] Guid id,
+        [FromBody] UpdateMaidDTO updateMaidDTO)
     {
-        var maid = await _usersService.UpdateMaid(id, updateMaidDTO);
+        var maid = await _usersService.UpdateMaid(accountId, id, updateMaidDTO);
         return Ok(maid);
     }
 
-    [HttpPut("doorkeepers/{id}")]
+    [HttpPut("{accountId}/doorkeepers/{id}")]
     [Authorize(Policy = AppConstants.AppPolicies.OwnsAccountPolicy)]
-    public async Task<ActionResult<EmployeeDTO>> UpdateDoorkeeper([FromRoute] Guid id, [FromBody] UpdateDoorkeeperDTO updateDoorkeeperDTO)
+    public async Task<ActionResult<EmployeeDTO>> UpdateDoorkeeper(
+        [FromRoute] Guid accountId,
+        [FromRoute] Guid id,
+        [FromBody] UpdateDoorkeeperDTO updateDoorkeeperDTO)
     {
-        var doorkeeper = await _usersService.UpdateDoorkeeper(id, updateDoorkeeperDTO);
+        var doorkeeper = await _usersService.UpdateDoorkeeper(accountId, id, updateDoorkeeperDTO);
         return Ok(doorkeeper);
     }
 
