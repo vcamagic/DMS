@@ -19,7 +19,6 @@ public class UsersController : ControllerBase
     [HttpGet("students")]
     public async Task<ActionResult<Page<StudentDTO>>> GetStudents([FromQuery] PaginationDTO paginationDTO)
     {
-        var context = HttpContext;
         var students = await _usersService.GetStudents(paginationDTO);
         return Ok(students);
     }

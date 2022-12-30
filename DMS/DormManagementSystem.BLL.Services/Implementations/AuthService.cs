@@ -37,24 +37,24 @@ public class AuthService : IAuthService
             UserName = registerAccountDTO.Email,
         };
 
-        foreach (var role in registerAccountDTO.Roles)
-        {
-            _ = _userManager.AddToRoleAsync(account, ConvertToRole(role));
-        }
-
         var result = await _userManager.CreateAsync(account, registerAccountDTO.Password);
 
-        if (result.Succeeded)
+        if (!result.Succeeded)
         {
-            return new AccountDTO
-            {
-                Id = account.Id,
-                Email = account.Email,
-                IsActive = false,
-            };
+            throw new BadRequestException($"Error while creating new account.");
         }
 
-        throw new BadRequestException(result.Errors.Select(x => x.Description).Aggregate((current, pervious) => current + " " + pervious));
+        foreach (var role in registerAccountDTO.Roles)
+        {
+            await _userManager.AddToRoleAsync(account, ConvertToRole(role));
+        }
+
+        return new AccountDTO
+        {
+            Id = account.Id,
+            Email = account.Email,
+            IsActive = false,
+        };
     }
 
     public async Task Login(LoginDTO loginDTO)
@@ -74,12 +74,14 @@ public class AuthService : IAuthService
             throw new BadRequestException("Bad credentials.");
         }
 
-        await _signInManager.SignInAsync(account, new AuthenticationProperties
+        await _signInManager.SignInAsync(
+        account,
+        new AuthenticationProperties
         {
             IsPersistent = true,
-            ExpiresUtc = DateTime.UtcNow.AddMinutes(30),
-            AllowRefresh = true,           
-        }, CookieAuthenticationDefaults.AuthenticationScheme);
+            ExpiresUtc = DateTime.Now.AddMinutes(30),
+            AllowRefresh = true,
+        });
     }
 
     public async Task RefreshCookie(ClaimsPrincipal user)

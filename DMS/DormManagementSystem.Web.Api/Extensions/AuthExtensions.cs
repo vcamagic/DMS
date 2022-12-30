@@ -13,7 +13,10 @@ public static class AuthExtensions
     public static AuthenticationBuilder ConfigureAuthentication(this IServiceCollection services) =>
         services
             .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-            .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme);
+            .AddCookie(options =>
+            {
+                options.SlidingExpiration = true;
+            });
 
     public static IServiceCollection ConfigureAuthorization(this IServiceCollection services) =>
         services.AddAuthorization(builder =>
@@ -22,49 +25,42 @@ public static class AuthExtensions
             builder.AddPolicy(AppConstants.AppPolicies.OwnsAccountPolicy, opt =>
             {
                 opt.RequireAuthenticatedUser()
-                    .AddAuthenticationSchemes(CookieAuthenticationDefaults.AuthenticationScheme)
                     .AddRequirements(new OwnsAccountRequirement());
             });
 
             builder.AddPolicy(AppConstants.AppPolicies.WardenPolicy, opt =>
             {
                 opt.RequireAuthenticatedUser()
-                    .AddAuthenticationSchemes(CookieAuthenticationDefaults.AuthenticationScheme)
                     .RequireClaim(ClaimTypes.Role, AppConstants.AppRoles.Warden, AppConstants.AppRoles.Administrator);
             });
 
             builder.AddPolicy(AppConstants.AppPolicies.AdministratorPolicy, opt =>
             {
                 opt.RequireAuthenticatedUser()
-                    .AddAuthenticationSchemes(CookieAuthenticationDefaults.AuthenticationScheme)
                     .RequireClaim(ClaimTypes.Role, AppConstants.AppRoles.Administrator);
             });
 
             builder.AddPolicy(AppConstants.AppPolicies.MaidPolicy, opt =>
             {
                 opt.RequireAuthenticatedUser()
-                    .AddAuthenticationSchemes(CookieAuthenticationDefaults.AuthenticationScheme)
                     .RequireClaim(ClaimTypes.Role, AppConstants.AppRoles.Maid, AppConstants.AppRoles.Administrator);
             });
 
             builder.AddPolicy(AppConstants.AppPolicies.DoorkeeperPolicy, opt =>
             {
                 opt.RequireAuthenticatedUser()
-                    .AddAuthenticationSchemes(CookieAuthenticationDefaults.AuthenticationScheme)
                     .RequireClaim(ClaimTypes.Role, AppConstants.AppRoles.Doorkeeper, AppConstants.AppRoles.Administrator);
             });
 
             builder.AddPolicy(AppConstants.AppPolicies.StudentPolicy, opt =>
             {
                 opt.RequireAuthenticatedUser()
-                    .AddAuthenticationSchemes(CookieAuthenticationDefaults.AuthenticationScheme)
                     .RequireClaim(ClaimTypes.Role, AppConstants.AppRoles.Student, AppConstants.AppRoles.Administrator);
             });
 
             builder.AddPolicy(AppConstants.AppPolicies.JanitorPolicy, opt =>
             {
                 opt.RequireAuthenticatedUser()
-                    .AddAuthenticationSchemes(CookieAuthenticationDefaults.AuthenticationScheme)
                     .RequireClaim(ClaimTypes.Role, AppConstants.AppRoles.Janitor, AppConstants.AppRoles.Administrator);
             });
         });
