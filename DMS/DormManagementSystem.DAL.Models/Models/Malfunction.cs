@@ -23,5 +23,9 @@ public class Malfunction
     public Guid StudentId { get; set; }
     public Student Student { get; set; }
 
+    [Required]
+    public Guid RoomId { get; set; }
+    public Room Room { get; set; }
+
     public ICollection<Janitor> Janitors { get; set; }
 }

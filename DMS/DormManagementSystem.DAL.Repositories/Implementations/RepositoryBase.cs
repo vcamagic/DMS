@@ -15,6 +15,8 @@ public class RepositoryBase<T> : IRepositoryBase<T> where T : class
     }
     public void Create(T entity) => _context.Set<T>().Add(entity);
 
+    public void CreateRange(IEnumerable<T> entities) => _context.Set<T>().AddRange(entities);
+
     public void Delete(T entity) => _context.Set<T>().Remove(entity);
 
     public IQueryable<T> FindAll(bool trackChanges) =>
@@ -28,7 +30,6 @@ public class RepositoryBase<T> : IRepositoryBase<T> where T : class
             _context.Set<T>().AsNoTracking().Where(expression).AsQueryable();
 
     public void Update(T entity) => _context.Set<T>().Update(entity);
-
 
     private readonly ApplicationContext _context;
 }

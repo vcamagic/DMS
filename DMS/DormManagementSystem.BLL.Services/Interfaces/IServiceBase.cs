@@ -61,6 +61,12 @@ public interface IServiceBase<T> where T : class
     Task Create(T entity);
 
     ///<summary>
+    /// Creates a range of entities of type T.
+    ///</summary>
+    ///<param name="entity">Entities of type T.</param>
+    Task CreateRange(IEnumerable<T> entities);
+
+    ///<summary>
     /// Updates an entity of type T.
     ///</summary>
     ///<param name="entity">Entity of type T.</param>

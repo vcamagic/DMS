@@ -67,6 +67,23 @@ public class ApplicationContext : IdentityDbContext<Account, Role, Guid>
         .HasMany(x => x.Malfunctions)
         .WithMany(x => x.Janitors);
 
+        modelBuilder
+        .Entity<Floor>()
+        .HasMany(x => x.Rooms)
+        .WithOne(x => x.Floor);
+
+        modelBuilder
+        .Entity<Floor>()
+        .HasOne(x => x.Maid)
+        .WithOne(x => x.Floor)
+        .HasForeignKey<Maid>(x => x.FloorId);
+
+
+        modelBuilder
+        .Entity<Floor>()
+        .HasIndex(x => x.Level)
+        .IsUnique();
+
         base.OnModelCreating(modelBuilder);
     }
 
@@ -80,4 +97,6 @@ public class ApplicationContext : IdentityDbContext<Account, Role, Guid>
     public DbSet<Janitor> Janitors { get; set; }
     public DbSet<Shift> Shifts { get; set; }
     public DbSet<Malfunction> Malfunctions { get; set; }
+    public DbSet<Floor> Floors { get; set; }
+    public DbSet<Room> Rooms { get; set; }
 }

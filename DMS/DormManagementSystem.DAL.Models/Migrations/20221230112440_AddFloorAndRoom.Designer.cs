@@ -4,6 +4,7 @@ using DormManagementSystem.DAL.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DormManagementSystem.DAL.Models.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20221230112440_AddFloorAndRoom")]
+    partial class AddFloorAndRoom
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -101,9 +103,6 @@ namespace DormManagementSystem.DAL.Models.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Level")
-                        .IsUnique();
 
                     b.ToTable("Floors");
                 });
@@ -437,10 +436,6 @@ namespace DormManagementSystem.DAL.Models.Migrations
                     b.Property<Guid?>("FloorId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasIndex("FloorId")
-                        .IsUnique()
-                        .HasFilter("[FloorId] IS NOT NULL");
-
                     b.ToTable("Maids", (string)null);
                 });
 
@@ -615,7 +610,9 @@ namespace DormManagementSystem.DAL.Models.Migrations
                 {
                     b.HasOne("DormManagementSystem.DAL.Models.Models.Floor", "Floor")
                         .WithOne("Maid")
-                        .HasForeignKey("DormManagementSystem.DAL.Models.Models.Maid", "FloorId");
+                        .HasForeignKey("DormManagementSystem.DAL.Models.Models.Maid", "AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("DormManagementSystem.DAL.Models.Models.Employee", null)
                         .WithOne()

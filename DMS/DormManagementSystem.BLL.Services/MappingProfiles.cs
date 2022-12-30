@@ -28,6 +28,7 @@ public class MappingProfiles : Profile
         CreateMap<CreateShiftDTO, Shift>().ForMember(x => x.Employees, opt => opt.MapFrom(y => new List<Employee>()));
         CreateMap<CreateMalfunctionDTO, Malfunction>();
         CreateMap<CreateStudentDTO, Student>();
+        CreateMap<CreateFloorDTO, Floor>().ForMember(x => x.Id, opt => opt.MapFrom(x => Guid.NewGuid()));
 
 
         CreateMap<UpdateUserDTO, User>();

@@ -13,10 +13,10 @@ public class DateAfterAttribute : ValidationAttribute
         object firstDateValue = GetPropertyValue(validationContext.ObjectInstance, FirstDateProperty);
         object secondDateValue = GetPropertyValue(validationContext.ObjectInstance, SecondDateProperty);
 
-        if (firstDateValue == null || secondDateValue == null || 
+        if (firstDateValue == null || secondDateValue == null ||
             !(firstDateValue is DateTime) || !(secondDateValue is DateTime))
         {
-           return new ValidationResult("Dates are not valid.");
+            return new ValidationResult("Dates are not valid.");
         }
 
         DateTime firstDate = (DateTime)firstDateValue;
