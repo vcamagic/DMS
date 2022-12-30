@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace DormManagementSystem.BLL.Services.DTOs;
@@ -14,12 +15,18 @@ public class RegisterAccountDTO
     public IEnumerable<Role> Roles { get; set; }
 }
 
-public enum Role 
+public enum Role
 {
-    Administrator,
+    [Description("Represents Administrator Role")]
+    Administrator = 1,
+    [Description("Represents Warden Role")]
     Warden,
+    [Description("Represents Maid Role")]
     Maid,
+    [Description("Represents Doorkeeper Role")]
     Doorkeeper,
+    [Description("Represents Janitor Role")]
     Janitor,
+    [Description("Represents Student Role")]
     Student
 }

@@ -30,7 +30,6 @@ public class AccountsService : ServiceBase<Account>, IAccountsService
         SortDTO sortDTO = null,
         bool? active = null)
     {
-        var includeClaims = new string[] { nameof(Account.Claims) };
 
         var accountsPage = sortDTO switch
         {
@@ -41,8 +40,7 @@ public class AccountsService : ServiceBase<Account>, IAccountsService
                     x => active == null || x.IsActive == active, 
                     false, 
                     orderSelector: x => x.Email, 
-                    orderAscending: sortDTO.Order != "desc" , 
-                    includes: includeClaims
+                    orderAscending: sortDTO.Order != "desc"
                 ),
             { SortBy: "isActive" } => 
                 await GetEntityPage(
@@ -50,14 +48,12 @@ public class AccountsService : ServiceBase<Account>, IAccountsService
                     x => active == null || x.IsActive == active, 
                     false, 
                     orderSelector: x => x.IsActive, 
-                    orderAscending: sortDTO.Order != "desc" , 
-                    includes: includeClaims
+                    orderAscending: sortDTO.Order != "desc"
                 ),
             _ => await GetEntityPage(
                     paginationDTO, 
                     x => active == null || x.IsActive == active, 
-                    false, 
-                    includes: includeClaims
+                    false
                 )
         };
 
@@ -66,7 +62,7 @@ public class AccountsService : ServiceBase<Account>, IAccountsService
 
     public async Task<AccountDTO> GetAccount(Guid id)
     {
-        var account = await GetEntity(x => x.Id == id, false, new string[] { nameof(Account.Claims) }) ??
+        var account = await GetEntity(x => x.Id == id, false) ??
             throw new BadRequestException($"Account with id {id} does not exist.");
 
         return Mapper.Map<AccountDTO>(account);
@@ -74,7 +70,7 @@ public class AccountsService : ServiceBase<Account>, IAccountsService
 
     public async Task<AccountDTO> GetAccount(string email)
     {
-        var account = await GetEntity(x => x.Email == email, false, new string[] { nameof(Account.Claims) }) ??
+        var account = await GetEntity(x => x.Email == email, false) ??
             throw new BadRequestException($"Account with email address {email} does not exist."); ;
 
         return Mapper.Map<AccountDTO>(account);
@@ -89,28 +85,12 @@ public class AccountsService : ServiceBase<Account>, IAccountsService
         return Mapper.Map<AccountDTO>(account);
     }
 
-    public async Task<bool> AccountHasClaim(Guid id, (string name, string value) claim)
+    public async Task<bool> AccountHasRole(Guid id, string role)
     {
         var account = await GetAccount(id);
 
-        return account.Claims.Any(x => x.Name == claim.name && x.Value == claim.value);
+        return true;
     }
-
-    private static ICollection<Claim> ConvertRolesToClaims(IEnumerable<Role> roles) =>
-    roles.Select(x =>
-    {
-        return x switch
-        {
-            Role.Administrator => new Claim("Role", "Administrator"),
-            Role.Warden => new Claim("Role", "Warden"),
-            Role.Maid => new Claim("Role", "Maid"),
-            Role.Doorkeeper => new Claim("Role", "Doorkeeper"),
-            Role.Janitor => new Claim("Role", "Janitor"),
-            Role.Student => new Claim("Role", "Student"),
-            _ => new Claim()
-        };
-    }).ToList();
-
 
     private readonly IRepositoryManager _repositoryManager;
 }

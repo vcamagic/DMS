@@ -9,7 +9,6 @@ public class MappingProfiles : Profile
     public MappingProfiles()
     {
         CreateMap<Account, AccountDTO>();
-        CreateMap<Claim, ClaimDTO>().ReverseMap();
         CreateMap<User, UserDTO>().ReverseMap();
         CreateMap<Doorkeeper, DoorkeeperDTO>().ReverseMap();
         CreateMap<Doorkeeper, EmployeeDTO>().ReverseMap();

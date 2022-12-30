@@ -5,6 +5,7 @@ using DormManagementSystem.BLL.Services.Interfaces;
 using DormManagementSystem.DAL.Models.Models;
 using DormManagementSystem.DAL.Repositories.Interfaces;
 using DormManagementSystem.GlobalExceptionHandler.Exceptions;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace DormManagementSystem.BLL.Services.Implementations;
@@ -15,6 +16,7 @@ public class UsersService : ServiceBase<User>, IUsersService
         IRepositoryManager repositoryManager,
         IMapper mapper,
         IAccountsService accountsService,
+        UserManager<Account> accountManager,
         IServiceBase<Student> studentsServiceBase,
         IServiceBase<Warden> wardensServiceBase,
         IServiceBase<Maid> maidsServiceBase,
@@ -23,6 +25,7 @@ public class UsersService : ServiceBase<User>, IUsersService
         ) : base(repositoryManager.UserRepository, repositoryManager, mapper)
     {
         _accountsService = accountsService;
+        _accountManager = accountManager;
         _studentsServiceBase = studentsServiceBase;
         _wardensServiceBase = wardensServiceBase;
         _maidsServiceBase = maidsServiceBase;
@@ -65,31 +68,31 @@ public class UsersService : ServiceBase<User>, IUsersService
 
     public async Task<StudentDTO> CreateStudent(CreateStudentDTO createStudentDTO)
     {
-        await CheckUserData(createStudentDTO.JMBG, createStudentDTO.AccountId, ("Role", "Student"));
+        await CheckUserData(createStudentDTO.JMBG, createStudentDTO.AccountId, "Student");
         return await CreateUser<Student, CreateStudentDTO, StudentDTO>(RepositoryManager.StudentRepository, createStudentDTO);
     }
 
     public async Task<WardenDTO> CreateWarden(CreateWardenDTO createWardenDTO)
     {
-        await CheckUserData(createWardenDTO.JMBG, createWardenDTO.AccountId, ("Role", "Warden"));
+        await CheckUserData(createWardenDTO.JMBG, createWardenDTO.AccountId, "Warden");
         return await CreateUser<Warden, CreateWardenDTO, WardenDTO>(RepositoryManager.WardenRepository, createWardenDTO);
     }
 
     public async Task<EmployeeDTO> CreateJanitor(CreateJanitorDTO createJanitorDTO)
     {
-        await CheckUserData(createJanitorDTO.JMBG, createJanitorDTO.AccountId, ("Role", "Janitor"));
+        await CheckUserData(createJanitorDTO.JMBG, createJanitorDTO.AccountId, "Janitor");
         return await CreateUser<Janitor, CreateJanitorDTO, EmployeeDTO>(RepositoryManager.JanitorRepository, createJanitorDTO);
     }
 
     public async Task<EmployeeDTO> CreateMaid(CreateMaidDTO createMaidDTO)
     {
-        await CheckUserData(createMaidDTO.JMBG, createMaidDTO.AccountId, ("Role", "Maid"));
+        await CheckUserData(createMaidDTO.JMBG, createMaidDTO.AccountId, "Maid");
         return await CreateUser<Maid, CreateMaidDTO, EmployeeDTO>(RepositoryManager.MaidRepository, createMaidDTO);
     }
 
     public async Task<EmployeeDTO> CreateDoorkeeper(CreateDoorkeeperDTO createDoorkeeperDTO)
     {
-        await CheckUserData(createDoorkeeperDTO.JMBG, createDoorkeeperDTO.AccountId, (name: "Role", value: "Doorkeeper"));
+        await CheckUserData(createDoorkeeperDTO.JMBG, createDoorkeeperDTO.AccountId, "Doorkeeper");
         return await CreateUser<Doorkeeper, CreateDoorkeeperDTO, EmployeeDTO>(RepositoryManager.DoorkeeperRepository, createDoorkeeperDTO);
     }
 
@@ -108,7 +111,7 @@ public class UsersService : ServiceBase<User>, IUsersService
     public async Task<EmployeeDTO> UpdateDoorkeeper(Guid id, UpdateDoorkeeperDTO updateStudentDTO) =>
         await UpdateUser<Doorkeeper, UpdateDoorkeeperDTO, EmployeeDTO>(_doorkeepersServiceBase, x => x.Id == id, updateStudentDTO);
 
-    private async Task CheckUserData(string jmbg, Guid accountId, (string name, string value) requiredClaim)
+    private async Task CheckUserData(string jmbg, Guid accountId, string requiredRole)
     {
         var user = await GetEntity(x => x.JMBG == jmbg, true);
 
@@ -117,11 +120,14 @@ public class UsersService : ServiceBase<User>, IUsersService
             throw new BadRequestException($"{nameof(User)} with JMBG {jmbg} already exists.");
         }
 
-        var account = await _accountsService.GetAccount(accountId);
+        var account = await _accountManager.FindByIdAsync(accountId.ToString()) ??
+            throw new BadRequestException($"{nameof(Account)} with id {accountId} does not exist");
+        
+        var roles = await _accountManager.GetRolesAsync(account);
 
-        if (!account.Claims.Any(x => x.Name == requiredClaim.name && x.Value == requiredClaim.value))
+        if (!roles.Contains(requiredRole))
         {
-            throw new BadRequestException($"{nameof(Account)} with id {accountId} has no {requiredClaim.value} claim.");
+            throw new BadRequestException($"{nameof(Account)} with id {accountId} has no {requiredRole} role.");
         }
     }
 
@@ -167,6 +173,7 @@ public class UsersService : ServiceBase<User>, IUsersService
 
 
     private readonly IAccountsService _accountsService;
+    private readonly UserManager<Account> _accountManager;
     private readonly IServiceBase<Student> _studentsServiceBase;
     private readonly IServiceBase<Warden> _wardensServiceBase;
     private readonly IServiceBase<Maid> _maidsServiceBase;

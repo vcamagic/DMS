@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DormManagementSystem.Web.Api.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/auth")]
 public class AuthenticationController : ControllerBase
 {
     public AuthenticationController(IAuthService authService)
@@ -17,20 +17,27 @@ public class AuthenticationController : ControllerBase
         _authService = authService;
     }
 
-    [HttpPost("/register-account")]
-    public async Task<ActionResult<AccountDTO>> RegisterAccount([FromBody] RegisterAccountDTO registerAccountDTO) 
+    [HttpPost("register-account")]
+    public async Task<ActionResult<AccountDTO>> RegisterAccount([FromBody] RegisterAccountDTO registerAccountDTO)
     {
-        var accountDTO  = await _authService.RegisterAccount(registerAccountDTO);
+        var accountDTO = await _authService.RegisterAccount(registerAccountDTO);
         return Ok(accountDTO);
     }
 
-    [HttpPost("/login")]
+    [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginDTO loginDTO)
     {
         await _authService.Login(loginDTO);
         return Ok();
     }
 
+    [HttpPost("refresh-cookie")]
+    [Authorize]
+    public async Task<IActionResult> RefreshCookie()
+    {
+        await _authService.RefreshCookie(HttpContext.User);
+        return Ok();
+    }
+
     private readonly IAuthService _authService;
 }
- 

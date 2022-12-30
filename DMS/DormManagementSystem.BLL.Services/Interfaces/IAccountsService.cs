@@ -19,5 +19,5 @@ public interface IAccountsService
     ///</summary>
     ///<returns>Flag indicating weather account has specified claim.</returns>
     ///<exception cref="BadRequestException">Thrown when account with <c>id</c> doesn't exist.</exception>
-    Task<bool> AccountHasClaim(Guid id, (string name, string value) claim);
+    Task<bool> AccountHasRole(Guid id, string role);
 }

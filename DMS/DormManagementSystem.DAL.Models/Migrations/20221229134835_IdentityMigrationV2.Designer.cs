@@ -4,6 +4,7 @@ using DormManagementSystem.DAL.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DormManagementSystem.DAL.Models.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20221229134835_IdentityMigrationV2")]
+    partial class IdentityMigrationV2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -80,6 +82,10 @@ namespace DormManagementSystem.DAL.Models.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Email")
+                        .IsUnique()
+                        .HasFilter("[Email] IS NOT NULL");
+
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
 
@@ -129,6 +135,9 @@ namespace DormManagementSystem.DAL.Models.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("AccountId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
@@ -142,6 +151,8 @@ namespace DormManagementSystem.DAL.Models.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AccountId");
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
@@ -406,6 +417,13 @@ namespace DormManagementSystem.DAL.Models.Migrations
                     b.Navigation("Student");
                 });
 
+            modelBuilder.Entity("DormManagementSystem.DAL.Models.Models.Role", b =>
+                {
+                    b.HasOne("DormManagementSystem.DAL.Models.Models.Account", null)
+                        .WithMany("Roles")
+                        .HasForeignKey("AccountId");
+                });
+
             modelBuilder.Entity("DormManagementSystem.DAL.Models.Models.User", b =>
                 {
                     b.HasOne("DormManagementSystem.DAL.Models.Models.Account", "Account")
@@ -554,6 +572,8 @@ namespace DormManagementSystem.DAL.Models.Migrations
 
             modelBuilder.Entity("DormManagementSystem.DAL.Models.Models.Account", b =>
                 {
+                    b.Navigation("Roles");
+
                     b.Navigation("User");
                 });
 

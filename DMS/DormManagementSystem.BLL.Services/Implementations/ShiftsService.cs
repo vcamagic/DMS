@@ -45,7 +45,7 @@ public class ShiftsService : ServiceBase<Shift>, IShiftsService
         var shift = await GetEntity(
             x => x.Id == id,
             false,
-            new string[] { $"{nameof(Shift.Employees)}.{nameof(Account)}.{nameof(Account.Claims)}" })
+            new string[] { $"{nameof(Shift.Employees)}.{nameof(Account)}" })
             ?? throw new BadRequestException($"Shift with id {id} does not exist.");
 
         return Mapper.Map<ShiftDTO>(shift);
@@ -53,7 +53,7 @@ public class ShiftsService : ServiceBase<Shift>, IShiftsService
 
     public async Task<Page<ShiftDTO>> GetShifts(PaginationDTO paginationDTO)
     {
-        var shifts = await GetEntityPage(paginationDTO, false, new string[] { $"{nameof(Shift.Employees)}.{nameof(Account)}.{nameof(Account.Claims)}" });
+        var shifts = await GetEntityPage(paginationDTO, false, new string[] { $"{nameof(Shift.Employees)}.{nameof(Account)}" });
 
         return Mapper.Map<Page<ShiftDTO>>(shifts);
     }
@@ -63,7 +63,7 @@ public class ShiftsService : ServiceBase<Shift>, IShiftsService
         var shift = await GetEntity(
             x => x.Id == id,
             true,
-            new string[] { $"{nameof(Shift.Employees)}.{nameof(Account)}.{nameof(Account.Claims)}" }) ??
+            new string[] { $"{nameof(Shift.Employees)}.{nameof(Account)}.{nameof(Account)}" }) ??
             throw new BadRequestException($"Shift with id {id} does not exist.");
 
         Mapper.Map(updateShiftDTO, shift);

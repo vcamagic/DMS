@@ -1,11 +1,13 @@
 
 using System.Diagnostics.CodeAnalysis;
 using DormManagementSystem.DAL.Models.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace DormManagementSystem.DAL.Models;
 
-public class ApplicationContext : DbContext
+public class ApplicationContext : IdentityDbContext<Account, Role, Guid>
 {
     public ApplicationContext([NotNullAttribute] DbContextOptions options) : base(options)
     {
@@ -13,11 +15,6 @@ public class ApplicationContext : DbContext
     }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder
-        .Entity<Account>()
-        .HasIndex(x => x.Email)
-        .IsUnique();
-
         modelBuilder
         .Entity<Account>()
         .HasOne(x => x.User)
@@ -33,15 +30,6 @@ public class ApplicationContext : DbContext
         .Entity<User>()
         .HasIndex(x => x.JMBG)
         .IsUnique();
-
-        modelBuilder
-        .Entity<Claim>(x =>
-        {
-            x
-            .HasOne(x => x.Account)
-            .WithMany(x => x.Claims)
-            .HasForeignKey(x => x.AccountId);
-        });
 
         modelBuilder
         .Entity<Warden>()
@@ -64,7 +52,7 @@ public class ApplicationContext : DbContext
         modelBuilder
         .Entity<Maid>()
         .ToTable("Maids");
-        
+
         modelBuilder
         .Entity<Doorkeeper>()
         .ToTable("Doorkeepers");
@@ -83,8 +71,7 @@ public class ApplicationContext : DbContext
     }
 
     public DbSet<Account> Accounts { get; set; }
-    public DbSet<User> Users { get; set; }
-    public DbSet<Claim> Claims { get; set; }
+    public DbSet<User> AppUsers { get; set; }
     public DbSet<Student> Students { get; set; }
     public DbSet<Warden> Wardens { get; set; }
     public DbSet<Employee> Employees { get; set; }

@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using DormManagementSystem.BLL.Services.Interfaces;
 using DormManagementSystem.GlobalExceptionHandler.Exceptions;
 using DormManagementSystem.Web.Api.Helpers;
@@ -17,7 +18,7 @@ public class OwnsAccountPolicyHandler : AuthorizationHandler<OwnsAccountRequirem
     protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, OwnsAccountRequirement requirement)
     {
         var routeParameter = _accessor.HttpContext.GetRouteValue("id") as string;
-        var emailClaim = context.User.Claims.FirstOrDefault(x => x.Type == "Email")?.Value;
+        var emailClaim = context.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;
 
         if (routeParameter == null || emailClaim == null || !Guid.TryParse(routeParameter, out var accountId))
         {
@@ -25,7 +26,7 @@ public class OwnsAccountPolicyHandler : AuthorizationHandler<OwnsAccountRequirem
             return;
         }
 
-        if (context.User.HasClaim("Role", AppConstants.AppRoles.Administrator))
+        if (context.User.HasClaim(ClaimTypes.Role, AppConstants.AppRoles.Administrator))
         {
             context.Succeed(requirement);
             return;
