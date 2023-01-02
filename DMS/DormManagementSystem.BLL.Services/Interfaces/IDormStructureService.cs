@@ -5,4 +5,5 @@ public interface IDormStructureService
 {
     Task CreateFloors(IEnumerable<CreateFloorDTO> floorDTOs);
     Task CreateFloor(CreateFloorDTO floorDTOs);
+    Task CreateRoomsOnFloor(Guid floorId, IEnumerable<RoomDTO> rooms);
 }

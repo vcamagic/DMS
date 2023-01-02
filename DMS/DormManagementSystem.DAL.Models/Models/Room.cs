@@ -8,6 +8,8 @@ public class Room
     public Guid Id { get; set; }
     [MaxLength(3)]
     public string RoomNumber { get; set; }
+    [Range(0, int.MaxValue)]
+    public int Capacity { get; set; }
 
     [Required]
     public Guid FloorId { get; set; }

@@ -31,6 +31,13 @@ public class DormStructureController : ControllerBase
         return Ok();
     }
 
+    [HttpPost("{floorId}/rooms")]
+    public async Task<IActionResult> CreateRoomsOnFloor([FromRoute] Guid floorId, [FromBody] IEnumerable<RoomDTO> rooms)
+    {
+        await _dormStructureService.CreateRoomsOnFloor(floorId, rooms);
+        return Ok();
+    }
+
     [HttpPost]
     public IActionResult CreateDormStructure([FromBody] DormStructureBatch batch)
     {

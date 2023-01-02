@@ -19,6 +19,7 @@ public class MappingProfiles : Profile
         CreateMap<Student, StudentDTO>().ReverseMap();
         CreateMap<Malfunction, MalfunctionDTO>().ReverseMap();
         CreateMap<Warden, WardenDTO>().ReverseMap();
+        CreateMap<RoomDTO, Room>().ReverseMap();
 
 
         CreateMap<CreateAccountDTO, Account>();

@@ -2,15 +2,18 @@ using AutoMapper;
 using DormManagementSystem.BLL.Services.DTOs;
 using DormManagementSystem.BLL.Services.Interfaces;
 using DormManagementSystem.DAL.Models.Models;
+using DormManagementSystem.DAL.Repositories.Interfaces;
 using DormManagementSystem.GlobalExceptionHandler.Exceptions;
 
 namespace DormManagementSystem.BLL.Services.Implementations;
 public class DormStructureService : IDormStructureService
 {
     public DormStructureService(
+        IRepositoryBase<Room> roomsRepository,
         IServiceBase<Floor> floorsService,
         IMapper mapper)
     {
+        _roomsRepository = roomsRepository;
         _floorsService = floorsService;
         _mapper = mapper;
     }
@@ -49,6 +52,27 @@ public class DormStructureService : IDormStructureService
         await _floorsService.Create(floor);
     }
 
+    public async Task CreateRoomsOnFloor(Guid floorId, IEnumerable<RoomDTO> rooms)
+    {
+        var floor = await _floorsService.GetEntity(x => x.Id == floorId, false) ??
+            throw new BadRequestException($"Floor with id {floorId} does not exist.");
+
+        var roomsForCreation = _mapper.Map<IEnumerable<Room>>(rooms);
+
+        roomsForCreation = roomsForCreation.Select(x => new Room 
+        { 
+            FloorId = floorId, 
+            Id = Guid.NewGuid(),
+            RoomNumber = x.RoomNumber, 
+            Capacity = x.Capacity 
+        });
+
+        _roomsRepository.CreateRange(roomsForCreation);
+
+        await _roomsRepository.Context.SaveChangesAsync();
+    }
+
+    private readonly IRepositoryBase<Room> _roomsRepository;
     private readonly IServiceBase<Floor> _floorsService;
     private readonly IMapper _mapper;
 }
