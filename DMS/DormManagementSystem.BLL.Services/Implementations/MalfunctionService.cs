@@ -43,7 +43,7 @@ public class MalfunctionsService : ServiceBase<Malfunction>, IMalfunctionsServic
             .StudentRepository
             .FindByCondition(x => x.Id == createMalfunctionDTO.StudentId, false)
             .FirstOrDefaultAsync() ??
-                throw new BadRequestException($"Student with id {createMalfunctionDTO.StudentId} does not exist.");
+                throw new NotFoundException($"Student with id {createMalfunctionDTO.StudentId} does not exist.");
 
         var malfunction = Mapper.Map<Malfunction>(createMalfunctionDTO);
         malfunction.IsFixed = false;
@@ -56,7 +56,7 @@ public class MalfunctionsService : ServiceBase<Malfunction>, IMalfunctionsServic
     public async Task UpdateMalfunction(Guid id, JsonPatchDocument<UpdateMalfunctionDTO> patchDocument)
     {
         var malfunction = await GetEntity(x => x.Id == id, true, new string[] { $"{nameof(Malfunction.Janitors)}" }) ??
-            throw new BadRequestException($"Malfunction with id {id} does not exist");
+            throw new NotFoundException($"Malfunction with id {id} does not exist");
 
         var malfunctionToPatch = Mapper.Map<UpdateMalfunctionDTO>(malfunction);
 

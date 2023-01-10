@@ -4,6 +4,7 @@ using DormManagementSystem.DAL.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DormManagementSystem.DAL.Models.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20230110084037_RoomsStructureV2")]
+    partial class RoomsStructureV2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -407,9 +409,6 @@ namespace DormManagementSystem.DAL.Models.Migrations
                 {
                     b.HasBaseType("DormManagementSystem.DAL.Models.Models.Room");
 
-                    b.Property<int>("Capacity")
-                        .HasColumnType("int");
-
                     b.ToTable("Laundries");
                 });
 
@@ -648,8 +647,7 @@ namespace DormManagementSystem.DAL.Models.Migrations
 
                     b.HasOne("DormManagementSystem.DAL.Models.Models.Residency", "Residency")
                         .WithMany("Students")
-                        .HasForeignKey("ResidencyId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .HasForeignKey("ResidencyId");
 
                     b.Navigation("Residency");
                 });

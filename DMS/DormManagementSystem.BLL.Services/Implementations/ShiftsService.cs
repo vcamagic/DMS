@@ -35,7 +35,7 @@ public class ShiftsService : ServiceBase<Shift>, IShiftsService
     public async Task DeleteShift(Guid id)
     {
         var shift = await GetEntity(x => x.Id == id, true) ??
-            throw new BadRequestException($"Shift with id {id} does not exist.");
+            throw new NotFoundException($"Shift with id {id} does not exist.");
 
         await Delete(shift);
     }
@@ -46,7 +46,7 @@ public class ShiftsService : ServiceBase<Shift>, IShiftsService
             x => x.Id == id,
             false,
             new string[] { $"{nameof(Shift.Employees)}.{nameof(Account)}" })
-            ?? throw new BadRequestException($"Shift with id {id} does not exist.");
+            ?? throw new NotFoundException($"Shift with id {id} does not exist.");
 
         return Mapper.Map<ShiftDTO>(shift);
     }
@@ -64,7 +64,7 @@ public class ShiftsService : ServiceBase<Shift>, IShiftsService
             x => x.Id == id,
             true,
             new string[] { $"{nameof(Shift.Employees)}.{nameof(Account)}.{nameof(Account)}" }) ??
-            throw new BadRequestException($"Shift with id {id} does not exist.");
+            throw new NotFoundException($"Shift with id {id} does not exist.");
 
         Mapper.Map(updateShiftDTO, shift);
 
@@ -83,7 +83,7 @@ public class ShiftsService : ServiceBase<Shift>, IShiftsService
                 .EmployeeRepository
                 .FindByCondition(x => x.Id == employeeId, true)
                 .FirstOrDefault() ??
-                    throw new BadRequestException($"Employee with id {employeeId} does not exist.");
+                    throw new NotFoundException($"Employee with id {employeeId} does not exist.");
 
             employees.Add(employee);
         }

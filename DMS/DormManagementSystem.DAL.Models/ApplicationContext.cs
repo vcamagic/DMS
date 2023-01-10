@@ -1,7 +1,5 @@
-
 using System.Diagnostics.CodeAnalysis;
 using DormManagementSystem.DAL.Models.Models;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -84,6 +82,19 @@ public class ApplicationContext : IdentityDbContext<Account, Role, Guid>
         .HasIndex(x => x.Level)
         .IsUnique();
 
+        modelBuilder
+        .Entity<Room>()
+        .HasIndex(x => x.RoomNumber)
+        .IsUnique();
+
+
+        modelBuilder
+        .Entity<Student>()
+        .HasOne(x => x.Residency)
+        .WithMany(x => x.Students)
+        .HasForeignKey(x => x.ResidencyId)
+        .OnDelete(DeleteBehavior.SetNull);
+
         base.OnModelCreating(modelBuilder);
     }
 
@@ -99,4 +110,7 @@ public class ApplicationContext : IdentityDbContext<Account, Role, Guid>
     public DbSet<Malfunction> Malfunctions { get; set; }
     public DbSet<Floor> Floors { get; set; }
     public DbSet<Room> Rooms { get; set; }
+    public DbSet<Residency> Residencies { get; set; }
+    public DbSet<Laundry> Laundries { get; set; }
+    public DbSet<Entertainment> Entertainments { get; set; }
 }
