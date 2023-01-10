@@ -4,6 +4,7 @@ using DormManagementSystem.DAL.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DormManagementSystem.DAL.Models.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20230102163429_RoomCapacity")]
+    partial class RoomCapacity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -192,10 +194,6 @@ namespace DormManagementSystem.DAL.Models.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("FloorId");
-
-                    b.HasIndex("RoomNumber")
-                        .IsUnique()
-                        .HasFilter("[RoomNumber] IS NOT NULL");
 
                     b.ToTable("Rooms");
                 });
@@ -399,33 +397,6 @@ namespace DormManagementSystem.DAL.Models.Migrations
                     b.ToTable("Employees", (string)null);
                 });
 
-            modelBuilder.Entity("DormManagementSystem.DAL.Models.Models.Entertainment", b =>
-                {
-                    b.HasBaseType("DormManagementSystem.DAL.Models.Models.Room");
-
-                    b.ToTable("Entertainments");
-                });
-
-            modelBuilder.Entity("DormManagementSystem.DAL.Models.Models.Laundry", b =>
-                {
-                    b.HasBaseType("DormManagementSystem.DAL.Models.Models.Room");
-
-                    b.Property<int>("Capacity")
-                        .HasColumnType("int");
-
-                    b.ToTable("Laundries");
-                });
-
-            modelBuilder.Entity("DormManagementSystem.DAL.Models.Models.Residency", b =>
-                {
-                    b.HasBaseType("DormManagementSystem.DAL.Models.Models.Room");
-
-                    b.Property<int>("Capacity")
-                        .HasColumnType("int");
-
-                    b.ToTable("Residencies");
-                });
-
             modelBuilder.Entity("DormManagementSystem.DAL.Models.Models.Student", b =>
                 {
                     b.HasBaseType("DormManagementSystem.DAL.Models.Models.User");
@@ -439,11 +410,6 @@ namespace DormManagementSystem.DAL.Models.Migrations
                         .IsRequired()
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
-
-                    b.Property<Guid?>("ResidencyId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasIndex("ResidencyId");
 
                     b.ToTable("Students", (string)null);
                 });
@@ -614,33 +580,6 @@ namespace DormManagementSystem.DAL.Models.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("DormManagementSystem.DAL.Models.Models.Entertainment", b =>
-                {
-                    b.HasOne("DormManagementSystem.DAL.Models.Models.Room", null)
-                        .WithOne()
-                        .HasForeignKey("DormManagementSystem.DAL.Models.Models.Entertainment", "Id")
-                        .OnDelete(DeleteBehavior.ClientCascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("DormManagementSystem.DAL.Models.Models.Laundry", b =>
-                {
-                    b.HasOne("DormManagementSystem.DAL.Models.Models.Room", null)
-                        .WithOne()
-                        .HasForeignKey("DormManagementSystem.DAL.Models.Models.Laundry", "Id")
-                        .OnDelete(DeleteBehavior.ClientCascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("DormManagementSystem.DAL.Models.Models.Residency", b =>
-                {
-                    b.HasOne("DormManagementSystem.DAL.Models.Models.Room", null)
-                        .WithOne()
-                        .HasForeignKey("DormManagementSystem.DAL.Models.Models.Residency", "Id")
-                        .OnDelete(DeleteBehavior.ClientCascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("DormManagementSystem.DAL.Models.Models.Student", b =>
                 {
                     b.HasOne("DormManagementSystem.DAL.Models.Models.User", null)
@@ -648,13 +587,6 @@ namespace DormManagementSystem.DAL.Models.Migrations
                         .HasForeignKey("DormManagementSystem.DAL.Models.Models.Student", "Id")
                         .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
-
-                    b.HasOne("DormManagementSystem.DAL.Models.Models.Residency", "Residency")
-                        .WithMany("Students")
-                        .HasForeignKey("ResidencyId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.Navigation("Residency");
                 });
 
             modelBuilder.Entity("DormManagementSystem.DAL.Models.Models.Warden", b =>
@@ -709,11 +641,6 @@ namespace DormManagementSystem.DAL.Models.Migrations
                     b.Navigation("Maid");
 
                     b.Navigation("Rooms");
-                });
-
-            modelBuilder.Entity("DormManagementSystem.DAL.Models.Models.Residency", b =>
-                {
-                    b.Navigation("Students");
                 });
 
             modelBuilder.Entity("DormManagementSystem.DAL.Models.Models.Student", b =>

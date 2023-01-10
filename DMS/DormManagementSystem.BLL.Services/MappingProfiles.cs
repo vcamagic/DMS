@@ -19,6 +19,11 @@ public class MappingProfiles : Profile
         CreateMap<Student, StudentDTO>().ReverseMap();
         CreateMap<Malfunction, MalfunctionDTO>().ReverseMap();
         CreateMap<Warden, WardenDTO>().ReverseMap();
+        CreateMap<RoomDTO, Room>().ReverseMap();
+        CreateMap<FloorDTO, Floor>().ReverseMap();
+        CreateMap<ResidencyDTO, Residency>().ReverseMap();
+        CreateMap<LaundryDTO, Laundry>().ReverseMap();
+        CreateMap<EntertainmentDTO, Entertainment>().ReverseMap();
 
 
         CreateMap<CreateAccountDTO, Account>();
@@ -28,6 +33,10 @@ public class MappingProfiles : Profile
         CreateMap<CreateShiftDTO, Shift>().ForMember(x => x.Employees, opt => opt.MapFrom(y => new List<Employee>()));
         CreateMap<CreateMalfunctionDTO, Malfunction>();
         CreateMap<CreateStudentDTO, Student>();
+        CreateMap<CreateFloorDTO, Floor>().ForMember(x => x.Id, opt => opt.MapFrom(x => Guid.NewGuid()));
+        CreateMap<CreateResidencyDTO, Residency>();
+        CreateMap<CreateLaundryDTO, Laundry>();
+        CreateMap<CreateEntertainmentDTO, Entertainment>();
 
 
         CreateMap<UpdateUserDTO, User>();

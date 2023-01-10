@@ -20,13 +20,13 @@ public enum Role
     [Description("Represents Administrator Role")]
     Administrator = 1,
     [Description("Represents Warden Role")]
-    Warden,
+    Warden = 2,
     [Description("Represents Maid Role")]
-    Maid,
+    Maid = 3,
     [Description("Represents Doorkeeper Role")]
-    Doorkeeper,
+    Doorkeeper = 4,
     [Description("Represents Janitor Role")]
-    Janitor,
+    Janitor = 5,
     [Description("Represents Student Role")]
-    Student
+    Student = 6
 }

@@ -13,5 +13,8 @@ public class Student : User
     [MaxLength(10, ErrorMessage = $"{nameof(IndexNumber)} can be 10 characters max.")]
     public string IndexNumber { get; set; }
 
+    public Guid? ResidencyId { get; set; }
+    public Residency Residency { get; set; }
+
     public ICollection<Malfunction> Malfunctions { get; set; }
 }

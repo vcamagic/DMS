@@ -95,7 +95,7 @@ public class AuthService : IAuthService
         }
 
         var account = await _userManager.FindByIdAsync(idGuid.ToString()) ??
-            throw new BadRequestException($"Account with id {idGuid} does not exist.");
+            throw new NotFoundException($"Account with id {idGuid} does not exist.");
 
         await _signInManager.RefreshSignInAsync(account);
     }

@@ -151,7 +151,7 @@ public class UsersService : ServiceBase<User>, IUsersService
         }
 
         var account = await _accountManager.FindByIdAsync(accountId.ToString()) ??
-            throw new BadRequestException($"{nameof(Account)} with id {accountId} does not exist");
+            throw new NotFoundException($"{nameof(Account)} with id {accountId} does not exist");
 
         var roles = await _accountManager.GetRolesAsync(account);
 
@@ -174,7 +174,7 @@ public class UsersService : ServiceBase<User>, IUsersService
         }
 
         var user = await query.FirstOrDefaultAsync() ??
-            throw new BadRequestException($"{typeof(T).Name} does not exist.");
+            throw new NotFoundException($"{typeof(T).Name} does not exist.");
 
         return Mapper.Map<TReturn>(user);
     }
@@ -225,7 +225,7 @@ public class UsersService : ServiceBase<User>, IUsersService
         where TEntityUpdateDTO : class
     {
         var user = await serviceBase.GetEntity(expression, true) ??
-                throw new BadRequestException($"{typeof(T).Name} does not exist.");
+                throw new NotFoundException($"{typeof(T).Name} does not exist.");
 
         Mapper.Map(updateDTO, user);
 

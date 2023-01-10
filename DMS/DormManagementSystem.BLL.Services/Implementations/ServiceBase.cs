@@ -47,7 +47,7 @@ public class ServiceBase<T> : IServiceBase<T> where T : class
 
         if (includes != null && !includes.Any(x => String.IsNullOrWhiteSpace(x)))
         {
-            query =  includes.Aggregate(query, (current, include) => current.Include(include));
+            query = includes.Aggregate(query, (current, include) => current.Include(include));
         }
 
         return await query.ToListAsync();
@@ -89,9 +89,15 @@ public class ServiceBase<T> : IServiceBase<T> where T : class
     public async Task Create(T entity)
     {
         _repository.Create(entity);
-
         await _repository.Context.SaveChangesAsync();
     }
+
+    public async Task CreateRange(IEnumerable<T> entities)
+    {
+        _repository.CreateRange(entities);
+        await _repository.Context.SaveChangesAsync();
+    }
+
     public async Task Update(T entity)
     {
         _repository.Update(entity);

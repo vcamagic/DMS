@@ -63,7 +63,7 @@ public class AccountsService : ServiceBase<Account>, IAccountsService
     public async Task<AccountDTO> GetAccount(Guid id)
     {
         var account = await GetEntity(x => x.Id == id, false) ??
-            throw new BadRequestException($"Account with id {id} does not exist.");
+            throw new NotFoundException($"Account with id {id} does not exist.");
 
         return Mapper.Map<AccountDTO>(account);
     }
@@ -71,7 +71,7 @@ public class AccountsService : ServiceBase<Account>, IAccountsService
     public async Task<AccountDTO> GetAccount(string email)
     {
         var account = await GetEntity(x => x.Email == email, false) ??
-            throw new BadRequestException($"Account with email address {email} does not exist."); ;
+            throw new NotFoundException($"Account with email address {email} does not exist."); ;
 
         return Mapper.Map<AccountDTO>(account);
     }

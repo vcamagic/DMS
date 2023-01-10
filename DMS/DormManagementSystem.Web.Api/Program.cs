@@ -28,6 +28,7 @@ builder.Services.AddScoped<IAccountsService, AccountsService>();
 builder.Services.AddScoped<IUsersService, UsersService>();
 builder.Services.AddScoped<IShiftsService, ShiftsService>();
 builder.Services.AddScoped<IMalfunctionsService, MalfunctionsService>();
+builder.Services.AddScoped<IDormStructureService, DormStructureService>();
 builder.Services.AddIdentity<Account, Role>()
     .AddEntityFrameworkStores<ApplicationContext>();
 
