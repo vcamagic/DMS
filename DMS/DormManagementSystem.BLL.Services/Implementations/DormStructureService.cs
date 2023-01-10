@@ -2,12 +2,14 @@ using AutoMapper;
 using DormManagementSystem.BLL.Services.DTOs;
 using DormManagementSystem.BLL.Services.Interfaces;
 using DormManagementSystem.DAL.Models.Models;
+using DormManagementSystem.DAL.Repositories.Interfaces;
 using DormManagementSystem.GlobalExceptionHandler.Exceptions;
 
 namespace DormManagementSystem.BLL.Services.Implementations;
 public class DormStructureService : IDormStructureService
 {
     public DormStructureService(
+        IRepositoryBase<Room> roomsRepository,
         IServiceBase<Floor> floorsService,
         IServiceBase<Room> roomsService,
         IServiceBase<Residency> residenciesService,
