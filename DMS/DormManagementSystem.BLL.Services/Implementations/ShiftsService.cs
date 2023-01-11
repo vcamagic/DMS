@@ -5,7 +5,6 @@ using DormManagementSystem.BLL.Services.Interfaces;
 using DormManagementSystem.DAL.Models.Models;
 using DormManagementSystem.DAL.Repositories.Interfaces;
 using DormManagementSystem.GlobalExceptionHandler.Exceptions;
-using Microsoft.EntityFrameworkCore;
 
 namespace DormManagementSystem.BLL.Services.Implementations;
 
@@ -67,7 +66,7 @@ public class ShiftsService : ServiceBase<Shift>, IShiftsService
         var shift = await GetEntity(
             x => x.Id == id,
             true,
-            ServiceHelpers.Include($"{nameof(Shift.Employees)}.{nameof(Account)}.{nameof(Account)}")
+            ServiceHelpers.Include($"{nameof(Shift.Employees)}.{nameof(Account)}")
         ) ??
             throw new NotFoundException($"Shift with id {id} does not exist.");
 
