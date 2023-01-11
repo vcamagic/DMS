@@ -12,5 +12,5 @@ public class Room
     public Guid FloorId { get; set; }
     public Floor Floor { get; set; }
 
-    ICollection<Malfunction> Malfunctions { get; set; }
+    public ICollection<Malfunction> Malfunctions { get; set; }
 }

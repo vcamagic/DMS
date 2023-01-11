@@ -113,4 +113,5 @@ public class ApplicationContext : IdentityDbContext<Account, Role, Guid>
     public DbSet<Residency> Residencies { get; set; }
     public DbSet<Laundry> Laundries { get; set; }
     public DbSet<Entertainment> Entertainments { get; set; }
+    public DbSet<WashingMachine> WashingMachines { get; set; }
 }

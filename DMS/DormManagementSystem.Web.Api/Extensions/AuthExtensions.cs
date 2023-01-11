@@ -63,6 +63,12 @@ public static class AuthExtensions
                 opt.RequireAuthenticatedUser()
                     .RequireClaim(ClaimTypes.Role, AppConstants.AppRoles.Janitor, AppConstants.AppRoles.Administrator);
             });
+
+            builder.AddPolicy(AppConstants.AppPolicies.WardenMaidPolicy, opt =>
+            {
+                opt.RequireAuthenticatedUser()
+                    .RequireClaim(ClaimTypes.Role, AppConstants.AppRoles.Warden, AppConstants.AppRoles.Maid, AppConstants.AppRoles.Administrator);
+            });
         });
 
     public static async void ConfigureApplicationRoles(this IApplicationBuilder app, IConfiguration configuration)

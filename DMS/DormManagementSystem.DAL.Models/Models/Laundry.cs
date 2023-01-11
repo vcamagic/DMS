@@ -8,4 +8,6 @@ public class Laundry : Room
 {
     [Required]
     public int Capacity { get; set; }
+
+    public ICollection<WashingMachine> WashingMachines { get; set; }
 }

@@ -24,6 +24,7 @@ public class MappingProfiles : Profile
         CreateMap<ResidencyDTO, Residency>().ReverseMap();
         CreateMap<LaundryDTO, Laundry>().ReverseMap();
         CreateMap<EntertainmentDTO, Entertainment>().ReverseMap();
+        CreateMap<WashingMachine, ResponseWashingMachineDTO>().ReverseMap();
 
 
         CreateMap<CreateAccountDTO, Account>();
@@ -37,6 +38,7 @@ public class MappingProfiles : Profile
         CreateMap<CreateResidencyDTO, Residency>();
         CreateMap<CreateLaundryDTO, Laundry>();
         CreateMap<CreateEntertainmentDTO, Entertainment>();
+        CreateMap<RequestWashingMachineDTO, WashingMachine>();
 
 
         CreateMap<UpdateUserDTO, User>();

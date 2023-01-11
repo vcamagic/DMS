@@ -21,5 +21,6 @@ public static class AppConstants
         public const string StudentPolicy = "StudentPolicy";
         public const string JanitorPolicy = "JanitorPolicy";
         public const string OwnsAccountPolicy = "OwnsAccountPolicy";
+        public const string WardenMaidPolicy = "WardenMaidPolicy";
     }
 }
