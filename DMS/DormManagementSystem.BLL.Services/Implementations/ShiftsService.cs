@@ -1,5 +1,6 @@
 using AutoMapper;
 using DormManagementSystem.BLL.Services.DTOs;
+using DormManagementSystem.BLL.Services.Helpers;
 using DormManagementSystem.BLL.Services.Interfaces;
 using DormManagementSystem.DAL.Models.Models;
 using DormManagementSystem.DAL.Repositories.Interfaces;
@@ -11,9 +12,11 @@ namespace DormManagementSystem.BLL.Services.Implementations;
 public class ShiftsService : ServiceBase<Shift>, IShiftsService
 {
     public ShiftsService(
+        IServiceBase<Employee> employeesService,
         IRepositoryManager repositoryManager,
-        IMapper mapper) : base(repositoryManager.ShiftRepository, repositoryManager, mapper)
+        IMapper mapper) : base(repositoryManager.ShiftRepository, mapper)
     {
+        _employeesService = employeesService;
     }
 
     public async Task<ShiftDTO> CreateShift(CreateShiftDTO createShiftDTO)
@@ -25,7 +28,7 @@ public class ShiftsService : ServiceBase<Shift>, IShiftsService
 
         var shift = Mapper.Map<Shift>(createShiftDTO);
 
-        AddEmployeesToShift(createShiftDTO.EmployeesIds, shift.Employees);
+        await AddEmployeesToShift(createShiftDTO.EmployeesIds, shift.Employees);
 
         await Create(shift);
 
@@ -45,15 +48,16 @@ public class ShiftsService : ServiceBase<Shift>, IShiftsService
         var shift = await GetEntity(
             x => x.Id == id,
             false,
-            new string[] { $"{nameof(Shift.Employees)}.{nameof(Account)}" })
-            ?? throw new NotFoundException($"Shift with id {id} does not exist.");
+            ServiceHelpers.Include($"{nameof(Shift.Employees)}.{nameof(Account)}")
+        ) ?? 
+            throw new NotFoundException($"Shift with id {id} does not exist.");
 
         return Mapper.Map<ShiftDTO>(shift);
     }
 
     public async Task<Page<ShiftDTO>> GetShifts(PaginationDTO paginationDTO)
     {
-        var shifts = await GetEntityPage(paginationDTO, false, new string[] { $"{nameof(Shift.Employees)}.{nameof(Account)}" });
+        var shifts = await GetEntityPage(paginationDTO, false, includes: ServiceHelpers.Include($"{nameof(Shift.Employees)}.{nameof(Account)}"));
 
         return Mapper.Map<Page<ShiftDTO>>(shifts);
     }
@@ -63,29 +67,29 @@ public class ShiftsService : ServiceBase<Shift>, IShiftsService
         var shift = await GetEntity(
             x => x.Id == id,
             true,
-            new string[] { $"{nameof(Shift.Employees)}.{nameof(Account)}.{nameof(Account)}" }) ??
+            ServiceHelpers.Include($"{nameof(Shift.Employees)}.{nameof(Account)}.{nameof(Account)}")
+        ) ??
             throw new NotFoundException($"Shift with id {id} does not exist.");
 
         Mapper.Map(updateShiftDTO, shift);
 
-        AddEmployeesToShift(updateShiftDTO.EmployeesIds, shift.Employees);
+        await AddEmployeesToShift(updateShiftDTO.EmployeesIds, shift.Employees);
 
         await Update(shift);
 
         return Mapper.Map<ShiftDTO>(shift);
     }
 
-    private void AddEmployeesToShift(IEnumerable<Guid> employeesIds, ICollection<Employee> employees)
+    private async Task AddEmployeesToShift(IEnumerable<Guid> employeesIds, ICollection<Employee> employees)
     {
         foreach (var employeeId in employeesIds)
         {
-            var employee = RepositoryManager
-                .EmployeeRepository
-                .FindByCondition(x => x.Id == employeeId, true)
-                .FirstOrDefault() ??
+            var employee = await _employeesService.GetEntity(x => x.Id == employeeId, true) ??
                     throw new NotFoundException($"Employee with id {employeeId} does not exist.");
 
             employees.Add(employee);
         }
     }
+
+    private readonly IServiceBase<Employee> _employeesService;
 }

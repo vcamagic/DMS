@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using AutoMapper;
 using DormManagementSystem.BLL.Services.DTOs;
 using DormManagementSystem.BLL.Services.Interfaces;
@@ -31,31 +32,13 @@ public class AccountsService : ServiceBase<Account>, IAccountsService
         bool? active = null)
     {
 
-        var accountsPage = sortDTO switch
-        {
-            null => await GetEntityPage(paginationDTO, x => active == null || x.IsActive == active, false),
-            { SortBy: "email" } => 
-                await GetEntityPage(
-                    paginationDTO, 
-                    x => active == null || x.IsActive == active, 
-                    false, 
-                    orderSelector: x => x.Email, 
-                    orderAscending: sortDTO.Order != "desc"
-                ),
-            { SortBy: "isActive" } => 
-                await GetEntityPage(
-                    paginationDTO, 
-                    x => active == null || x.IsActive == active, 
-                    false, 
-                    orderSelector: x => x.IsActive, 
-                    orderAscending: sortDTO.Order != "desc"
-                ),
-            _ => await GetEntityPage(
-                    paginationDTO, 
-                    x => active == null || x.IsActive == active, 
-                    false
-                )
-        };
+        var accountsPage = await GetEntityPage(
+            paginationDTO: paginationDTO,
+            expression: x => active == null || x.IsActive == active,
+            trackChanges: false,
+            orderSelector: CreateOrderSelector(sortDTO.SortBy),
+            orderAscending: sortDTO.Order != "desc"
+        );
 
         return Mapper.Map<Page<AccountDTO>>(accountsPage);
     }
@@ -91,6 +74,14 @@ public class AccountsService : ServiceBase<Account>, IAccountsService
 
         return true;
     }
+
+    private Expression<Func<Account, object>> CreateOrderSelector(string orderBy = null) =>
+        orderBy switch
+        {
+            "email" => x => x.Email,
+            "isActive" => x => x.IsActive,
+            _ => null
+        };
 
     private readonly IRepositoryManager _repositoryManager;
 }

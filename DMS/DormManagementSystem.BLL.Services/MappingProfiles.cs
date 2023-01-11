@@ -17,7 +17,7 @@ public class MappingProfiles : Profile
         CreateMap<EmployeeDTO, Employee>().ReverseMap();
         CreateMap<Shift, ShiftDTO>().ReverseMap();
         CreateMap<Student, StudentDTO>().ReverseMap();
-        CreateMap<Malfunction, MalfunctionDTO>().ReverseMap();
+        CreateMap<Malfunction, MalfunctionDTO>().ForMember(x => x.Janitors, opt => opt.MapFrom(x => x.Janitors.Select(y => y.Id))).ReverseMap();
         CreateMap<Warden, WardenDTO>().ReverseMap();
         CreateMap<RoomDTO, Room>().ReverseMap();
         CreateMap<FloorDTO, Floor>().ReverseMap();
@@ -45,7 +45,9 @@ public class MappingProfiles : Profile
         CreateMap<UpdateMaidDTO, Maid>();
         CreateMap<UpdateJanitorDTO, Janitor>();
         CreateMap<UpdateDoorkeeperDTO, Doorkeeper>();
-        CreateMap<UpdateMalfunctionDTO, Malfunction>().ForMember(x => x.Janitors, opt => opt.Ignore()).ReverseMap();
+        CreateMap<UpdateMalfunctionDTO, Malfunction>()
+            .ForMember(x => x.Janitors, opt => opt.Ignore())
+            .ReverseMap().ForMember(x => x.Janitors, opt => opt.MapFrom(x => x.Janitors.Select(y => y.Id)));
         CreateMap<UpdateShiftDTO, Shift>().ForMember(x => x.Employees, opt => opt.MapFrom(y => new List<Employee>()));
 
 

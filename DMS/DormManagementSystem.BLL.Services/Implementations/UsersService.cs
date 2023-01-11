@@ -2,6 +2,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using AutoMapper;
 using DormManagementSystem.BLL.Services.DTOs;
+using DormManagementSystem.BLL.Services.Helpers;
 using DormManagementSystem.BLL.Services.Interfaces;
 using DormManagementSystem.DAL.Models.Models;
 using DormManagementSystem.DAL.Repositories.Interfaces;
@@ -37,59 +38,59 @@ public class UsersService : ServiceBase<User>, IUsersService
     public async Task<Page<StudentDTO>> GetStudents(PaginationDTO paginationDTO) =>
         Mapper.Map<Page<StudentDTO>>(
             await _studentsServiceBase
-            .GetEntityPage(paginationDTO, false, includes: new string[] { $"{nameof(User.Account)}" }));
+            .GetEntityPage(paginationDTO, false, includes: ServiceHelpers.Include($"{nameof(User.Account)}")));
 
     public async Task<IReadOnlyList<WardenDTO>> GetWardens() =>
         Mapper.Map<IReadOnlyList<WardenDTO>>(
             await _wardensServiceBase
-            .GetEntities(includes: new string[] { $"{nameof(User.Account)}" }));
+            .GetEntities(includes: ServiceHelpers.Include($"{nameof(User.Account)}")));
 
     public async Task<IReadOnlyList<EmployeeDTO>> GetJanitors() =>
         Mapper.Map<IReadOnlyList<EmployeeDTO>>(
             await _janitorsServiceBase
-            .GetEntities(includes: new string[] { $"{nameof(User.Account)}" }));
+            .GetEntities(includes: ServiceHelpers.Include($"{nameof(User.Account)}")));
 
     public async Task<IReadOnlyList<EmployeeDTO>> GetMaids() =>
         Mapper.Map<IReadOnlyList<EmployeeDTO>>(
             await _maidsServiceBase
-            .GetEntities(includes: new string[] { $"{nameof(User.Account)}" }));
+            .GetEntities(includes: ServiceHelpers.Include($"{nameof(User.Account)}")));
 
     public async Task<IReadOnlyList<EmployeeDTO>> GetDoorkeepers() =>
         Mapper.Map<IReadOnlyList<EmployeeDTO>>(
             await _doorkeepersServiceBase
-            .GetEntities(includes: new string[] { $"{nameof(User.Account)}" }));
+            .GetEntities(includes: ServiceHelpers.Include($"{nameof(User.Account)}")));
 
     public async Task<StudentDTO> GetStudent(Guid id) =>
         await GetUser<Student, StudentDTO>(
             RepositoryManager.StudentRepository,
             x => x.Id == id,
-            new string[] { $"{nameof(User.Account)}" });
+            ServiceHelpers.Include($"{nameof(User.Account)}"));
 
 
     public async Task<WardenDTO> GetWarden(Guid id) =>
         await GetUser<Warden, WardenDTO>(
-            RepositoryManager.WardenRepository, 
-            x => x.Id == id, 
-            new string[] { $"{nameof(User.Account)}" });
+            RepositoryManager.WardenRepository,
+            x => x.Id == id,
+            ServiceHelpers.Include($"{nameof(User.Account)}"));
 
 
     public async Task<EmployeeDTO> GetJanitor(Guid id) =>
         await GetUser<Janitor, EmployeeDTO>(
-            RepositoryManager.JanitorRepository, 
-            x => x.Id == id, 
-            new string[] { $"{nameof(User.Account)}" });
+            RepositoryManager.JanitorRepository,
+            x => x.Id == id,
+            ServiceHelpers.Include($"{nameof(User.Account)}"));
 
     public async Task<EmployeeDTO> GetMaid(Guid id) =>
         await GetUser<Maid, EmployeeDTO>(
-            RepositoryManager.MaidRepository, 
-            x => x.Id == id, 
-            new string[] { $"{nameof(User.Account)}" });
+            RepositoryManager.MaidRepository,
+            x => x.Id == id,
+            ServiceHelpers.Include($"{nameof(User.Account)}"));
 
     public async Task<EmployeeDTO> GetDoorkeeper(Guid id) =>
         await GetUser<Doorkeeper, EmployeeDTO>(
-            RepositoryManager.DoorkeeperRepository, 
-            x => x.Id == id, 
-            new string[] { $"{nameof(User.Account)}" });
+            RepositoryManager.DoorkeeperRepository,
+            x => x.Id == id,
+            ServiceHelpers.Include($"{nameof(User.Account)}"));
 
 
     public async Task<StudentDTO> CreateStudent(Guid accountId, CreateStudentDTO createStudentDTO)

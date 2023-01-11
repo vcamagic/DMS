@@ -1,5 +1,7 @@
+using System.Linq.Expressions;
 using AutoMapper;
 using DormManagementSystem.BLL.Services.DTOs;
+using DormManagementSystem.BLL.Services.Helpers;
 using DormManagementSystem.BLL.Services.Interfaces;
 using DormManagementSystem.DAL.Models.Models;
 using DormManagementSystem.DAL.Repositories.Interfaces;
@@ -12,38 +14,42 @@ namespace DormManagementSystem.BLL.Services.Implementations;
 public class MalfunctionsService : ServiceBase<Malfunction>, IMalfunctionsService
 {
     public MalfunctionsService(
+        IServiceBase<Student> studentsService,
         IRepositoryBase<Malfunction> repository,
-        IRepositoryManager repositoryManager,
-        IMapper mapper) : base(repository, repositoryManager, mapper)
+        IMapper mapper) : base(repository, mapper)
     {
+        _studentsService = studentsService;
     }
 
     public async Task<MalfunctionDTO> GetMalfunction(Guid id)
     {
-        var malfunction = await GetEntity(x => x.Id == id, false);
+        var malfunction = await GetEntity(
+            expression: x => x.Id == id,
+            trackChanges: false,
+            includes: ServiceHelpers.Include($"{nameof(Malfunction.Janitors)}")) ??
+             throw new NotFoundException($"Malfunction with id {id} does not exist.");
+
         return Mapper.Map<MalfunctionDTO>(malfunction);
     }
 
     public async Task<Page<MalfunctionDTO>> GetMalfunctions(PaginationDTO paginationDTO, SortDTO sortDTO, bool? resolved = null)
     {
-        var malfunctionsPage = sortDTO switch
-        {
-            { SortBy: "priority" } => await GetEntityPage(paginationDTO, false, orderSelector: x => x.Priority, orderAscending: sortDTO.Order != "desc"),
-            { SortBy: "expectedFixTime" } => await GetEntityPage(paginationDTO, false, orderSelector: x => x.ExpectedFixTime, orderAscending: sortDTO.Order != "desc"),
-            { SortBy: "actualFixTime" } => await GetEntityPage(paginationDTO, false, orderSelector: x => x.ActualFixTime, orderAscending: sortDTO.Order != "desc"),
-            _ => await GetEntityPage(paginationDTO, false)
-        };
+        var malfunctionsPage = await GetEntityPage(
+            paginationDTO: paginationDTO,
+            trackChanges: false,
+            expression: x => resolved == null || x.IsFixed == resolved,
+            orderSelector: CreateOrderSelector(sortDTO.SortBy),
+            orderAscending: sortDTO.Order != "desc",
+            includes: ServiceHelpers.Include($"{nameof(Malfunction.Janitors)}"));
+
 
         return Mapper.Map<Page<MalfunctionDTO>>(malfunctionsPage);
     }
 
     public async Task<MalfunctionDTO> CreateMalfunction(CreateMalfunctionDTO createMalfunctionDTO)
     {
-        var student = await RepositoryManager
-            .StudentRepository
-            .FindByCondition(x => x.Id == createMalfunctionDTO.StudentId, false)
-            .FirstOrDefaultAsync() ??
-                throw new NotFoundException($"Student with id {createMalfunctionDTO.StudentId} does not exist.");
+        var student = await _studentsService.GetEntity(x => x.Id == createMalfunctionDTO.StudentId, false) ??
+            throw new NotFoundException($"Student with id {createMalfunctionDTO.StudentId} does not exist.");
 
         var malfunction = Mapper.Map<Malfunction>(createMalfunctionDTO);
         malfunction.IsFixed = false;
@@ -56,7 +62,7 @@ public class MalfunctionsService : ServiceBase<Malfunction>, IMalfunctionsServic
     public async Task UpdateMalfunction(Guid id, JsonPatchDocument<UpdateMalfunctionDTO> patchDocument)
     {
         var malfunction = await GetEntity(x => x.Id == id, true, new string[] { $"{nameof(Malfunction.Janitors)}" }) ??
-            throw new NotFoundException($"Malfunction with id {id} does not exist");
+            throw new NotFoundException($"Malfunction with id {id} does not exist.");
 
         var malfunctionToPatch = Mapper.Map<UpdateMalfunctionDTO>(malfunction);
 
@@ -71,4 +77,15 @@ public class MalfunctionsService : ServiceBase<Malfunction>, IMalfunctionsServic
 
         await Update(malfunction);
     }
+
+    private Expression<Func<Malfunction, object>> CreateOrderSelector(string orderBy = null) =>
+        orderBy switch
+        {
+            "priority" => x => x.Priority,
+            "expectedFixTime" => x => x.ExpectedFixTime,
+            "actualFixTime" => x => x.ActualFixTime,
+            _ => null
+        };
+
+    private readonly IServiceBase<Student> _studentsService;
 }

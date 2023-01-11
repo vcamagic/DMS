@@ -56,26 +56,19 @@ public class ServiceBase<T> : IServiceBase<T> where T : class
     public async Task<Page<T>> GetEntityPage(
         PaginationDTO paginationDTO,
         bool trackChanges,
+        Expression<Func<T, bool>> expression = null,
         string[] includes = null,
         Expression<Func<T, object>> orderSelector = null,
         bool orderAscending = true)
     {
-        var query = _repository.FindAll(trackChanges);
+        var query = expression switch
+        {
+            not null => _repository.FindByCondition(expression, trackChanges),
+            _ => _repository.FindAll(trackChanges)
+        };
+
         return await ApplySortingPagingAndLoadRelatedEntities(query, paginationDTO, includes, orderSelector, orderAscending);
     }
-
-    public async Task<Page<T>> GetEntityPage(
-        PaginationDTO paginationDTO,
-        Expression<Func<T, bool>> expression,
-        bool trackChanges,
-        string[] includes = null,
-        Expression<Func<T, object>> orderSelector = null,
-        bool orderAscending = true)
-    {
-        var query = _repository.FindByCondition(expression, trackChanges);
-        return await ApplySortingPagingAndLoadRelatedEntities(query, paginationDTO, includes, orderSelector, orderAscending);
-    }
-
 
     public async Task<T> GetEntity(Expression<Func<T, bool>> expression, bool trackChanges, string[] includes = null)
     {
