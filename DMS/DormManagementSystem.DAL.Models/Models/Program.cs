@@ -11,4 +11,6 @@ public class Program
 
     [Required] public Guid WashingMachineId { get; set; }
     public WashingMachine WashingMachine { get; set; }
+
+    public ICollection<Reservation> Reservations { get; set; }
 }

@@ -171,6 +171,38 @@ namespace DormManagementSystem.DAL.Models.Migrations
                     b.ToTable("Programs");
                 });
 
+            modelBuilder.Entity("DormManagementSystem.DAL.Models.Models.Reservation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("From")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("ProgramId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("StudentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("To")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("WashingMachineId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProgramId");
+
+                    b.HasIndex("StudentId");
+
+                    b.HasIndex("WashingMachineId");
+
+                    b.ToTable("Reservations");
+                });
+
             modelBuilder.Entity("DormManagementSystem.DAL.Models.Models.Role", b =>
                 {
                     b.Property<Guid>("Id")
@@ -561,6 +593,33 @@ namespace DormManagementSystem.DAL.Models.Migrations
                     b.Navigation("WashingMachine");
                 });
 
+            modelBuilder.Entity("DormManagementSystem.DAL.Models.Models.Reservation", b =>
+                {
+                    b.HasOne("DormManagementSystem.DAL.Models.Models.Program", "Program")
+                        .WithMany("Reservations")
+                        .HasForeignKey("ProgramId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DormManagementSystem.DAL.Models.Models.Student", "Student")
+                        .WithMany("Reservations")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DormManagementSystem.DAL.Models.Models.WashingMachine", "WashingMachine")
+                        .WithMany("Reservations")
+                        .HasForeignKey("WashingMachineId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Program");
+
+                    b.Navigation("Student");
+
+                    b.Navigation("WashingMachine");
+                });
+
             modelBuilder.Entity("DormManagementSystem.DAL.Models.Models.Room", b =>
                 {
                     b.HasOne("DormManagementSystem.DAL.Models.Models.Floor", "Floor")
@@ -781,6 +840,11 @@ namespace DormManagementSystem.DAL.Models.Migrations
                     b.Navigation("Rooms");
                 });
 
+            modelBuilder.Entity("DormManagementSystem.DAL.Models.Models.Program", b =>
+                {
+                    b.Navigation("Reservations");
+                });
+
             modelBuilder.Entity("DormManagementSystem.DAL.Models.Models.Room", b =>
                 {
                     b.Navigation("Malfunctions");
@@ -789,6 +853,8 @@ namespace DormManagementSystem.DAL.Models.Migrations
             modelBuilder.Entity("DormManagementSystem.DAL.Models.Models.WashingMachine", b =>
                 {
                     b.Navigation("Programs");
+
+                    b.Navigation("Reservations");
                 });
 
             modelBuilder.Entity("DormManagementSystem.DAL.Models.Models.Laundry", b =>
@@ -804,6 +870,8 @@ namespace DormManagementSystem.DAL.Models.Migrations
             modelBuilder.Entity("DormManagementSystem.DAL.Models.Models.Student", b =>
                 {
                     b.Navigation("Malfunctions");
+
+                    b.Navigation("Reservations");
                 });
 #pragma warning restore 612, 618
         }

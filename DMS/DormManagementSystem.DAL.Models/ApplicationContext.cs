@@ -99,8 +99,28 @@ public class ApplicationContext : IdentityDbContext<Account, Role, Guid>
             .Entity<Program>()
             .HasOne(x => x.WashingMachine)
             .WithMany(x => x.Programs)
-            .HasForeignKey(x => x.WashingMachineId);
-        
+            .HasForeignKey(x => x.WashingMachineId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder
+            .Entity<Reservation>()
+            .HasOne(x => x.Program)
+            .WithMany(x => x.Reservations)
+            .HasForeignKey(x => x.ProgramId);
+
+        modelBuilder
+            .Entity<Reservation>()
+            .HasOne(x => x.WashingMachine)
+            .WithMany(x => x.Reservations)
+            .HasForeignKey(x => x.WashingMachineId)
+            .OnDelete(DeleteBehavior.NoAction);
+
+        modelBuilder
+            .Entity<Reservation>()
+            .HasOne(x => x.Student)
+            .WithMany(x => x.Reservations)
+            .HasForeignKey(x => x.StudentId);
+
         base.OnModelCreating(modelBuilder);
     }
 
@@ -121,4 +141,5 @@ public class ApplicationContext : IdentityDbContext<Account, Role, Guid>
     public DbSet<Entertainment> Entertainments { get; set; }
     public DbSet<WashingMachine> WashingMachines { get; set; }
     public DbSet<Program> Programs { get; set; }
+    public DbSet<Reservation> Reservations { get; set; }
 }
