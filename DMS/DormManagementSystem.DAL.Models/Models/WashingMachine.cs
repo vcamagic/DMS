@@ -14,4 +14,6 @@ public class WashingMachine
     [Required]
     public Guid LaundryId { get; set; }
     public Laundry Laundry { get; set; }
+
+    public ICollection<Program> Programs { get; set; }
 }

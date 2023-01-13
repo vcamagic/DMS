@@ -145,6 +145,32 @@ namespace DormManagementSystem.DAL.Models.Migrations
                     b.ToTable("Malfunctions");
                 });
 
+            modelBuilder.Entity("DormManagementSystem.DAL.Models.Models.Program", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<float>("Duration")
+                        .HasColumnType("real");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("Temperature")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("WashingMachineId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WashingMachineId");
+
+                    b.ToTable("Programs");
+                });
+
             modelBuilder.Entity("DormManagementSystem.DAL.Models.Models.Role", b =>
                 {
                     b.Property<Guid>("Id")
@@ -508,7 +534,7 @@ namespace DormManagementSystem.DAL.Models.Migrations
             modelBuilder.Entity("DormManagementSystem.DAL.Models.Models.Malfunction", b =>
                 {
                     b.HasOne("DormManagementSystem.DAL.Models.Models.Room", "Room")
-                        .WithMany()
+                        .WithMany("Malfunctions")
                         .HasForeignKey("RoomId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -522,6 +548,17 @@ namespace DormManagementSystem.DAL.Models.Migrations
                     b.Navigation("Room");
 
                     b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("DormManagementSystem.DAL.Models.Models.Program", b =>
+                {
+                    b.HasOne("DormManagementSystem.DAL.Models.Models.WashingMachine", "WashingMachine")
+                        .WithMany("Programs")
+                        .HasForeignKey("WashingMachineId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("WashingMachine");
                 });
 
             modelBuilder.Entity("DormManagementSystem.DAL.Models.Models.Room", b =>
@@ -742,6 +779,16 @@ namespace DormManagementSystem.DAL.Models.Migrations
                     b.Navigation("Maid");
 
                     b.Navigation("Rooms");
+                });
+
+            modelBuilder.Entity("DormManagementSystem.DAL.Models.Models.Room", b =>
+                {
+                    b.Navigation("Malfunctions");
+                });
+
+            modelBuilder.Entity("DormManagementSystem.DAL.Models.Models.WashingMachine", b =>
+                {
+                    b.Navigation("Programs");
                 });
 
             modelBuilder.Entity("DormManagementSystem.DAL.Models.Models.Laundry", b =>
