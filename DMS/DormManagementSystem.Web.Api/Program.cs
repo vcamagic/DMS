@@ -30,6 +30,7 @@ builder.Services.AddScoped<IShiftsService, ShiftsService>();
 builder.Services.AddScoped<IMalfunctionsService, MalfunctionsService>();
 builder.Services.AddScoped<IDormStructureService, DormStructureService>();
 builder.Services.AddScoped<IWashingMachinesService, WashingMachinesService>();
+builder.Services.AddScoped<IProgramsService, ProgramsService>();
 builder.Services.AddIdentity<Account, Role>()
     .AddEntityFrameworkStores<ApplicationContext>();
 

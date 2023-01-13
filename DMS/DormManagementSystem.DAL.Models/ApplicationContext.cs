@@ -9,92 +9,98 @@ public class ApplicationContext : IdentityDbContext<Account, Role, Guid>
 {
     public ApplicationContext([NotNullAttribute] DbContextOptions options) : base(options)
     {
-
     }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder
-        .Entity<Account>()
-        .HasOne(x => x.User)
-        .WithOne(x => x.Account)
-        .HasForeignKey<User>(x => x.AccountId);
+            .Entity<Account>()
+            .HasOne(x => x.User)
+            .WithOne(x => x.Account)
+            .HasForeignKey<User>(x => x.AccountId);
 
         modelBuilder
-        .Entity<User>()
-        .Property(x => x.DateOfBirth)
-        .HasColumnType("date");
+            .Entity<User>()
+            .Property(x => x.DateOfBirth)
+            .HasColumnType("date");
 
         modelBuilder
-        .Entity<User>()
-        .HasIndex(x => x.JMBG)
-        .IsUnique();
+            .Entity<User>()
+            .HasIndex(x => x.JMBG)
+            .IsUnique();
 
         modelBuilder
-        .Entity<Warden>()
-        .ToTable("Wardens");
+            .Entity<Warden>()
+            .ToTable("Wardens");
 
         modelBuilder
-        .Entity<Student>()
-        .ToTable("Students")
-        .HasMany(x => x.Malfunctions)
-        .WithOne(x => x.Student);
+            .Entity<Student>()
+            .ToTable("Students")
+            .HasMany(x => x.Malfunctions)
+            .WithOne(x => x.Student);
 
         modelBuilder
-        .Entity<Employee>()
-        .ToTable("Employees");
+            .Entity<Employee>()
+            .ToTable("Employees");
 
         modelBuilder
-        .Entity<Janitor>()
-        .ToTable("Janitors");
+            .Entity<Janitor>()
+            .ToTable("Janitors");
 
         modelBuilder
-        .Entity<Maid>()
-        .ToTable("Maids");
+            .Entity<Maid>()
+            .ToTable("Maids");
 
         modelBuilder
-        .Entity<Doorkeeper>()
-        .ToTable("Doorkeepers");
+            .Entity<Doorkeeper>()
+            .ToTable("Doorkeepers");
 
         modelBuilder
-        .Entity<Employee>()
-        .HasMany(x => x.Shifts)
-        .WithMany(x => x.Employees);
+            .Entity<Employee>()
+            .HasMany(x => x.Shifts)
+            .WithMany(x => x.Employees);
 
         modelBuilder
-        .Entity<Janitor>()
-        .HasMany(x => x.Malfunctions)
-        .WithMany(x => x.Janitors);
+            .Entity<Janitor>()
+            .HasMany(x => x.Malfunctions)
+            .WithMany(x => x.Janitors);
 
         modelBuilder
-        .Entity<Floor>()
-        .HasMany(x => x.Rooms)
-        .WithOne(x => x.Floor);
+            .Entity<Floor>()
+            .HasMany(x => x.Rooms)
+            .WithOne(x => x.Floor);
 
         modelBuilder
-        .Entity<Floor>()
-        .HasOne(x => x.Maid)
-        .WithOne(x => x.Floor)
-        .HasForeignKey<Maid>(x => x.FloorId);
-
-
-        modelBuilder
-        .Entity<Floor>()
-        .HasIndex(x => x.Level)
-        .IsUnique();
-
-        modelBuilder
-        .Entity<Room>()
-        .HasIndex(x => x.RoomNumber)
-        .IsUnique();
+            .Entity<Floor>()
+            .HasOne(x => x.Maid)
+            .WithOne(x => x.Floor)
+            .HasForeignKey<Maid>(x => x.FloorId);
 
 
         modelBuilder
-        .Entity<Student>()
-        .HasOne(x => x.Residency)
-        .WithMany(x => x.Students)
-        .HasForeignKey(x => x.ResidencyId)
-        .OnDelete(DeleteBehavior.SetNull);
+            .Entity<Floor>()
+            .HasIndex(x => x.Level)
+            .IsUnique();
 
+        modelBuilder
+            .Entity<Room>()
+            .HasIndex(x => x.RoomNumber)
+            .IsUnique();
+
+
+        modelBuilder
+            .Entity<Student>()
+            .HasOne(x => x.Residency)
+            .WithMany(x => x.Students)
+            .HasForeignKey(x => x.ResidencyId)
+            .OnDelete(DeleteBehavior.SetNull);
+
+        modelBuilder
+            .Entity<Program>()
+            .HasOne(x => x.WashingMachine)
+            .WithMany(x => x.Programs)
+            .HasForeignKey(x => x.WashingMachineId);
+        
         base.OnModelCreating(modelBuilder);
     }
 
@@ -114,4 +120,5 @@ public class ApplicationContext : IdentityDbContext<Account, Role, Guid>
     public DbSet<Laundry> Laundries { get; set; }
     public DbSet<Entertainment> Entertainments { get; set; }
     public DbSet<WashingMachine> WashingMachines { get; set; }
+    public DbSet<Program> Programs { get; set; }
 }
